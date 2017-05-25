@@ -1,0 +1,85 @@
+var example = document.getElementById("example"),
+    ctx = example.getContext('2d');
+ctx.fillStyle = '#87CEFA';
+ctx.fillRect(0, 0, 400, 90);
+ctx.fillStyle = '#228B22';
+ctx.fillRect(0, 90, 400, 70);
+ctx.lineWidth = 1;
+ctx.fillStyle = '#FF4500';
+rectangle(0, 89, 3, 8, 120, 3, 0);
+ctx.fillStyle = '#8B4513';
+rectangle(10, 65, 75, 5, 11, 0, 5);
+ctx.fillStyle = '#A0522D';
+rectangle(85, 65, 50, 5, 11, 0, 5);
+rectangle(85, 90, 15, 30, 1, 0, 0);
+rectangle(100, 90, 45, 30, 1, 0, 0);
+ctx.fillStyle = '#AFEEEE';
+rectangle(20, 80, 20, 25, 2, 34, 0);
+ctx.fillStyle = '#8B0000';
+triangleHorizon(5, 65, 85, 40);
+ctx.beginPath();
+ctx.moveTo(90, 65);
+ctx.lineTo(140, 65);
+ctx.lineTo(94, 25);
+ctx.lineTo(44, 25);
+ctx.fill();
+ctx.beginPath();
+ctx.moveTo(5, 65);
+ctx.lineTo(100, 65);
+ctx.lineTo(85, 50);
+ctx.fill();
+ctx.fillStyle = '#000000';
+ctx.lineWidth = 1;
+ctx.fillStyle = '#8B0000';
+line(90, 65, 44, 25);
+line(90, 65, 140, 65);
+line(140, 65, 94, 25);
+line(94, 25, 44, 25);
+line(5, 65, 90, 65);
+line(5, 65, 44, 25);
+ctx.beginPath();
+ctx.moveTo(85, 90);
+ctx.lineTo(100, 90);
+ctx.lineTo(85, 70);
+ctx.fill();
+ctx.beginPath();
+ctx.moveTo(100, 90);
+ctx.lineTo(146, 90);
+ctx.lineTo(131, 70);
+ctx.lineTo(85, 70);
+ctx.fill();
+ctx.fillStyle = '#000000';
+line(85, 90, 100, 90);
+line(100, 90, 85, 70);
+line(85, 70, 85, 90);
+line(100, 90, 146, 90);
+line(146, 90, 131, 70);
+line(131, 70, 85, 70);
+line(85, 70, 100, 90);
+ctx.beginPath();
+ctx.arc(260, 15, 13, 0, 2 * Math.PI, false);
+ctx.fillStyle = '#FFD700';
+ctx.fill();
+ctx.fillStyle = '#FF4500';
+rectangle(0, 125, 7, 23, 43, 7, 0);
+
+function rectangle(x, y, width, height, amount, shiftRight, shiftDown) {
+  for (i = 0; i < amount; i++) {
+    ctx.fillRect(x + i * shiftRight, y + i * shiftDown, width, height);
+    ctx.strokeRect(x + i * shiftRight, y + i * shiftDown, width, height);
+  }
+};
+function triangleHorizon(x, y, stepX, stepY) {
+  ctx.beginPath();
+  ctx.moveTo(x, y);
+  ctx.lineTo(x + stepX, y);
+  ctx.lineTo((x + stepX) / 2, y - stepY);
+  ctx.fill();
+};
+function line(firstX, firstY, lastX, lastY) {
+  ctx.beginPath();
+  ctx.moveTo(firstX, firstY);
+  ctx.lineTo(lastX, lastY);
+  ctx.closePath();
+  ctx.stroke();
+};
