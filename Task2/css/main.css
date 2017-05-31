@@ -1,3 +1,7 @@
-ul{
+ul {
     list-style-type: none;
+}
+
+input[type="text"] {
+    border: none;
 }

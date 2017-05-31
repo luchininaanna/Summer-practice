@@ -1,7 +1,7 @@
-const minValueOfRange = 2;
-const maxValueOfRange = 10;
+const MIN_VALUE_OF_RANGE = 1;
+const MAX_VALUE_OF_RANGE = 10;
 function printEven(min, max) {
-  var i = min;
+  let i = min;
   if (i % 2 !== 0) {
     i += 1;
   }
@@ -10,4 +10,4 @@ function printEven(min, max) {
     i += 2;
   }
 }
-printEven(minValueOfRange, maxValueOfRange);
+printEven(MIN_VALUE_OF_RANGE, MAX_VALUE_OF_RANGE);

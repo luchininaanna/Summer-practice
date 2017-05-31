@@ -1,6 +1,6 @@
-var userName = prompt('Кто пришёл?', '');
+let userName = prompt('Кто пришёл?', '');
 if (userName === 'Админ') {
-  var pass = prompt('Пароль?', '');
+  let pass = prompt('Пароль?', '');
   if (pass === 'Чёрный Властелин') {
     alert('Добро пожаловать!');
   } else if (pass === null) {
