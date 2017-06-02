@@ -13,8 +13,26 @@ const NAVY = "#000080";
 const LIGHT_GRAY = "#AFEEEE";
 const GRAY = "#A9A9A9";
 const DARK_GRAY = "#808080";
+const WHITE = "#FFFFFF";
 
-ctx.lineWidth = 1;
+gameLoop();
+
+function gameLoop(){
+  memorizeThePositionOfObjects();
+  cleanCanvas();
+  createObjectWithNewCoordinates();
+}
+
+function memorizeThePositionOfObjects(){
+
+}
+function cleanCanvas(){
+  ctx.fillStyle = WHITE;
+  drawRectangle(0, 0, 1200, 800, 1, 0, 0)
+}
+function createObjectWithNewCoordinates();
+
+
 drawSky();
 drawGrass();
 drawFence();

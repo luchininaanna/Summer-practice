@@ -1,8 +1,10 @@
 let g_countingNumder = 0;
-let listOfElements = document.createElement("ul");
-document.body.appendChild(listOfElements);
+let g_listOfElements = document.createElement("ul");
+document.body.appendChild(g_listOfElements);
 
-document.getElementById("Add").onclick = function addItem() {
+document.getElementById("Add").onclick = addItem;
+
+function addItem() {
   g_countingNumder += 1;
 
   let elementOfList = document.createElement("li");
@@ -10,16 +12,17 @@ document.getElementById("Add").onclick = function addItem() {
   let inputCheckbox = document.createElement("input");
   inputCheckbox.type = "checkbox";
   inputCheckbox.onchange = switchButtonRemove;
-  inputCheckbox.name = "checkbox";
+  inputCheckbox.className = "checkboxOfListElement";
 
   let nameElement = document.createElement("input");
+  nameElement.className = "inputOfListElement";
   nameElement.type = "text";
   nameElement.value = "Item" + g_countingNumder;
 
   elementOfList.appendChild(inputCheckbox);
   elementOfList.appendChild(nameElement);
-  listOfElements.appendChild(elementOfList);
-};
+  g_listOfElements.appendChild(elementOfList);
+}
 
 function switchButtonRemove() {
   if (checkStatusOfCheckbox()) {
@@ -30,7 +33,7 @@ function switchButtonRemove() {
 }
 
 function checkStatusOfCheckbox() {
-  let listOfCheckbox = document.getElementsByName("checkbox");
+  let listOfCheckbox = document.getElementsByClassName("checkboxOfListElement");
   let amountOfCheckboxInList = listOfCheckbox.length;
 
   for (let i = 0; i < amountOfCheckboxInList; i++) {
@@ -41,13 +44,17 @@ function checkStatusOfCheckbox() {
   return false;
 }
 
-document.getElementById("Clean").onclick = function deletingItems() {
-  g_countingNumder = 0;
-  listOfElements.innerHTML = '';
-};
+document.getElementById("Clean").onclick = deletingItems;
 
-document.getElementById("Remove").onclick = function removeElement() {
-  let listOfCheckbox = document.getElementsByName("checkbox");
+function deletingItems() {
+  g_countingNumder = 0;
+  g_listOfElements.innerHTML = '';
+}
+
+document.getElementById("Remove").onclick = removeElement;
+
+function removeElement() {
+  let listOfCheckbox = document.getElementsByClassName("checkboxOfListElement");
   let amountOfCheckboxInList = listOfCheckbox.length;
 
   for (let i = 0; i < amountOfCheckboxInList; i++) {
@@ -58,6 +65,5 @@ document.getElementById("Remove").onclick = function removeElement() {
       i--
     }
   }
-
   document.getElementById("Remove").disabled = true;
-};
+}
