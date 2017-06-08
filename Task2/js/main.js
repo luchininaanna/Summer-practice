@@ -1,11 +1,11 @@
-let g_countingNumder = 0;
-let g_listOfElements = document.createElement("ul");
-document.body.appendChild(g_listOfElements);
+let g_countOfNumder = 0;
+let g_list_element_input = document.createElement("ul");
+document.body.appendChild(g_list_element_input);
 
 document.getElementById("Add").onclick = addItem;
 
 function addItem() {
-  g_countingNumder += 1;
+  g_countOfNumder += 1;
 
   let elementOfList = document.createElement("li");
 
@@ -17,11 +17,11 @@ function addItem() {
   let nameElement = document.createElement("input");
   nameElement.className = "inputOfListElement";
   nameElement.type = "text";
-  nameElement.value = "Item" + g_countingNumder;
+  nameElement.value = "Item" + g_countOfNumder;
 
   elementOfList.appendChild(inputCheckbox);
   elementOfList.appendChild(nameElement);
-  g_listOfElements.appendChild(elementOfList);
+  g_list_element_input.appendChild(elementOfList);
 }
 
 function switchButtonRemove() {
@@ -44,11 +44,11 @@ function checkStatusOfCheckbox() {
   return false;
 }
 
-document.getElementById("Clean").onclick = deletingItems;
+document.getElementById("Clean").onclick = deleteItems;
 
-function deletingItems() {
-  g_countingNumder = 0;
-  g_listOfElements.innerHTML = '';
+function deleteItems() {
+  g_countOfNumder = 0;
+  g_list_element_input.innerHTML = '';
 }
 
 document.getElementById("Remove").onclick = removeElement;

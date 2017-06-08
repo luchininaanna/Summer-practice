@@ -1,5 +1,5 @@
 const MIN_VALUE_OF_RANGE = -10;
-const MAX_VALUE_OF_RANGE = 16000;
+const MAX_VALUE_OF_RANGE = 100;
 function printPrimeFromRange(min, max) {
   for (let i = min; i < max; i++) {
     if (isPrime(i)) {
@@ -15,8 +15,6 @@ function isPrime(i) {
       }
     }
     return true;
-  } else {
-    i++;
   }
 }
 printPrimeFromRange(MIN_VALUE_OF_RANGE, MAX_VALUE_OF_RANGE);
