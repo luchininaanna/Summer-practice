@@ -3,47 +3,72 @@ const LIGHT_KHAKI = "#EEE8AA";
 const DARK_KHAKI = "#8B864E";
 const RED = "#EE0000";
 const ORANGE = "#FF8C00";
+const WHITE = "#FFFFFF";
 
-let g_context = {
-  example: document.getElementById("example"),
-  ctx: document.getElementById("example").getContext("2d"), //g_example.getContext("2d")
-  fields: createCoordinatesOfFields(),
-  stateOfGame: createStateOfGame()
-};
+const SHIFT_OF_BROWSER_WINDOW = 8;
+const FIRST_PLAYER = 1;
+const SECOND_PLAYER = 2;
+const EMPTY = 0;
+const CROSS = 1;
+const NAUGHT = 2;
 
-createGame();
+let g_context = {};
+g_context.ctx = document.getElementById("canvas").getContext("2d");
+g_context.prevTime = new Date();
+g_context.fields = createCoordinatesOfFields(100, 100);
+g_context.stateOfGame = createStateOfGame();
+g_context.clock = createStateOfClock();
 
-document.getElementById("example").onclick = changeField;
+window.requestAnimationFrame(gameLoop);
+document.getElementById("canvas").onclick = checkTheClick;
 
-function createGame() {
+gameLoop();
+
+function gameLoop() {
   let ctx = g_context.ctx;
+  let currTime = new Date();
+  let prevTime = g_context.prevTime;
+  let deltaTime = currTime - prevTime;
+  let sumDeltaTime = g_context.clock.sumDeltaTime + deltaTime / 1000;
+  let namePlayerWithRightOfMove = g_context.stateOfGame.namePlayerWithRightOfMove;
+  g_context.clock.sumDeltaTime = sumDeltaTime;
+  updateTheCoordinates(sumDeltaTime);
+  cleanCanvas(ctx);
+  drawObjectWithNewCoordinates(ctx, namePlayerWithRightOfMove);
+  requestAnimationFrame(gameLoop);
+  g_context.prevTime = currTime;
+}
+
+function updateTheCoordinates(sumDeltaTime) {
+  checkEarlyVictory(sumDeltaTime);
+  g_context.clock.deltaCorner = sumDeltaTime * 0.2 * 2;
+  return g_context.clock.deltaCorner
+}
+
+function checkEarlyVictory(sumDeltaTime) {
+  let timeForMove = 5;
+  if (sumDeltaTime > timeForMove) {
+    g_context.clock = createStateOfClock();
+    let namePlayerWithRightOfMove = g_context.stateOfGame.namePlayerWithRightOfMove;
+    checkTheWinnerByTime(namePlayerWithRightOfMove);
+  }
+}
+
+function cleanCanvas(ctx) {
+  ctx.fillStyle = WHITE;
+  drawRectangle(ctx, 0, 0, 1200, 800, 1, 0, 0);
+}
+
+function drawObjectWithNewCoordinates(ctx, namePlayerWithRightOfMove) {
   drawBackground(ctx);
   drawField(ctx, 100, 100);
-  drawPlayers(ctx, 850, 450, 1);
+  drawWindowsOfPlayers(ctx, 850, 450, namePlayerWithRightOfMove);
+  drawElements(ctx);
+  drawClock(ctx, 950, 200);
+  checkTheWinnerBySetSymbols();
+  //checkTheDraw();
 }
 
-function changeField(e) {
-  const amountOfFields = 9;
-  const shift = 200;
-  let cursorX = e.pageX;
-  let cursorY = e.pageY;
-  let ctx = g_context.ctx;
-  let fields = g_context.fields;
-  let stateOfGame = g_context.stateOfGame;
-  for (let i = 0; i < amountOfFields; i++) {
-    if ((cursorX > fields[i].x) && (cursorX < fields[i].x + shift) &&
-        (cursorY > fields[i].y) && (cursorY < fields[i].y + shift) &&
-        (fields[i].presenceOFSymbol === 0)) {
-      if (stateOfGame.state === 1) {
-        fields[i].presenceOFSymbol = 2;
-      } else {
-        fields[i].presenceOFSymbol = 1;
-      }
-      addElement(ctx, stateOfGame, fields[i].x, fields[i].y, fields);
-    }
-  }
-  return fields;
-}
 function drawBackground(ctx) {
   ctx.strokeStyle = DARK_KHAKI;
   ctx.fillStyle = KHAKI;
@@ -62,17 +87,130 @@ function drawField(ctx, x, y) {
   drawLine(ctx, x, y + 200, x + 600, y + 200);
   drawLine(ctx, x, y + 400, x + 600, y + 400);
 }
-function drawCross(ctx, x, y) {
+function drawWindowsOfPlayers(ctx, x, y, namePlayerWithRightOfMove) {
+  if (namePlayerWithRightOfMove === FIRST_PLAYER) {
+    ctx.fillStyle = RED;
+    drawRectangle(ctx, x - 10, y - 10, 220, 100, 1, 0, 0);
+    ctx.fillStyle = DARK_KHAKI;
+    drawRectangle(ctx, x - 10, y + 110, 220, 100, 1, 0, 0);
+  } else {
+    ctx.fillStyle = DARK_KHAKI;
+    drawRectangle(ctx, x - 10, y - 10, 220, 100, 1, 0, 0);
+    ctx.fillStyle = RED;
+    drawRectangle(ctx, x - 10, y + 110, 220, 100, 1, 0, 0);
+  }
+  ctx.fillStyle = DARK_KHAKI;
+  ctx.strokeStyle = ORANGE;
+  drawRectangle(ctx, x, y, 200, 80, 2, 0, 120);
+  ctx.fillStyle = ORANGE;
+  ctx.font = "bold 30pt Arial";
+  ctx.fillText("Игрок 1", x + 30, y + 50);
+  ctx.fillText("Игрок 2", x + 30, y + 170);
+}
+function drawClock(ctx, x, y) {
+  let deltaCorner = g_context.clock.deltaCorner;
+  let radius = 120;
+  ctx.lineWidth = 3;
+  ctx.strokeStyle = RED;
+  ctx.beginPath();
+  ctx.arc(x, y, radius, 0, 2 * Math.PI, false);
+  ctx.lineTo(x, y);
+  ctx.stroke();
   ctx.fillStyle = RED;
-  const amountOfCircles = 15;
+  ctx.beginPath();
+  ctx.arc(x, y, radius, 0, deltaCorner * Math.PI, false);
+  ctx.lineTo(x, y);
+  ctx.fill();
+}
+
+function Field(x, y, nameOfSymbol) {
+  this.x = x;
+  this.y = y;
+  this.nameOfSymbol = nameOfSymbol;
+}
+function createCoordinatesOfFields(x, y) {
+  let fields = [];
+  fields[0] = new Field(x, y, EMPTY);
+  fields[1] = new Field(x + 200, y, EMPTY);
+  fields[2] = new Field(x + 400, y, EMPTY);
+  fields[3] = new Field(x, y + 200, EMPTY);
+  fields[4] = new Field(x + 200, y + 200, EMPTY);
+  fields[5] = new Field(x + 400, y + 200, EMPTY);
+  fields[6] = new Field(x, y + 400, EMPTY);
+  fields[7] = new Field(x + 200, y + 400, EMPTY);
+  fields[8] = new Field(x + 400, y + 400, EMPTY);
+  return fields
+}
+function createStateOfGame() {
+  stateOfGame = {
+    namePlayerWithRightOfMove: FIRST_PLAYER,
+  };
+  return stateOfGame
+}
+function createStateOfClock() {
+  stateOfClock = {
+    deltaCorner: EMPTY,
+    sumDeltaTime: EMPTY,
+  };
+  return stateOfClock
+}
+
+function checkTheClick(e) {
+  let cursorX = e.pageX;
+  let cursorY = e.pageY;
+  let fields = g_context.fields;
+  checkTheRightClick(cursorX, cursorY, fields);
+}
+
+function checkTheRightClick(x, y, fields) {
+  let amountOfFields = 9;
+  let shift = 200;
+  let namePlayerWithRightOfMove = g_context.stateOfGame.namePlayerWithRightOfMove;
+  for (let i = 0; i < amountOfFields; i++) {
+    if ((x > fields[i].x + SHIFT_OF_BROWSER_WINDOW) &&
+        (x < fields[i].x + shift + SHIFT_OF_BROWSER_WINDOW) &&
+        (y > fields[i].y + SHIFT_OF_BROWSER_WINDOW) &&
+        (y < fields[i].y + shift + SHIFT_OF_BROWSER_WINDOW) &&
+        (fields[i].nameOfSymbol === EMPTY)) {
+      g_context.clock = createStateOfClock();
+      if (namePlayerWithRightOfMove === FIRST_PLAYER) {
+        fields[i].nameOfSymbol = CROSS;
+        g_context.stateOfGame.namePlayerWithRightOfMove = SECOND_PLAYER;
+      } else {
+        fields[i].nameOfSymbol = NAUGHT;
+        g_context.stateOfGame.namePlayerWithRightOfMove = FIRST_PLAYER;
+      }
+    }
+  }
+}
+
+function drawElements(ctx) {
+  const amountOfFields = 9;
+  const shift = 200;
+  let fields = g_context.fields;
+  for (let i = 0; i < amountOfFields; i++) {
+    if (fields[i].nameOfSymbol === CROSS) {
+      drawCross(ctx, fields[i].x + shift / 2, fields[i].y + shift / 2);
+    }
+    if (fields[i].nameOfSymbol === NAUGHT) {
+      drawNaught(ctx, fields[i].x + shift / 2, fields[i].y + shift / 2);
+    }
+  }
+}
+
+function drawCross(ctx, x, y) {
+  let shift = 160;
   const radius = 10;
   const corner = 2;
-  for (let i = 0; i < amountOfCircles; i++) {
-    drawCircle(ctx, x + i * (radius / 2), y + i * (radius / 2), radius, corner);
-    drawCircle(ctx, x - i * (radius / 2), y - i * (radius / 2), radius, corner);
-    drawCircle(ctx, x - i * (radius / 2), y + i * (radius / 2), radius, corner);
-    drawCircle(ctx, x + i * (radius / 2), y - i * (radius / 2), radius, corner);
-  }
+  ctx.strokeStyle = RED;
+  ctx.lineWidth = 20;
+  drawLine(ctx, x - shift / 2, y - shift / 2, x + shift / 2, y + shift / 2);
+  drawLine(ctx, x - shift / 2, y + shift / 2, x + shift / 2, y - shift / 2);
+  ctx.fillStyle = RED;
+  drawCircle(ctx, x - shift / 2, y - shift / 2, radius, corner);
+  drawCircle(ctx, x + shift / 2, y + shift / 2, radius, corner);
+  drawCircle(ctx, x - shift / 2, y + shift / 2, radius, corner);
+  drawCircle(ctx, x + shift / 2, y - shift / 2, radius, corner)
 }
 function drawNaught(ctx, x, y) {
   const bigRadius = 90;
@@ -83,99 +221,69 @@ function drawNaught(ctx, x, y) {
   ctx.fillStyle = DARK_KHAKI;
   drawCircle(ctx, x, y, smallRadius, corner);
 }
-function createCoordinatesOfFields() {
-  let fields = [];
-  fields[0] = new Field(100, 100, 0);
-  fields[1] = new Field(300, 100, 0);
-  fields[2] = new Field(500, 100, 0);
-  fields[3] = new Field(100, 300, 0);
-  fields[4] = new Field(300, 300, 0);
-  fields[5] = new Field(500, 300, 0);
-  fields[6] = new Field(100, 500, 0);
-  fields[7] = new Field(300, 500, 0);
-  fields[8] = new Field(500, 500, 0);
-  return fields
-}
-function createStateOfGame() {
-  stateOfGame = {
-    state: 1,
-  };
-  return stateOfGame
-}
-function Field(x, y, presenceOFSymbol) {
-  this.x = x;
-  this.y = y;
-  this.presenceOFSymbol = presenceOFSymbol;
-}
-function drawPlayers(ctx, x, y, player) {
-  if (player === 1) {
-    ctx.fillStyle = RED;
-    drawRectangle(ctx, 840, 440, 220, 100, 1, 0, 0);
-    ctx.fillStyle = DARK_KHAKI;
-    drawRectangle(ctx, 840, 560, 220, 100, 1, 0, 0);
+
+function checkTheWinnerByTime(namePlayerWithRightOfMove) {
+  let message;
+  if (namePlayerWithRightOfMove === FIRST_PLAYER) {
+    namePlayerWithRightOfMove = SECOND_PLAYER;
+    message = 'Выиграл ' + namePlayerWithRightOfMove + " игрок!";
   } else {
-    ctx.fillStyle = DARK_KHAKI;
-    drawRectangle(ctx, 840, 440, 220, 100, 1, 0, 0);
-    ctx.fillStyle = RED;
-    drawRectangle(ctx, 840, 560, 220, 100, 1, 0, 0);
+    namePlayerWithRightOfMove = FIRST_PLAYER;
+    message = 'Выиграл ' + namePlayerWithRightOfMove + " игрок!";
   }
-  ctx.fillStyle = DARK_KHAKI;
-  ctx.strokeStyle = ORANGE;
-  drawRectangle(ctx, x, y, 200, 80, 2, 0, 120);
-  ctx.fillStyle = ORANGE;
-  ctx.font = "bold 30pt Arial";
-  ctx.fillText("Игрок 1", 880, 500);
-  ctx.fillText("Игрок 2", 880, 620);
+  alert(message);
 }
-function addElement(ctx, stateOfGame, x, y, fields) {
-  const shift = 200;
-  if (stateOfGame.state === 1) {
-    drawCross(ctx, x + shift / 2, y + shift / 2);
-    stateOfGame.state = 2;
-    drawPlayers(ctx, 850, 450, stateOfGame.state);
-  } else {
-    drawNaught(ctx, x + shift / 2, y + shift / 2);
-    stateOfGame.state = 1;
-    drawPlayers(ctx, 850, 450, stateOfGame.state);
-  }
-  checkTheWinner(fields, stateOfGame.state);
-  return stateOfGame;
-}
-function checkTheWinner(fields, state) {
-  if (((fields[0].presenceOFSymbol === state) && (fields[1].presenceOFSymbol === state) &&
-      (fields[2].presenceOFSymbol === state)) ||
-      ((fields[3].presenceOFSymbol === state) && (fields[4].presenceOFSymbol === state) &&
-      (fields[5].presenceOFSymbol === state)) ||
-      ((fields[6].presenceOFSymbol === state) && (fields[7].presenceOFSymbol === state) &&
-      (fields[8].presenceOFSymbol === state)) ||
-      ((fields[0].presenceOFSymbol === state) && (fields[3].presenceOFSymbol === state) &&
-      (fields[6].presenceOFSymbol === state)) ||
-      ((fields[1].presenceOFSymbol === state) && (fields[4].presenceOFSymbol === state) &&
-      (fields[7].presenceOFSymbol === state)) ||
-      ((fields[3].presenceOFSymbol === state) && (fields[5].presenceOFSymbol === state) &&
-      (fields[8].presenceOFSymbol === state)) ||
-      ((fields[0].presenceOFSymbol === state) && (fields[4].presenceOFSymbol === state) &&
-      (fields[8].presenceOFSymbol === state)) ||
-      ((fields[2].presenceOFSymbol === state) && (fields[4].presenceOFSymbol === state) &&
-      (fields[6].presenceOFSymbol === state))) {
+function checkTheWinnerBySetSymbols() {
+  let fields = g_context.fields;
+  let state = CROSS;
+  if (((fields[0].nameOfSymbol === state) && (fields[1].nameOfSymbol === state) &&
+      (fields[2].nameOfSymbol === state)) ||
+      ((fields[3].nameOfSymbol === state) && (fields[4].nameOfSymbol === state) &&
+      (fields[5].nameOfSymbol === state)) ||
+      ((fields[6].nameOfSymbol === state) && (fields[7].nameOfSymbol === state) &&
+      (fields[8].nameOfSymbol === state)) ||
+      ((fields[0].nameOfSymbol === state) && (fields[3].nameOfSymbol === state) &&
+      (fields[6].nameOfSymbol === state)) ||
+      ((fields[1].nameOfSymbol === state) && (fields[4].nameOfSymbol === state) &&
+      (fields[7].nameOfSymbol === state)) ||
+      ((fields[3].nameOfSymbol === state) && (fields[5].nameOfSymbol === state) &&
+      (fields[8].nameOfSymbol === state)) ||
+      ((fields[0].nameOfSymbol === state) && (fields[4].nameOfSymbol === state) &&
+      (fields[8].nameOfSymbol === state)) ||
+      ((fields[2].nameOfSymbol === state) && (fields[4].nameOfSymbol === state) &&
+      (fields[6].nameOfSymbol === state))) {
     let message;
-    if (state === 1) {
-      state = 2
+    if (state === CROSS) {
+      message = 'Выиграл ' + 1 + " игрок!";
     } else {
-      state = 1
+      message = 'Выиграл ' + 2 + " игрок!";
     }
-    message = 'Выиграл ' + state + " игрок!";
     alert(message);
-    setTimeout(askAboutNewGame, 1000);
+    setTimeout(askAboutNewGame, 10);
   }
 }
 function askAboutNewGame() {
   if (confirm("Хотите начать новую игру?")) {
-    g_context.ctx = document.getElementById("example").getContext("2d");
     g_context.fields = createCoordinatesOfFields();
     g_context.stateOfGame = createStateOfGame();
-    createGame()
+    g_context.clock = createStateOfClock();
+    gameLoop();
   }
+}
+function checkTheDraw() {
+  if (checkTheEmptyOfFields) {
+    alert("Ничья!");
+  }
+}
+function checkTheEmptyOfFields() {
+  let amountOfFields = 9;
+  let fields = g_context.fields;
+  for (let i = 0; i < amountOfFields; i++) {
+    if ((fields[i].nameOfSymbol === CROSS) || (fields[i].nameOfSymbol === NAUGHT)) {
+      return false
+    }
+  }
+  return true
 }
 
 function drawRectangle(ctx, x, y, width, height, amount, shiftRight, shiftDown) {
