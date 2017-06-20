@@ -15,32 +15,37 @@ const NAVY = "#000080";
 const DARK_BLUE = "#191970";
 const BLACK = "#000000";
 
+const WIDTH_OF_CLOUD = 200;
+const HEIGHT_OF_CLOUD = 100;
+
 
 let g_context = {
-  g_example: document.getElementById("example"),
-  g_ctx: document.getElementById("example").getContext("2d"), //g_example.getContext("2d")
-  g_prevTime: new Date(),
-  g_clouds: initialCoordinatesOfClouds(),
-  g_smoke: initialCoordinatesOfSmoke(),
-  g_sun: initialCoordinatesOfSun(),
+  example: document.getElementById("example"),
+  ctx: document.getElementById("example").getContext("2d"),
+  prevTime: new Date(),
+  clouds: initialCoordinatesOfClouds(),
+  smoke: initialCoordinatesOfSmoke(),
+  sun: initialCoordinatesOfSun(),
+  stateOfPicture: initialStateOfPicture(),
 };
 
 window.requestAnimationFrame(gameLoop);
 
+document.getElementById("example").onclick = deleteCloud;
+
 function gameLoop() {
   let currTime = new Date();
-  let prevTime = g_context.g_prevTime;
+  let prevTime = g_context.prevTime;
   let deltaTime = currTime - prevTime;
-  let ctx = g_context.g_ctx;
-  let clouds = g_context.g_clouds;
-  let smoke = g_context.g_smoke;
-  let sun = g_context.g_sun;
+  let ctx = g_context.ctx;
+  let clouds = g_context.clouds;
+  let smoke = g_context.smoke;
+  let sun = g_context.sun;
   updateTheCoordinates(deltaTime, clouds, smoke, sun);
   cleanCanvas(ctx);
   drawObjectWithNewCoordinates(ctx, clouds, smoke, sun);
-  document.getElementById("example").onclick = deleteCloud;
   requestAnimationFrame(gameLoop);
-  g_context.g_prevTime = currTime;
+  g_context.prevTime = currTime;
 }
 
 function updateTheCoordinates(deltaTime, clouds, smoke, sun) {
@@ -71,22 +76,48 @@ function cleanCanvas(ctx) {
   drawRectangle(ctx, 0, 0, 1200, 800, 1, 0, 0)
 }
 function drawObjectWithNewCoordinates(ctx, clouds, smoke, sun) {
-  drawSky(ctx, sun);
+  checkTimesOfDay(sun);
+  let timesOfDay = g_context.stateOfPicture.timesOfDay;
+  drawSky(ctx, timesOfDay);
   drawSun(ctx, sun.x, sun.y);
   drawBackFence(ctx);
+  drawClouds(ctx, clouds);
+  drawSmoke(ctx, smoke);
+  drawGrass(ctx, timesOfDay);
+  drawDog(ctx, 900, 520);
+  drawFrontFence(ctx);
+  drawHouse(ctx, 10, 400, timesOfDay);
+}
+
+function drawClouds(ctx, clouds) {
   let lengthOfClouds = clouds.length;
   for (let i = 0; i < lengthOfClouds; i++) {
     drawCloud(ctx, clouds[i].x, clouds[i].y)
   }
+}
+function drawSmoke(ctx, smoke) {
   ctx.fillStyle = DARK_GRAY;
   let lengthOfSmoke = smoke.length;
   for (let i = 0; i < lengthOfSmoke; i++) {
-    drawCircle(ctx, 310, smoke[i].y, 25, 2)
+    drawCircle(ctx, 310, smoke[i].y, 25, 2);
+    if (smoke[i].y < -20) {
+      if (i > 0) {
+        smoke[i].y = smoke[i - 1].y + 100;
+      } else {
+        smoke[i].y = smoke[i + 3].y + 100;
+      }
+    }
   }
-  drawGrass(ctx, sun);
-  drawDog(ctx, 900, 520);
-  drawFrontFence(ctx);
-  drawHouse(ctx, 10, 400, sun);
+}
+
+function checkTimesOfDay(sun) {
+  let timesOfDay;
+  if ((sun.x < -50) || (sun.x > 1250)) {
+    timesOfDay = "night";
+  } else {
+    timesOfDay = "day";
+  }
+  g_context.stateOfPicture.timesOfDay = timesOfDay;
 }
 
 function initialCoordinatesOfClouds() {
@@ -94,50 +125,34 @@ function initialCoordinatesOfClouds() {
   clouds[0] = {
     "x": 50,
     "y": 50,
-    "deltaX": 200,
-    "deltaY": 100,
   };
   clouds[1] = {
     "x": 250,
     "y": 120,
-    "deltaX": 200,
-    "deltaY": 100,
   };
   clouds[2] = {
     "x": 50,
     "y": 190,
-    "deltaX": 200,
-    "deltaY": 100,
   };
   clouds[3] = {
     "x": 450,
     "y": 10,
-    "deltaX": 200,
-    "deltaY": 100,
   };
   clouds[4] = {
     "x": 500,
     "y": 150,
-    "deltaX": 200,
-    "deltaY": 100,
   };
   clouds[5] = {
     "x": 800,
     "y": 150,
-    "deltaX": 200,
-    "deltaY": 100,
   };
   clouds[6] = {
     "x": 950,
     "y": 50,
-    "deltaX": 200,
-    "deltaY": 100,
   };
   clouds[7] = {
     "x": 750,
     "y": 0,
-    "deltaX": 200,
-    "deltaY": 100,
   };
   let lengthOfClouds = clouds.length;
   for (let i = 0; i < lengthOfClouds; i++) {
@@ -154,11 +169,11 @@ function initialCoordinatesOfClouds() {
 }
 function initialCoordinatesOfSmoke() {
   let smoke = [];
-  let amountSmoke = 100;
+  let amountSmoke = 4;
   let step = 100;
   for (let i = 0; i < amountSmoke; i++) {
     smoke[i] = {
-      "y": 200 + i * step,
+      "y": 300 + i * step,
     }
   }
   return smoke;
@@ -170,17 +185,23 @@ function initialCoordinatesOfSun() {
   };
   return sun;
 }
+function initialStateOfPicture() {
+  stateOfPicture = {
+    "timesOfDay": "day",
+  };
+  return stateOfPicture
+}
 
-function drawSky(ctx, sun) {
-  if ((sun.x < -50) || (sun.x > 1250)) {
+function drawSky(ctx, timesOfDay) {
+  if (timesOfDay === "night") {
     ctx.fillStyle = DARK_BLUE;
   } else {
     ctx.fillStyle = BLUE;
   }
   ctx.fillRect(0, 0, 1200, 500);
 }
-function drawGrass(ctx, sun) {
-  if ((sun.x < -50) || (sun.x > 1250)) {
+function drawGrass(ctx, timesOfDay) {
+  if (timesOfDay === "night") {
     ctx.fillStyle = DARK_GREEN;
   } else {
     ctx.fillStyle = GREEN;
@@ -199,13 +220,13 @@ function drawFrontFence(ctx) {
   ctx.fillStyle = ORANGE;
   drawRectangle(ctx, 0, 660, 35, 140, 35, 35, 0);
 }
-function drawHouse(ctx, x, y, sun) {
-  drawBase(ctx, x, y, sun);
+function drawHouse(ctx, x, y, timesOfDay) {
+  drawBase(ctx, x, y, timesOfDay);
   drawRoofs(ctx, x, y);
 }
-function drawBase(ctx, x, y, sun) {
+function drawBase(ctx, x, y, timesOfDay) {
   drawLog(ctx, x, y);
-  drawWindows(ctx, x, y, sun);
+  drawWindows(ctx, x, y, timesOfDay);
 }
 function drawLog(ctx, x, y) {
   drawDarkLog(ctx, x, y);
@@ -223,15 +244,15 @@ function drawLightLog(ctx, x, y) {
   ctx.fillStyle = NAVY;
   drawRectangle(ctx, x + 330, y + 130, 170, 105, 8, 0, 2);
 }
-function drawWindows(ctx, x, y, sun) {
-  drawGlass(ctx, x, y, sun);
+function drawWindows(ctx, x, y, timesOfDay) {
+  drawGlass(ctx, x, y, timesOfDay);
   drawFrame(ctx, x, y);
 }
-function drawGlass(ctx, x, y, sun) {
+function drawGlass(ctx, x, y, timesOfDay) {
   ctx.fillStyle = NAVY;
   ctx.lineWidth = 3;
   drawRectangle(ctx, x + 30, y + 60, 110, 140, 2, 120, 0);
-  if ((sun.x < -50) || (sun.x > 1250)) {
+  if (timesOfDay === "night") {
     ctx.fillStyle = LIGHT_YELLOW;
   } else {
     ctx.fillStyle = LIGHT_BLUE;
@@ -396,20 +417,39 @@ function drawCloud(ctx, x, y) {
   ctx.fill();
 }
 function deleteCloud(e) {
-  let clouds = g_context.g_clouds;
+  let clouds = g_context.clouds;
   let cursorX;
   let cursorY;
   cursorX = e.pageX;
   cursorY = e.pageY;
-  console.log(cursorX, cursorY);
-  console.log(clouds);
   let lengthOfClouds = clouds.length;
+  let found = 0;
   for (let i = 0; i < lengthOfClouds; i++) {
-    if ((cursorX > clouds[i].x) && (cursorX < (clouds[i].x + clouds[i].deltaX)) &&
-        (cursorY > clouds[i].y) && (cursorY < (clouds[i].y + clouds[i].deltaY))) {
+    if ((cursorX > clouds[i].x) && (cursorX < (clouds[i].x + WIDTH_OF_CLOUD)) &&
+        (cursorY > clouds[i].y) && (cursorY < (clouds[i].y + HEIGHT_OF_CLOUD)) &&
+        (found === 0)) {
+      found = 1;
       removed = clouds.splice(i, 1);
       i--;
       lengthOfClouds--;
     }
   }
+  if (clouds.length < 1) {
+    setTimeout(createRandomClouds, 3000);
+  }
+}
+function createRandomClouds() {
+  let clouds = g_context.clouds;
+  let maxX = 950;
+  let minX = 50;
+  let maxY = 190;
+  let minY = 10;
+  let amountOfClouds = 8;
+  for (let i = 0; i < amountOfClouds; i++) {
+    clouds[i] = {
+      "x": Math.floor(Math.random() * (maxX - minX + 1)) + minX,
+      "y": Math.floor(Math.random() * (maxY - minY + 1)) + minY,
+    };
+  }
+  g_context.clouds = clouds;
 }

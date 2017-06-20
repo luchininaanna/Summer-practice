@@ -3,6 +3,9 @@ let g_list_element_input = document.createElement("ul");
 document.body.appendChild(g_list_element_input);
 
 document.getElementById("Add").onclick = addItem;
+document.getElementById("Clean").onclick = clearList;
+document.getElementById("Remove").onclick = removeElement;
+
 
 function addItem() {
   g_countOfNumder += 1;
@@ -44,14 +47,10 @@ function checkStatusOfCheckbox() {
   return false;
 }
 
-document.getElementById("Clean").onclick = deleteItems;
-
-function deleteItems() {
+function clearList() {
   g_countOfNumder = 0;
   g_list_element_input.innerHTML = '';
 }
-
-document.getElementById("Remove").onclick = removeElement;
 
 function removeElement() {
   let listOfCheckbox = document.getElementsByClassName("checkboxOfListElement");
