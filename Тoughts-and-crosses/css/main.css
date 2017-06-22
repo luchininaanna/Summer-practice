@@ -1,4 +1,23 @@
-*{
+* {
     margin: 0;
     padding: 0;
+}
+#canvas {
+    display: block;
+    margin: 0 auto;
+}
+#nameOfGame {
+    display: block;
+    margin: 0 auto;
+    background: orange;
+    width: 1200px;
+    border: 1px solid red;
+}
+
+#game {
+    padding: 5% 0;
+    text-align: center;
+    font: bold 40px serif;
+    color: olive;
+    text-shadow: red 0 0 10px;
 }

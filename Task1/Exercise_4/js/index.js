@@ -8,7 +8,9 @@ function printPrimeFromRange(min, max) {
   }
 }
 function isPrime(i) {
-  if (i > 1) {
+  if (i <= 1){
+    return false
+  } else {
     for (let j = 2; j <= (i - (i % 2)) / 2; j++) {
       if (i % j === 0) {
         return false;

@@ -20,7 +20,6 @@ const HEIGHT_OF_CLOUD = 100;
 
 
 let g_context = {
-  example: document.getElementById("example"),
   ctx: document.getElementById("example").getContext("2d"),
   prevTime: new Date(),
   clouds: initialCoordinatesOfClouds(),
@@ -154,17 +153,6 @@ function initialCoordinatesOfClouds() {
     "x": 750,
     "y": 0,
   };
-  let lengthOfClouds = clouds.length;
-  for (let i = 0; i < lengthOfClouds; i++) {
-    let deltaXLeft = 10;
-    let deltaXRight = 200;
-    let deltaYUp = 10;
-    let deltaYDown = 100;
-    clouds[i].xLeft = clouds[i].x - deltaXLeft;
-    clouds[i].xRight = clouds[i].x + deltaXRight;
-    clouds[i].yUp = clouds[i].y - deltaYUp;
-    clouds[i].yDown = clouds[i].y + deltaYDown
-  }
   return clouds;
 }
 function initialCoordinatesOfSmoke() {
