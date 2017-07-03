@@ -1,13 +1,12 @@
-function searchCombination(state, amountCellsByWidth, amountCellsByHeight, amountForWinningSet, i) {
+function searchCombination(game, fields, state, amountCellsByWidth, amountCellsByHeight, amountForWinningSet, i) {
   let n = Math.floor(i / amountCellsByWidth);
   let m = i - amountCellsByWidth * n;
   let numberOfCell;
-  let fields = g_context.fields;
   let amountOfSet = 0;
   let setOfPosition = [];
 
-  while ((m < amountCellsByWidth - 1) && (n > 0)) {
-    n--;
+  while ((m < amountCellsByWidth - 1) && (n > 0)) {  //проверка выигрышной комбинации по направлению:
+    n--;                                             // правый верхний угол - левый нижний угол
     m++;
   }
   while ((m >= 0) && (n <= amountCellsByHeight - 1)) {
@@ -22,16 +21,16 @@ function searchCombination(state, amountCellsByWidth, amountCellsByHeight, amoun
     m--;
     n++;
     if (amountOfSet === amountForWinningSet) {
-      g_context.game.winningSet = setOfPosition;
-      return g_context.game.winningSet;
+      game.winningSet = setOfPosition;
+      return game;
     }
   }
 
   amountOfSet = 0;
   n = Math.floor(i / amountCellsByWidth);
   m = numberOfCell - amountCellsByWidth * n;
-  while ((m > 0) && (n > 0)) {
-    m--;
+  while ((m > 0) && (n > 0)) { //проверка выигрышной комбинации по направлению:
+    m--;                       //левый верхний угол - правый нижний угол
     n--;
   }
   while ((m <= amountCellsByHeight - 1) && (n <= amountCellsByHeight - 1)) {
@@ -46,15 +45,15 @@ function searchCombination(state, amountCellsByWidth, amountCellsByHeight, amoun
     m++;
     n++;
     if (amountOfSet === amountForWinningSet) {
-      g_context.game.winningSet = setOfPosition;
-      return g_context.game.winningSet;
+      game.winningSet = setOfPosition;
+      return game;
     }
   }
 
   amountOfSet = 0;
   n = Math.floor(i / amountCellsByWidth);
   m = numberOfCell - amountCellsByWidth * n;
-  while ((m > 0)) {
+  while ((m > 0)) {  //проверка выигрышной комбинации по горизотали
     m--;
   }
   while ((m <= amountCellsByHeight - 1)) {
@@ -68,15 +67,15 @@ function searchCombination(state, amountCellsByWidth, amountCellsByHeight, amoun
     }
     m++;
     if (amountOfSet === amountForWinningSet) {
-      g_context.game.winningSet = setOfPosition;
-      return g_context.game.winningSet;
+      game.winningSet = setOfPosition;
+      return game;
     }
   }
 
   amountOfSet = 0;
   n = Math.floor(numberOfCell / amountCellsByWidth);
   m = numberOfCell - amountCellsByWidth * n;
-  while ((n > 0)) {
+  while ((n > 0)) { //проверка выигрышной комбинации по вертикали
     n--;
   }
   while ((n <= amountCellsByHeight - 1)) {
@@ -90,8 +89,19 @@ function searchCombination(state, amountCellsByWidth, amountCellsByHeight, amoun
     }
     n++;
     if (amountOfSet === amountForWinningSet) {
-      g_context.game.winningSet = setOfPosition;
-      return g_context.game.winningSet;
+      game.winningSet = setOfPosition;
+      return game;
     }
+  }
+}
+
+function checkTheEndOfSearching() {
+  if (amountOfSet === amountForWinningSet) {
+    game.winningSet = setOfPosition;
+    return game;
+  } else {
+    amountOfSet = 0;
+    n = Math.floor(numberOfCell / amountCellsByWidth);
+    m = numberOfCell - amountCellsByWidth * n;
   }
 }
