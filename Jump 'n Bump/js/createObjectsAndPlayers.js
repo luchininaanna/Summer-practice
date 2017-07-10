@@ -129,11 +129,18 @@ function Player(source, x, y, movingButtons) {
   this.movingButtons = movingButtons;
   this.leftFreeSpace = playerInformation.LEFT_FREE_SPACE;
   this.rightFreeSpace = playerInformation.RIGHT_FREE_SPACE;
-  this.speed = playerInformation.SPEED;
+
+  this.horizontalSpeed = playerInformation.HORIZONTAL_SPEED;
+  this.verticalSpeed = playerInformation.VERTICAL_SPEED;
+  this.accelerationOfGravity = playerInformation.ACCELERATION_OF_GRAVITY;
+  this.startY = 0;
+  this.startSpeed = 0;
+  this.maxHeight = 0;
+  this.nowJumpHeight = 0;
+  this.jumpTime = 0;
+  this.jumpState = playerInformation.DOWN_JUMP;
+
   this.rightMove = 0;
   this.leftMove = 0;
   this.upMove = 0;
-  this.downMove = 0;
-  this.presentValueJumpHeight = 0;
-  this.jumpHeight = playerInformation.JUMP_HEIGHT;
 }
