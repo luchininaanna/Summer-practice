@@ -21,79 +21,53 @@ function updatePlayersCoordinates(players, deltaTime) {
 function updatePlayerCoordinates(players, player, deltaTime) {
   if (player.rightMove === 1) {
     let updatedX = player.x + player.horizontalSpeed * deltaTime;
-    let freeSpace = checkOthersPlayers(player, updatedX, players);
-    if ((updatedX > 0) && (updatedX < canvasSize.WIDTH - player.width) && (freeSpace)) {
+    let freeHorizontallySpace = checkOthersHorizontallyPlayers(player, updatedX, players);
+    let freeVerticallySpace = checkOthersVerticallyPlayers(player, player.y, players);
+    if (((updatedX > 0) && (updatedX < canvasSize.WIDTH - player.width) && freeHorizontallySpace)
+    || ((!freeHorizontallySpace) && (freeVerticallySpace) && (player.upMove === 1))){
       player.x = updatedX;
     }
   }
 
   if (player.leftMove === 1) {
     let updatedX = player.x - player.horizontalSpeed * deltaTime;
-    let freeSpace = checkOthersPlayers(player, updatedX, players);
-    if ((updatedX > 0) && (updatedX < canvasSize.WIDTH - player.width) && (freeSpace)) {
+    let freeHorizontallySpace = checkOthersHorizontallyPlayers(player, updatedX, players);
+    let freeVerticallySpace = checkOthersVerticallyPlayers(player, player.y, players);
+    if (((updatedX > 0) && (updatedX < canvasSize.WIDTH - player.width) && freeHorizontallySpace)
+    || ((!freeHorizontallySpace) && (freeVerticallySpace) && (player.upMove === 1))){
       player.x = updatedX;
     }
   }
 
   if (player.upMove === 1) {
-    let updatedY;
-    let updatedHeight;
-    let updatedSpeed;
-    let updatedTime = player.jumpTime + deltaTime/100;
-    if (player.nowJumpHeight === 0) {
-      player.startY = player.y;
-      player.startSpeed = player.verticalSpeed;
-      player.maxHeight = (player.verticalSpeed * player.verticalSpeed)/ (2 * player.accelerationOfGravity);
-    }
-    player.jumpTime = updatedTime;
-    console.log(player.startSpeed);
-    if (player.jumpState === playerInformation.UP_JUMP){
-      updatedSpeed = player.startSpeed - player.accelerationOfGravity *
-          player.jumpTime;
-      player.verticalSpeed = updatedSpeed;
-      updatedY = player.startY - (player.verticalSpeed*player.jumpTime) - (player.accelerationOfGravity *
-          player.jumpTime * player.jumpTime / 2);
-      updatedHeight = player.nowJumpHeight + (player.y - updatedY);
-      player.nowJumpHeight = updatedHeight;
-      if (player.nowJumpHeight >= 127) {
-        player.jumpState = playerInformation.DOWN_JUMP;
-        player.startSpeed = 0;
-        player.jumpTime = 0;
-      }
-    }
-    if (player.jumpState === playerInformation.DOWN_JUMP){
-      console.log("***************");
-      updatedSpeed = player.startSpeed + player.accelerationOfGravity *
-          player.jumpTime;
-      player.verticalSpeed = updatedSpeed;
-      updatedY = player.startY - (player.verticalSpeed*player.jumpTime) +
-          (player.accelerationOfGravity *player.jumpTime *player.jumpTime / 2);
-      updatedHeight = player.nowJumpHeight - (updatedY - player.y);
-      player.nowJumpHeight = updatedHeight;
-      console.log(player.nowJumpHeight);
-      if (player.nowJumpHeight <= 0) {
-        player.upMove = 0;
-        player.jumpTime = 0;
-        player.nowJumpHeight = 0;
-        player.speed = player.VERTICAL_SPEED;
-      }
-    }
+    let updatedSpeed = player.verticalSpeed- player.accelerationOfGravity * deltaTime/ 100;
+    player.verticalSpeed = updatedSpeed;
+    let updatedY = player.y - updatedSpeed * deltaTime / 100;
+    let freeVerticallySpace = checkOthersVerticallyPlayers(player, updatedY, players);
+    let freeHorizontallySpace = checkOthersHorizontallyPlayers(player, player.x, players);
     player.y = updatedY;
+    if ((!freeHorizontallySpace) && (!freeVerticallySpace)){
+      console.log("DELETE");
+    }
+    if (player.y  > 785) {
+      player.upMove = 0;
+      player.verticalSpeed = playerInformation.START_VERTICAL_SPEED;
+    }
   }
 }
 
-function checkOthersPlayers(player, updatedX, players) {
+function checkOthersHorizontallyPlayers(player, updatedX, players) {
   if (players) {
     for (let key in players) {
       if (players[key] != player) {
         let otherPlayer = players[key];
         if ((((updatedX + player.width - player.rightFreeSpace) > (otherPlayer.x + otherPlayer.leftFreeSpace))
             && ((updatedX + player.width - player.rightFreeSpace) < (otherPlayer.x + otherPlayer.width -
-            otherPlayer.rightFreeSpace)))  //проверка игрока справа
+            otherPlayer.rightFreeSpace)))//проверка игрока справа
             ||
             (((updatedX + player.leftFreeSpace) > (otherPlayer.x + otherPlayer.leftFreeSpace))
             && ((updatedX + player.leftFreeSpace) < (otherPlayer.x + otherPlayer.width -
-            otherPlayer.rightFreeSpace)))) { //проверка игрока слева
+            otherPlayer.rightFreeSpace)))){ //проверка игрока слева
           return false;
         }
       }
@@ -101,6 +75,21 @@ function checkOthersPlayers(player, updatedX, players) {
   }
   return true;
 }
+
+function checkOthersVerticallyPlayers(player, updatedY, players){
+  if (players) {
+    for (let key in players) {
+      if (players[key] != player) {
+        let otherPlayer = players[key];
+        if (((updatedY + player.height) > (otherPlayer.y + otherPlayer.topFreeSpace))
+            && (updatedY + player.topFreeSpace) < (otherPlayer.y + otherPlayer.height))
+          return false;
+        }
+      }
+  }
+  return true;
+}
+
 
 function drawRectangle(ctx, x, y, width, height, amount, shiftRight, shiftDown) {
   for (let i = 0; i < amount; i++) {
