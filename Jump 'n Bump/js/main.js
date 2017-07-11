@@ -1,4 +1,5 @@
 let g_context = {};
+g_context.canvas = document.getElementById("canvas");
 g_context.ctx = document.getElementById("canvas").getContext("2d");
 g_context.prevTime = new Date();
 g_context.resources = [];
