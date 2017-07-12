@@ -1,14 +1,17 @@
-function createObjects() {
-  let backgroundImage = g_context.resources["background"];
-  let firstTypeImage = g_context.resources["firstLand"];
-  let secondTypeImage = g_context.resources["secondLand"];
-  let iceBoxImage = g_context.resources["iceBox"];
-  let rocksImage = g_context.resources["rocks"];
+function objects() {
+  let backgroundImage = g_context.resources[imageNames.BACKGROUND];
+  let firstTypeImage = g_context.resources[imageNames.FIRST_LAND];
+  let secondTypeImage = g_context.resources[imageNames.SECOND_LAND];
+  let iceBoxImage = g_context.resources[imageNames.ICE_BOX];
+  let rocksImage = g_context.resources[imageNames.ROCKS];
   let objects = [];
   objects.push(new Background(backgroundImage, 0, 0));
-  let stairsAmount = 37;
+  const stairsAmount = 37;
+  const startX = -10;
+  const stairWidth = 45;
+  const stairY = 860;
   for (let i = 0; i < stairsAmount; i++) {
-    objects.push(new SmallStair(firstTypeImage, -10 + 45 * i, 860));
+    objects.push(new SmallStair(firstTypeImage, startX + stairWidth * i, stairY));
   }
   return objects;
 }
@@ -108,7 +111,7 @@ function Rock(source, x, y) {
   this.type = "land";
 }
 
-function createPlayers() {
+function players() {
   let playerImage = g_context.resources["player"];
   let objects = [];
 
@@ -139,4 +142,31 @@ function Player(source, x, y, movingButtons) {
   this.rightMove = 0;
   this.leftMove = 0;
   this.upMove = 0;
+}
+
+function scoreboards() {
+  let scoreboard = g_context.resources[imageNames.SCOREBOARD];
+  let objects = [];
+  let x = canvasSize.WIDTH - pointScoreboard.WIDTH;
+
+  for (let i = 0; i < MAX_PLAYERS_AMOUNT; i++) {
+    createScoreboard(objects, scoreboard, x, i * pointScoreboard.HEIGHT);
+  }
+  return objects;
+}
+function createScoreboard(objects, scoreboard, x, y) {
+  objects.push(new ScoreboardBackground(scoreboard, x, y));
+  return objects;
+}
+function ScoreboardBackground(source, x, y) {
+  this.source = source;
+  this.image_x = pointScoreboard.IMAGE_X;
+  this.image_y = pointScoreboard.IMAGE_Y;
+  this.image_width = pointScoreboard.IMAGE_WIDTH;
+  this.image_height = pointScoreboard.IMAGE_HEIGHT;
+  this.x = x;
+  this.y = y;
+  this.width = pointScoreboard.WIDTH;
+  this.height = pointScoreboard.HEIGHT;
+  this.pointsAmount = 0;
 }

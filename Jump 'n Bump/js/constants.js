@@ -1,4 +1,5 @@
-const MAX_COUNTER_VALUE = 6;
+const MAX_COUNTER_VALUE = 7;
+const MAX_PLAYERS_AMOUNT = 4;
 
 const colors = {
   WHITE: "#FFFFFF"
@@ -77,7 +78,7 @@ const secondPlayerMoveButton = {
   UP: 87, //W
   RIGHT: 68 //D
 };
-let playerInformation = {
+const playerInformation = {
   IMAGE_X: 24,
   IMAGE_Y: 75,
   IMAGE_WIDTH: 195,
@@ -92,4 +93,113 @@ let playerInformation = {
   ACCELERATION_OF_GRAVITY: 9.8,
   ALIVE: 1,
   UNALIVE: 0
+};
+const imageNames = {
+  BACKGROUND: "background",
+  FIRST_LAND: "firstLand",
+  SECOND_LAND: "secondLand",
+  ICE_BOX: "iceBox",
+  ROCKS: "rocks",
+  PLAYER: "player",
+  SCOREBOARD: "scoreboard"
+};
+const points = {
+  ZERO: {
+    IMAGE_X: 1428,
+    IMAGE_Y: 726,
+    IMAGE_WIDTH: 380,
+    IMAGE_HEIGHT: 670,
+    TOP_FREE_SPACE: 0,
+    WIDTH: 90,
+    HEIGHT: 180
+  },
+  ONE: {
+    IMAGE_X: 0,
+    IMAGE_Y: 72,
+    IMAGE_WIDTH: 300,
+    IMAGE_HEIGHT: 550,
+    TOP_FREE_SPACE: 0,
+    WIDTH: 90,
+    HEIGHT: 180
+  },
+  TWO: {
+    IMAGE_X: 288,
+    IMAGE_Y: 48,
+    IMAGE_WIDTH: 270,
+    IMAGE_HEIGHT: 730,
+    TOP_FREE_SPACE: 160,
+    WIDTH: 90,
+    HEIGHT: 180
+  },
+  THREE: {
+    IMAGE_X: 576,
+    IMAGE_Y: 72,
+    IMAGE_WIDTH: 270,
+    IMAGE_HEIGHT: 635,
+    TOP_FREE_SPACE: 115,
+    WIDTH: 90,
+    HEIGHT: 180
+  },
+  FOUR: {
+    IMAGE_X: 852,
+    IMAGE_Y: 78,
+    IMAGE_WIDTH: 430,
+    IMAGE_HEIGHT: 610,
+    TOP_FREE_SPACE: 90,
+    WIDTH: 90,
+    HEIGHT: 180
+  },
+  FIVE: {
+    IMAGE_X: 12,
+    IMAGE_Y: 792,
+    IMAGE_WIDTH: 380,
+    IMAGE_HEIGHT: 690,
+    TOP_FREE_SPACE: 50,
+    WIDTH: 90,
+    HEIGHT: 180
+  },
+  SIX: {
+    IMAGE_X: 402,
+    IMAGE_Y: 816,
+    IMAGE_WIDTH: 270,
+    IMAGE_HEIGHT: 650,
+    TOP_FREE_SPACE: 120,
+    WIDTH: 90,
+    HEIGHT: 180
+  },
+  SEVEN: {
+    IMAGE_X: 660,
+    IMAGE_Y: 726,
+    IMAGE_WIDTH: 440,
+    IMAGE_HEIGHT: 660,
+    TOP_FREE_SPACE: 70,
+    WIDTH: 90,
+    HEIGHT: 180
+  },
+  EIGHT: {
+    IMAGE_X: 1116,
+    IMAGE_Y: 696,
+    IMAGE_WIDTH: 300,
+    IMAGE_HEIGHT: 650,
+    TOP_FREE_SPACE: 70,
+    WIDTH: 90,
+    HEIGHT: 180
+  },
+  NINE: {
+    IMAGE_X: 1296,
+    IMAGE_Y: 72,
+    IMAGE_WIDTH: 400,
+    IMAGE_HEIGHT: 580,
+    TOP_FREE_SPACE: 0,
+    WIDTH: 90,
+    HEIGHT: 180
+  }
+};
+const pointScoreboard = {
+  IMAGE_X: 1986,
+  IMAGE_Y: 42,
+  IMAGE_WIDTH: 500,
+  IMAGE_HEIGHT: 824,
+  WIDTH: 170,
+  HEIGHT: 225
 };

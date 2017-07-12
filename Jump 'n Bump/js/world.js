@@ -1,6 +1,7 @@
 function World() {
-  this.objects = createObjects();
-  this.players = createPlayers();
+  this.objects = objects();
+  this.players = players();
+  this.scoreboards = scoreboards();
   this.update = function (deltaTime) {
     updatePlayersCoordinates(this.players, deltaTime);
   };
@@ -13,5 +14,7 @@ function World() {
     drawObjects(ctx, gameWorldObjects);
     let players = this.players;
     drawObjects(ctx, players);
+    let scoreboards = this.scoreboards;
+    drawObjects(ctx, scoreboards);
   };
 }
