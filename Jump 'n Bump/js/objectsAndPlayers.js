@@ -1,4 +1,4 @@
-function objects() {
+function getObjects() {
   let backgroundImage = g_context.resources[imageNames.BACKGROUND];
   let firstTypeImage = g_context.resources[imageNames.FIRST_LAND];
   let secondTypeImage = g_context.resources[imageNames.SECOND_LAND];
@@ -111,13 +111,18 @@ function Rock(source, x, y) {
   this.type = "land";
 }
 
-function players() {
+function getPlayers() {
   let playerImage = g_context.resources["player"];
-  let objects = [];
-
-  objects["firstPlayer"] = new Player(playerImage, 600, 785, firstPlayerMoveButton);
-  objects["secondPlayer"] = new Player(playerImage, 900, 785, secondPlayerMoveButton);
-  return objects;
+  let players = new Players(playerImage);
+  return players
+}
+function Players(playerImage){
+  this.firstPlayer = new Player(playerImage, 600, 785, firstPlayerMoveButton);
+  this.secondPlayer = new Player(playerImage, 900, 785, secondPlayerMoveButton);
+  this.draw = function (ctx) {
+    drawObject(ctx, this.firstPlayer);
+    drawObject(ctx, this.secondPlayer);
+  }
 }
 function Player(source, x, y, movingButtons) {
   this.source = source;
@@ -144,7 +149,7 @@ function Player(source, x, y, movingButtons) {
   this.upMove = 0;
 }
 
-function scoreboards() {
+function getScoreboards() {
   let scoreboard = g_context.resources[imageNames.SCOREBOARD];
   let objects = [];
   let x = canvasSize.WIDTH - pointScoreboard.WIDTH;

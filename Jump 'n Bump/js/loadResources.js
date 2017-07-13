@@ -1,11 +1,11 @@
-function loadResources() {
+function loadResources(startFunction) {
   let resources = [];
   let counter = 0;
 
   function increment() {
     counter += 1;
     if (counter === MAX_COUNTER_VALUE) {
-      gameLoop();
+      startFunction();
     }
   }
 
