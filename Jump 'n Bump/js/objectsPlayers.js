@@ -120,8 +120,12 @@ function Players(playerImage){
   this.firstPlayer = new Player(playerImage, 600, 785, firstPlayerMoveButton);
   this.secondPlayer = new Player(playerImage, 900, 785, secondPlayerMoveButton);
   this.draw = function (ctx) {
-    drawObject(ctx, this.firstPlayer);
-    drawObject(ctx, this.secondPlayer);
+    if (this.firstPlayer.liveState = playerInformation.ALIVE) {
+      drawObject(ctx, this.firstPlayer);
+    }
+    if (this.secondPlayer.liveState = playerInformation.ALIVE) {
+      drawObject(ctx, this.secondPlayer);
+    }
   }
 }
 function Player(source, x, y, movingButtons) {

@@ -1,16 +1,3 @@
-function drawObjects(ctx, objects) {
-  if (objects) {
-    for (let key in objects) {
-      drawObject(ctx, objects[key]);
-    }
-  }
-}
-
-function drawObject(ctx, object) {
-  ctx.drawImage(object.source, object.image_x, object.image_y, object.image_width, object.image_height,
-      object.x, object.y, object.width, object.height);
-}
-
 function updatePlayersCoordinates(players, deltaTime) {
   if (players) {
     for (let key in players) {
@@ -40,7 +27,7 @@ function createRightMoving(players, player, deltaTime) {
   let freeBottomSpace = g_world.checkBottomFree(player, player.y, players);
   if (((updatedX > 0) && (updatedX < canvasSize.WIDTH - pointScoreboard.WIDTH - player.width)
       && freeHorizontallySpace) || ((!freeHorizontallySpace) &&
-      (freeTopSpace && freeBottomSpace) && (player.upMove === 1))) {
+      (freeTopSpace || freeBottomSpace) && (player.upMove === 1))) {
     player.x = updatedX;
   }
 }
@@ -50,7 +37,7 @@ function createLeftMoving(players, player, deltaTime) {
   let freeTopSpace = g_world.checkTopFree(player, player.y, players);
   let freeBottomSpace = g_world.checkBottomFree(player, player.y, players);
   if (((updatedX > 0) && (updatedX < canvasSize.WIDTH - pointScoreboard.WIDTH - player.width) && freeHorizontallySpace)
-      || ((!freeHorizontallySpace) && (freeTopSpace && freeBottomSpace) && (player.upMove === 1))) {
+      || ((!freeHorizontallySpace) && (freeTopSpace || freeBottomSpace) && (player.upMove === 1))) {
     player.x = updatedX;
   }
 }
@@ -59,11 +46,11 @@ function createJump(players, player, deltaTime) {
   player.verticalSpeed = updatedSpeed;
   let updatedY = player.y - updatedSpeed * deltaTime / 100;
   let freeHorizontallySpace = g_world.checkHorizontallyFree(player, player.x, players);
-  let freeTopSpace = g_world.checkTopFree(player, updatedY, players);
   let freeBottomSpace = g_world.checkBottomFree(player, updatedY, players);
   player.y = updatedY;
-  if ((!freeHorizontallySpace) && !(freeTopSpace) && !(freeBottomSpace)) {
-    console.log("DELETE");
+  if ((!freeHorizontallySpace) && !(freeBottomSpace)) {
+    increaseScores(players, player);
+    searchKilledPlayers(players, player);
   }
   if (player.y > 785) {
     player.upMove = 0;
@@ -71,9 +58,39 @@ function createJump(players, player, deltaTime) {
   }
 }
 
-function drawRectangle(ctx, x, y, width, height, amount, shiftRight, shiftDown) {
-  for (let i = 0; i < amount; i++) {
-    ctx.fillRect(x + i * shiftRight, y + i * shiftDown, width, height);
-    ctx.strokeRect(x + i * shiftRight, y + i * shiftDown, width, height);
+function increaseScores(players, player) {
+  let scoreboards = g_world.scoreboards;
+  let newScore;
+  let scoreboardNumber;
+  switch (player) {
+    case players.firstPlayer:
+      scoreboardNumber = 0;
+    case players.secondPlayer:
+      scoreboardNumber = 1;
   }
+  newScore = scoreboards[scoreboardNumber].pointsAmount + 1;
+  scoreboards[scoreboardNumber].pointsAmount = newScore;
+  return scoreboards;
+}
+function searchKilledPlayers(players, player) {
+  if (players) {
+    for (let key in players) {
+      if (players[key] != player) {
+        let otherPlayer = players[key];
+        console.log(otherPlayer.liveState);
+        if ((((player.x + player.width - player.rightFreeSpace) > (otherPlayer.x + otherPlayer.leftFreeSpace))
+            && ((player.x + player.width - player.rightFreeSpace) < (otherPlayer.x + otherPlayer.width -
+            otherPlayer.rightFreeSpace)) && ((otherPlayer.y + otherPlayer.topFreeSpace) <= (player.y + player.height)))
+            ||
+            (((player.x + player.leftFreeSpace) > (otherPlayer.x + otherPlayer.leftFreeSpace))
+            && (player.x + player.leftFreeSpace) < (otherPlayer.x + otherPlayer.width -
+            otherPlayer.rightFreeSpace)) && ((otherPlayer.y + otherPlayer.topFreeSpace) <= (player.y + player.height))) {
+          players[key].liveState = playerInformation.UNALIVE;
+          console.log(players[key].liveState);
+          console.log(players[key]);
+        }
+      }
+    }
+  }
+  return players;
 }
