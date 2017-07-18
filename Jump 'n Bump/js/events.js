@@ -1,13 +1,15 @@
 addEventListener("keydown", checkPressedButtons);
 addEventListener("keyup", checkReleasedButtons);
 
-window.onresize = function changeCanvasSize() {
+function changeCanvasSize() {
   let ctx = g_context.ctx;
   let canvas = g_context.canvas;
   ctx.restore();
   ctx.save();
   scalingWindow(ctx, canvas);
-};
+}
+window.onresize = changeCanvasSize;
+changeCanvasSize();
 
 function checkPressedButtons(event) {
   let players = g_world.players;
@@ -60,6 +62,10 @@ function scalingWindow(ctx, canvas) {
   } else {                                // высота окна выше желаемой высоты игры
     coefficient = newWidth / canvasSize.WIDTH;//widthCoefficient
   }
+  if (coefficient > canvasSize.MAX_COEFFICIENT) {
+    coefficient = canvasSize.MAX_COEFFICIENT;
+  }
+  console.log(coefficient);
   canvas.width = canvasSize.WIDTH * coefficient;
   canvas.height = canvasSize.HEIGHT * coefficient;
   ctx.scale(coefficient, coefficient);

@@ -26,7 +26,8 @@ const bigStair = {
 };
 const canvasSize = {
   WIDTH: 1650,
-  HEIGHT: 900
+  HEIGHT: 900,
+  MAX_COEFFICIENT: 1.5
 };
 const firstTypeGrass = {
   IMAGE_X: 33,
