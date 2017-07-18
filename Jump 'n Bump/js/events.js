@@ -1,5 +1,4 @@
 addEventListener("keydown", checkPressedButtons);
-
 addEventListener("keyup", checkReleasedButtons);
 
 window.onresize = function changeCanvasSize() {

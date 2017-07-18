@@ -7,7 +7,7 @@ function drawObjects(ctx, objects) {
 }
 
 function drawObject(ctx, object) {
-  ctx.drawImage(object.source, object.image_x, object.image_y, object.image_width, object.image_height,
+  ctx.drawImage(object.source, object.imageX, object.imageY, object.imageWidth, object.imageHeight,
       object.x, object.y, object.width, object.height);
 }
 

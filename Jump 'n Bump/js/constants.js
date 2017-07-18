@@ -1,5 +1,4 @@
 const MAX_COUNTER_VALUE = 7;
-const MAX_PLAYERS_AMOUNT = 4;
 
 const colors = {
   WHITE: "#FFFFFF"
@@ -14,7 +13,8 @@ const smallStair = {
   IMAGE_WIDTH: 16,
   IMAGE_HEIGHT: 17,
   WIDTH: 50,
-  HEIGHT: 50
+  HEIGHT: 50,
+  TOP_FREE_SPACE: 10
 };
 const bigStair = {
   IMAGE_X: 48,
@@ -89,10 +89,20 @@ const playerInformation = {
   RIGHT_FREE_SPACE: 13,
   TOP_FREE_SPACE: 38,
   HORIZONTAL_SPEED: 0.5,
-  START_VERTICAL_SPEED: 50,
+  START_BIG_VERTICAL_SPEED: 60,
+  START_SMALL_VERTICAL_SPEED: 40,
   ACCELERATION_OF_GRAVITY: 9.8,
   ALIVE: 1,
-  UNALIVE: 0
+  UNALIVE: 0,
+  JUMP: 1,
+  NO_JUMP: 0,
+  UNALIVE_TIME: 5
+};
+const playerName = {
+  FIRST_NAME: "1",
+  SECOND_NAME: "2",
+  THIRD_NAME: "3",
+  FOURTH_NAME: "4"
 };
 const imageNames = {
   BACKGROUND: "background",
@@ -105,94 +115,74 @@ const imageNames = {
 };
 const points = {
   ZERO: {
+    VALUE: 0,
     IMAGE_X: 1428,
     IMAGE_Y: 726,
     IMAGE_WIDTH: 380,
-    IMAGE_HEIGHT: 670,
-    TOP_FREE_SPACE: 0,
-    WIDTH: 90,
-    HEIGHT: 180
+    IMAGE_HEIGHT: 670
   },
   ONE: {
+    VALUE: 1,
     IMAGE_X: 0,
     IMAGE_Y: 72,
     IMAGE_WIDTH: 300,
-    IMAGE_HEIGHT: 550,
-    TOP_FREE_SPACE: 0,
-    WIDTH: 90,
-    HEIGHT: 180
+    IMAGE_HEIGHT: 550
   },
   TWO: {
+    VALUE: 2,
     IMAGE_X: 288,
     IMAGE_Y: 48,
     IMAGE_WIDTH: 270,
-    IMAGE_HEIGHT: 730,
-    TOP_FREE_SPACE: 160,
-    WIDTH: 90,
-    HEIGHT: 180
+    IMAGE_HEIGHT: 730
   },
   THREE: {
+    VALUE: 3,
     IMAGE_X: 576,
     IMAGE_Y: 72,
     IMAGE_WIDTH: 270,
-    IMAGE_HEIGHT: 635,
-    TOP_FREE_SPACE: 115,
-    WIDTH: 90,
-    HEIGHT: 180
+    IMAGE_HEIGHT: 635
   },
   FOUR: {
+    VALUE: 4,
     IMAGE_X: 852,
     IMAGE_Y: 78,
     IMAGE_WIDTH: 430,
-    IMAGE_HEIGHT: 610,
-    TOP_FREE_SPACE: 90,
-    WIDTH: 90,
-    HEIGHT: 180
+    IMAGE_HEIGHT: 610
   },
   FIVE: {
+    VALUE: 5,
     IMAGE_X: 12,
     IMAGE_Y: 792,
     IMAGE_WIDTH: 380,
-    IMAGE_HEIGHT: 690,
-    TOP_FREE_SPACE: 50,
-    WIDTH: 90,
-    HEIGHT: 180
+    IMAGE_HEIGHT: 690
   },
   SIX: {
+    VALUE: 6,
     IMAGE_X: 402,
     IMAGE_Y: 816,
     IMAGE_WIDTH: 270,
-    IMAGE_HEIGHT: 650,
-    TOP_FREE_SPACE: 120,
-    WIDTH: 90,
-    HEIGHT: 180
+    IMAGE_HEIGHT: 650
   },
   SEVEN: {
+    VALUE: 7,
     IMAGE_X: 660,
     IMAGE_Y: 726,
     IMAGE_WIDTH: 440,
-    IMAGE_HEIGHT: 660,
-    TOP_FREE_SPACE: 70,
-    WIDTH: 90,
-    HEIGHT: 180
+    IMAGE_HEIGHT: 660
   },
   EIGHT: {
+    VALUE: 8,
     IMAGE_X: 1116,
     IMAGE_Y: 696,
     IMAGE_WIDTH: 300,
-    IMAGE_HEIGHT: 650,
-    TOP_FREE_SPACE: 70,
-    WIDTH: 90,
-    HEIGHT: 180
+    IMAGE_HEIGHT: 650
   },
   NINE: {
+    VALUE: 9,
     IMAGE_X: 1296,
     IMAGE_Y: 72,
     IMAGE_WIDTH: 400,
-    IMAGE_HEIGHT: 580,
-    TOP_FREE_SPACE: 0,
-    WIDTH: 90,
-    HEIGHT: 180
+    IMAGE_HEIGHT: 580
   }
 };
 const pointScoreboard = {
@@ -201,5 +191,15 @@ const pointScoreboard = {
   IMAGE_WIDTH: 500,
   IMAGE_HEIGHT: 824,
   WIDTH: 170,
-  HEIGHT: 225
+  HEIGHT: 225,
+  Y_POINT_SHIFT: 110,
+  X_FIRST_POINT_SHIFT: 30,
+  X_SECOND_POINT_SHIFT: 85,
+  POINT_HEIGHT: 95,
+  POINT_WIDTH: 59
 };
+const bottomType = {
+  LAND: "land",
+  ICE: "ice",
+  AIR: "air"
+}
