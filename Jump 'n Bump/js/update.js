@@ -23,8 +23,8 @@ function updatePlayerCoordinates(players, player, deltaTime) {
 
 function rightMoving(players, player, deltaTime) {
   let updatedX = player.x + player.horizontalSpeed * deltaTime;
-  players = players.getPlayersInState(playerInformation.ALIVE);
-  let freeHorizontallySpace = g_world.checkHorizontallyFree(player, updatedX, players);
+  let alivePlayers = players.getPlayersInState(playerInformation.ALIVE);
+  let freeHorizontallySpace = g_world.checkHorizontallyFree(player, updatedX, alivePlayers);
   let isScreen = (updatedX > 0) && (updatedX < canvasSize.WIDTH - pointScoreboard.WIDTH - player.width);
 
   if ((isScreen && freeHorizontallySpace)) {
@@ -33,8 +33,8 @@ function rightMoving(players, player, deltaTime) {
 }
 function leftMoving(players, player, deltaTime) {
   let updatedX = player.x - player.horizontalSpeed * deltaTime;
-  players = players.getPlayersInState(playerInformation.ALIVE);
-  let freeHorizontallySpace = g_world.checkHorizontallyFree(player, updatedX, players);
+  let alivePlayers = players.getPlayersInState(playerInformation.ALIVE);
+  let freeHorizontallySpace = g_world.checkHorizontallyFree(player, updatedX, alivePlayers);
   let isScreen = (updatedX > 0) && (updatedX < canvasSize.WIDTH - pointScoreboard.WIDTH - player.width);
 
   if ((isScreen && freeHorizontallySpace)) {
@@ -45,20 +45,30 @@ function jump(players, player, deltaTime) {
   let updatedSpeed = player.verticalSpeed - player.accelerationOfGravity * deltaTime / 100;
   player.verticalSpeed = updatedSpeed;
   let updatedY = player.y - updatedSpeed * deltaTime / 100;
-  players = players.getPlayersInState(playerInformation.ALIVE);
-  let freeHorizontallySpace = g_world.checkHorizontallyFree(player, player.x, players);
-  let freeBottomSpace = g_world.checkBottomFree(player, updatedY, players);
-  player.y = updatedY;
+  let alivePlayers = players.getPlayersInState(playerInformation.ALIVE);
+  let freeHorizontallySpace = g_world.checkHorizontallyFree(player, player.x, alivePlayers);
+  let freeBottomSpace = g_world.checkBottomFree(player, updatedY, alivePlayers);
+  let elements = g_world.objects;
+  let freeTopSpace = g_world.checkTopFree(player, updatedY, elements);
+  if (player.y < 0) {
+    player.y = 0;
+    player.verticalSpeed = 0;
+  } else {
+    player.y = updatedY;
+  }
 
   if ((!freeHorizontallySpace) && !(freeBottomSpace)) {
     increaseScores(player);
-    searchKilledPlayers(players, player);
+    searchKilledPlayers(alivePlayers, player);
     player.upMove = 1;
     player.jumpState = playerInformation.JUMP;
     player.verticalSpeed = playerInformation.START_SMALL_VERTICAL_SPEED;
   }
 
-  if (player.y > 785) {
+  let isLand = g_world.checkLand(player);
+
+  if ((isLand) && (updatedSpeed < 0)) {
+    player.y = isLand -playerInformation.HEIGHT + smallStair.TOP_FREE_SPACE;
     player.upMove = 0;
     player.jumpState = playerInformation.NO_JUMP;
     player.verticalSpeed = playerInformation.START_BIG_VERTICAL_SPEED;

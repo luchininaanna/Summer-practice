@@ -97,7 +97,7 @@ const playerInformation = {
   UNALIVE: 0,
   JUMP: 1,
   NO_JUMP: 0,
-  UNALIVE_TIME: 5
+  UNALIVE_TIME: 2
 };
 const playerName = {
   FIRST_NAME: "1",
@@ -203,4 +203,21 @@ const bottomType = {
   LAND: "land",
   ICE: "ice",
   AIR: "air"
-}
+};
+const randomPlaces = {
+  FIRST: 1,
+  SECOND: 2,
+  THIRD: 3,
+  FOURTH: 4,
+  FIFTH: 5,
+  FIRST_PLACE_X: 100,
+  FIRST_PLACE_Y: 350,
+  SECOND_PLACE_X: 900,
+  SECOND_PLACE_Y: 70,
+  THIRD_PLACE_X: 1300,
+  THIRD_PLACE_Y: 530,
+  FOURTH_PLACE_X: 600,
+  FOURTH_PLACE_Y: 470,
+  FIFTH_PLACE_X: 1100,
+  FIFTH_PLACE_Y: 630
+};

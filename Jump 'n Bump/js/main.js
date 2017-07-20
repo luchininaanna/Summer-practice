@@ -4,9 +4,9 @@ g_context.ctx = document.getElementById("canvas").getContext("2d");
 g_context.prevTime = new Date();
 g_context.resources = [];
 
-let g_world = new World();
-
 loadResources(gameLoop);
+
+let g_world = new World();
 
 function gameLoop() {
   let ctx = g_context.ctx;

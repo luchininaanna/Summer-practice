@@ -17,26 +17,26 @@ function World() {
     this.players.draw(ctx);
     this.scoreboards.draw(ctx);
   };
-  this.checkHorizontallyFree = function (player, updatedX, players) {
-    if (players) {
-      for (let key in players) {
-        if ((players[key] != player) &&
-            ((players[key].name === playerName.FIRST_NAME) ||
-            (players[key].name === playerName.SECOND_NAME) ||
-            (players[key].name === playerName.THIRD_NAME) ||
-            (players[key].name === playerName.FOURTH_NAME))) {
-          let otherPlayer = players[key];
-          let verticallyFree = ((player.y + player.topFreeSpace) > (otherPlayer.y + otherPlayer.height)) ||
-              ((player.y + player.height) < (otherPlayer.y + otherPlayer.topFreeSpace));
+  this.checkHorizontallyFree = function (player, updatedX, elements) {
+    if (elements) {
+      for (let key in elements) {
+        if ((elements[key] != player) &&
+            ((elements[key].name === playerName.FIRST_NAME) ||
+            (elements[key].name === playerName.SECOND_NAME) ||
+            (elements[key].name === playerName.THIRD_NAME) ||
+            (elements[key].name === playerName.FOURTH_NAME))) {
+          let otherElement = elements[key];
+          let verticallyFree = ((player.y + player.topFreeSpace) > (otherElement.y + otherElement.height)) ||
+              ((player.y + player.height) < (otherElement.y + otherElement.topFreeSpace));
           let afterLeftSideAnotherPlayer = (updatedX + player.width - player.rightFreeSpace) >
-              (otherPlayer.x + otherPlayer.leftFreeSpace);
+              (otherElement.x + otherElement.leftFreeSpace);
           let beforeRightAnotherPlayerFree = (updatedX + player.width - player.rightFreeSpace) <
-              (otherPlayer.x + otherPlayer.width - otherPlayer.rightFreeSpace);
+              (otherElement.x + otherElement.width - otherElement.rightFreeSpace);
           let afterRightSideAnotherPlayer = (updatedX + player.leftFreeSpace) >
-              (otherPlayer.x + otherPlayer.leftFreeSpace);
+              (otherElement.x + otherElement.leftFreeSpace);
           let beforeLeftAnotherPlayerFree = (updatedX + player.leftFreeSpace) <
-              (otherPlayer.x + otherPlayer.width -
-              otherPlayer.rightFreeSpace);
+              (otherElement.x + otherElement.width -
+              otherElement.rightFreeSpace);
 
           if (verticallyFree) {
             return true
@@ -52,44 +52,50 @@ function World() {
     }
     return true;
   };
-  this.checkTopFree = function (player, updatedY, players) {
-    if (players) {
-      for (let key in players) {
-        if (players[key] != player) {
-          let otherPlayer = players[key];
-          if ((updatedY + player.topFreeSpace) < (otherPlayer.y + otherPlayer.height))
+  this.checkTopFree = function (player, updatedY, elements) {
+    if (elements) {
+      for (let key in elements) {
+        if ((elements[key] != player) && (elements[key] != imageNames.BACKGROUND)) {
+          let otherElement  = elements[key];
+          if ((updatedY + player.topFreeSpace) < (otherElement .y + otherElement .height))
             return false;
         }
       }
     }
     return true;
   };
-  this.checkBottomFree = function (player, updatedY, players) {
-    if (players) {
-      for (let key in players) {
-        if (players[key] != player) {
-          let otherPlayer = players[key];
-          if ((updatedY + player.height) > (otherPlayer.y + otherPlayer.topFreeSpace))
+  this.checkBottomFree = function (player, updatedY, elements) {
+    if (elements) {
+      for (let key in elements) {
+        if (elements[key] != player) {
+          let otherElement = elements[key];
+          if ((updatedY + player.height) > (otherElement .y + otherElement .topFreeSpace))
             return false;
         }
       }
     }
     return true;
   };
-  this.checkTypeOfBottom = function (player) {
-    if (this.objects) {
-      for (let key in this.objects) {
-        if (this.objects[key].type = bottomType.LAND){
+  this.checkLand = function (player) {
+    if (!this.objects) {
+      return false;
+    }
+    for (let key in this.objects) {
+      if (this.objects[key].type === bottomType.LAND){
 
-          let underLand = (player.x > this.objects[key].x)
+        let underLand = (player.x > this.objects[key].x)
               && (player.x < this.objects[key].x + this.objects[key].width);
-          let distanceToLand = (player.y + player.height) - (this.objects[key].y - smallStair.TOP_FREE_SPACE);
 
-          if ((underLand) && (distanceToLand >= 0) && (distanceToLand <= smallStair.TOP_FREE_SPACE)){
-            console.log("land")
-          }
+        let distanceToLand = (player.y + player.height) - (this.objects[key].y - smallStair.TOP_FREE_SPACE);
+
+        //console.log(player.y + player.height);
+        //console.log(this.objects[key].y + smallStair.TOP_FREE_SPACE);
+
+        if ((underLand) && (distanceToLand >= 0) && (distanceToLand <= smallStair.TOP_FREE_SPACE)){
+          return this.objects[key].y;
         }
       }
     }
+    return false;
   }
 }

@@ -6,10 +6,59 @@ function getObjects() {
   let rocksImage = g_context.resources[imageNames.ROCKS];
   let objects = [];
   objects.push(new Background(backgroundImage, 0, 0));
-  const stairsAmount = 33;
-  const startX = -10;
-  const stairWidth = 45;
-  const stairY = 860;
+  let stairsAmount = 33;
+  let startX = -10;
+  let stairWidth = 45;
+  let stairY = 860;
+  for (let i = 0; i < stairsAmount; i++) {
+    objects.push(new SmallStair(firstTypeImage, startX + stairWidth * i, stairY));
+  }
+  stairsAmount = 5;
+  startX = 1000;
+  stairWidth = 45;
+  stairY = 700;
+  for (let i = 0; i < stairsAmount; i++) {
+    objects.push(new SmallStair(firstTypeImage, startX + stairWidth * i, stairY));
+  }
+  stairsAmount = 3;
+  startX = 1300;
+  stairWidth = 45;
+  stairY = 600;
+  for (let i = 0; i < stairsAmount; i++) {
+    objects.push(new SmallStair(firstTypeImage, startX + stairWidth * i, stairY));
+  }
+  stairsAmount = 8;
+  startX = 550;
+  stairWidth = 45;
+  stairY = 550;
+  for (let i = 0; i < stairsAmount; i++) {
+    objects.push(new SmallStair(firstTypeImage, startX + stairWidth * i, stairY));
+  }
+  stairsAmount = 7;
+  startX = 100;
+  stairWidth = 45;
+  stairY = 430;
+  for (let i = 0; i < stairsAmount; i++) {
+    objects.push(new SmallStair(firstTypeImage, startX + stairWidth * i, stairY));
+  }
+  stairsAmount = 20;
+  startX = 600;
+  stairWidth = 45;
+  stairY = 150;
+  for (let i = 0; i < stairsAmount; i++) {
+    objects.push(new SmallStair(firstTypeImage, startX + stairWidth * i, stairY));
+  }
+  stairsAmount = 3;
+  startX = 300;
+  stairWidth = 45;
+  stairY = 300;
+  for (let i = 0; i < stairsAmount; i++) {
+    objects.push(new SmallStair(firstTypeImage, startX + stairWidth * i, stairY));
+  }
+  stairsAmount = 3;
+  startX = 450;
+  stairWidth = 45;
+  stairY = 200;
   for (let i = 0; i < stairsAmount; i++) {
     objects.push(new SmallStair(firstTypeImage, startX + stairWidth * i, stairY));
   }
@@ -137,9 +186,40 @@ function Players(playerImage) {
         if (unalivePlayers[key].unaliveTime >= playerInformation.UNALIVE_TIME) {
           unalivePlayers[key].liveState = playerInformation.ALIVE;
           unalivePlayers[key].unaliveTime = 0;
+          this.chooseRandomPlace(unalivePlayers[key]);
         }
       }
     }
+  };
+  this.chooseRandomPlace = function (player) {
+    const MIN = 1;
+    const MAX = 5;
+    let placeVariant = this.chooseRandomDigit(MIN, MAX);
+    switch (placeVariant) {
+      case randomPlaces.FIRST:
+        player.x = randomPlaces.FIRST_PLACE_X;
+        player.y = randomPlaces.FIRST_PLACE_Y;
+        break;
+      case randomPlaces.SECOND:
+        player.x = randomPlaces.SECOND_PLACE_X;
+        player.y = randomPlaces.SECOND_PLACE_Y;
+        break;
+      case randomPlaces.THIRD:
+        player.x = randomPlaces.THIRD_PLACE_X;
+        player.y = randomPlaces.THIRD_PLACE_Y;
+        break;
+      case randomPlaces.FOURTH:
+        player.x = randomPlaces.FOURTH_PLACE_X;
+        player.y = randomPlaces.FOURTH_PLACE_Y;
+        break;
+      case randomPlaces.FIFTH:
+        player.x = randomPlaces.FIFTH_PLACE_X;
+        player.y = randomPlaces.FIFTH_PLACE_Y;
+        break;
+    }
+  };
+  this.chooseRandomDigit = function (min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
   };
   this.firstPlayer = new Player(playerImage, playerName.FIRST_NAME, 600, 785, firstPlayerMoveButton);
   this.secondPlayer = new Player(playerImage, playerName.SECOND_NAME, 900, 785, secondPlayerMoveButton);

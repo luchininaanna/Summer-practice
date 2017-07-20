@@ -1,69 +1,48 @@
-let resources = [];
-let count = 0;
-
 function loadResources(startFunction) {
-  const images = [
-    {
-      name: imageNames.SCOREBOARD,
-      src: "image/scoreboard.png"
-    },
-    {
-      name: imageNames.BACKGROUND,
-      src: "image/background.png"
-    },
-    {
-      name: imageNames.FIRST_LAND,
-      src: "image/firstLand.png"
-    },
-    {
-      name: imageNames.SECOND_LAND,
-      src: "image/secondLand.png"
-    },
-    {
-      name: imageNames.ICE_BOX,
-      src: "image/iceBox.png"
-    },
-    {
-      name: imageNames.PLAYER,
-      src: "image/player.png"
-    },
-    {
-      name: imageNames.ROCKS,
-      src: "image/rocks.png"
-    }
-  ];
-  let loader = new LoadResources(startFunction);
-  loader.addImages(images);
-}
+  let resources = [];
+  let counter = 0;
 
-function LoadResources(startFunction) {
-  this.checkLoading = function () {
-    if (count === MAX_COUNTER_VALUE) {
-      g_context.resources = this.getImages();
+  function increment() {
+    counter += 1;
+    if (counter === MAX_COUNTER_VALUE) {
       startFunction();
     }
-  };
-
-  this.increaseCounter = function () {
-    count++;
-  };
-
-  this.addImage = function (name, src) {
-    let image = new Image();
-    image.src = src;
-    image.onload = this.increaseCounter();
-    resources[name] = image;
-    this.checkLoading();
-  };
-
-  this.addImages = function (images) {
-    let amountImages = images.length;
-    for (let i = 0; i < amountImages; i++) {
-      this.addImage(images[i].name, images[i].src);
-    }
-  };
-
-  this.getImages = function () {
-    return resources;
   }
+
+  let background = new Image();
+  background.src = "image/background.png";
+  background.onload = increment;
+  resources[imageNames.BACKGROUND] = background;
+
+  let firstLand = new Image();
+  firstLand.src = "image/firstLand.png";
+  firstLand.onload = increment;
+  resources[imageNames.FIRST_LAND] = firstLand;
+
+  let secondLand = new Image();
+  secondLand.src = "image/secondLand.png";
+  secondLand.onload = increment;
+  resources[imageNames.SECOND_LAND] = secondLand;
+
+  let iceBox = new Image();
+  iceBox.src = "image/iceBox.png";
+  iceBox.onload = increment;
+  resources[imageNames.ICE_BOX] = iceBox;
+
+  let rocks = new Image();
+  rocks.src = "image/rocks.png";
+  rocks.onload = increment;
+  resources[imageNames.ROCKS] = rocks;
+
+  let player = new Image();
+  player.src = "image/player.png";
+  player.onload = increment;
+  resources[imageNames.PLAYER] = player;
+
+  let scoreboard = new Image();
+  scoreboard.src = "image/scoreboard.png";
+  scoreboard.onload = increment;
+  resources[imageNames.SCOREBOARD] = scoreboard;
+
+  g_context.resources = resources;
 }
