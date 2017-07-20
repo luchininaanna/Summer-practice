@@ -65,7 +65,6 @@ function scalingWindow(ctx, canvas) {
   if (coefficient > canvasSize.MAX_COEFFICIENT) {
     coefficient = canvasSize.MAX_COEFFICIENT;
   }
-  console.log(coefficient);
   canvas.width = canvasSize.WIDTH * coefficient;
   canvas.height = canvasSize.HEIGHT * coefficient;
   ctx.scale(coefficient, coefficient);
