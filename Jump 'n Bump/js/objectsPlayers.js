@@ -6,45 +6,17 @@ function getObjects() {
   let rocksImage = g_context.resources[imageNames.ROCKS];
   let objects = [];
   objects.push(new Background(backgroundImage, 0, 0));
-  let stairsAmount = 33;
-  let startX = -10;
+  let stairsAmount = 20;
+  let startX = 600;
   let stairWidth = 45;
-  let stairY = 860;
-  for (let i = 0; i < stairsAmount; i++) {
-    objects.push(new SmallStair(firstTypeImage, startX + stairWidth * i, stairY));
-  }
-  stairsAmount = 5;
-  startX = 1000;
-  stairWidth = 45;
-  stairY = 700;
+  let stairY = 150;
   for (let i = 0; i < stairsAmount; i++) {
     objects.push(new SmallStair(firstTypeImage, startX + stairWidth * i, stairY));
   }
   stairsAmount = 3;
-  startX = 1300;
+  startX = 450;
   stairWidth = 45;
-  stairY = 600;
-  for (let i = 0; i < stairsAmount; i++) {
-    objects.push(new SmallStair(firstTypeImage, startX + stairWidth * i, stairY));
-  }
-  stairsAmount = 8;
-  startX = 550;
-  stairWidth = 45;
-  stairY = 550;
-  for (let i = 0; i < stairsAmount; i++) {
-    objects.push(new SmallStair(firstTypeImage, startX + stairWidth * i, stairY));
-  }
-  stairsAmount = 7;
-  startX = 100;
-  stairWidth = 45;
-  stairY = 430;
-  for (let i = 0; i < stairsAmount; i++) {
-    objects.push(new SmallStair(firstTypeImage, startX + stairWidth * i, stairY));
-  }
-  stairsAmount = 20;
-  startX = 600;
-  stairWidth = 45;
-  stairY = 150;
+  stairY = 200;
   for (let i = 0; i < stairsAmount; i++) {
     objects.push(new SmallStair(firstTypeImage, startX + stairWidth * i, stairY));
   }
@@ -55,10 +27,38 @@ function getObjects() {
   for (let i = 0; i < stairsAmount; i++) {
     objects.push(new SmallStair(firstTypeImage, startX + stairWidth * i, stairY));
   }
-  stairsAmount = 3;
-  startX = 450;
+  stairsAmount = 7;
+  startX = 100;
   stairWidth = 45;
-  stairY = 200;
+  stairY = 430;
+  for (let i = 0; i < stairsAmount; i++) {
+    objects.push(new SmallStair(firstTypeImage, startX + stairWidth * i, stairY));
+  }
+  stairsAmount = 8;
+  startX = 550;
+  stairWidth = 45;
+  stairY = 550;
+  for (let i = 0; i < stairsAmount; i++) {
+    objects.push(new SmallStair(firstTypeImage, startX + stairWidth * i, stairY));
+  }
+  stairsAmount = 3;
+  startX = 1300;
+  stairWidth = 45;
+  stairY = 600;
+  for (let i = 0; i < stairsAmount; i++) {
+    objects.push(new SmallStair(firstTypeImage, startX + stairWidth * i, stairY));
+  }
+  stairsAmount = 5;
+  startX = 1000;
+  stairWidth = 45;
+  stairY = 700;
+  for (let i = 0; i < stairsAmount; i++) {
+    objects.push(new SmallStair(firstTypeImage, startX + stairWidth * i, stairY));
+  }
+  stairsAmount = 33;
+  startX = -10;
+  stairWidth = 45;
+  stairY = 860;
   for (let i = 0; i < stairsAmount; i++) {
     objects.push(new SmallStair(firstTypeImage, startX + stairWidth * i, stairY));
   }
@@ -244,11 +244,15 @@ function Player(source, playerName, x, y, movingButtons) {
   this.y = y;
   this.width = playerInformation.WIDTH;
   this.height = playerInformation.HEIGHT;
+
   this.movingButtons = movingButtons;
+
   this.leftFreeSpace = playerInformation.LEFT_FREE_SPACE;
   this.rightFreeSpace = playerInformation.RIGHT_FREE_SPACE;
   this.topFreeSpace = playerInformation.TOP_FREE_SPACE;
+
   this.liveState = playerInformation.ALIVE;
+  this.unaliveTime = 0;
 
   this.horizontalSpeed = playerInformation.HORIZONTAL_SPEED;
   this.accelerationOfGravity = playerInformation.ACCELERATION_OF_GRAVITY;
@@ -258,7 +262,9 @@ function Player(source, playerName, x, y, movingButtons) {
   this.leftMove = 0;
   this.upMove = 0;
 
-  this.unaliveTime = 0;
+  this.distanceToLand = 0;
+  this.underLand = 0;
+  this.nextLandY = 0;
 }
 
 function getScoreboards() {

@@ -80,20 +80,45 @@ function World() {
     if (!this.objects) {
       return false;
     }
+    player.distanceToLand = 0;
+    player.underLand = 0;
     for (let key in this.objects) {
       if (this.objects[key].type === bottomType.LAND){
-
-        let underLand = (player.x > this.objects[key].x)
-              && (player.x < this.objects[key].x + this.objects[key].width);
-
-        let distanceToLand = (player.y + player.height) - (this.objects[key].y - smallStair.TOP_FREE_SPACE);
-
-        //console.log(player.y + player.height);
-        //console.log(this.objects[key].y + smallStair.TOP_FREE_SPACE);
-
-        if ((underLand) && (distanceToLand >= 0) && (distanceToLand <= smallStair.TOP_FREE_SPACE)){
-          return this.objects[key].y;
+        let playerAfterLeftLandSide = player.x + playerInformation.WIDTH / 2 >= this.objects[key].x;
+        let playerAfterRightLandSide = player.x + playerInformation.WIDTH / 2 <= this.objects[key].x + this.objects[key].width;
+        let underLand = playerAfterLeftLandSide && playerAfterRightLandSide;
+        if (underLand) {
+          player.underLand = 1;
         }
+
+        if (underLand && (this.objects[key].y >= (player.y + player.height))) {
+           //находим ближайшую ступень
+          let distanceToLand = this.objects[key].y + smallStair.TOP_FREE_SPACE - (player.y + player.height);
+          if ((player.distanceToLand >= distanceToLand) || (player.distanceToLand === 0)) {
+            player.distanceToLand = distanceToLand;
+            player.nextLandY = this.objects[key].y;
+          }
+        }
+      }
+    }
+    if (player.underLand){
+      return true;
+    } else {
+      return false;
+    }
+  };
+  this.checkOnLand = function (player) {
+    if (!this.objects) {
+      return false;
+    }
+    for (let key in this.objects) {
+      let playerAfterLeftLandSide = player.x + playerInformation.WIDTH / 2 >= this.objects[key].x;
+      let playerAfterRightLandSide = player.x + playerInformation.WIDTH / 2 <= this.objects[key].x + this.objects[key].width;
+      let underLand = playerAfterLeftLandSide && playerAfterRightLandSide;
+      let onLand = player.y === this.objects[key].y - playerInformation.HEIGHT + smallStair.TOP_FREE_SPACE;
+
+      if (underLand && onLand) {
+        return true;
       }
     }
     return false;
