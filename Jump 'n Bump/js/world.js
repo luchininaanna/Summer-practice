@@ -1,4 +1,5 @@
 function World() {
+  this.state = statesOfGame.IN_PROCESS;
   this.objects = getObjects();
   this.players = getPlayers();
   this.scoreboards = getScoreboards();
@@ -12,10 +13,14 @@ function World() {
     drawRectangle(ctx, 0, 0, canvasSize.WIDTH, canvasSize.HEIGHT, 1, 0, 0);
   };
   this.render = function (ctx) {
-    let gameWorldObjects = this.objects;
-    drawObjects(ctx, gameWorldObjects);
-    this.players.draw(ctx);
-    this.scoreboards.draw(ctx);
+    if (this.state === statesOfGame.IN_PROCESS) {
+      let gameWorldObjects = this.objects;
+      drawObjects(ctx, gameWorldObjects);
+      this.players.draw(ctx);
+      this.scoreboards.draw(ctx);
+    } else {
+      drawResult(ctx);
+    }
   };
   this.checkHorizontallyFree = function (player, updatedX, elements) {
     if (elements) {

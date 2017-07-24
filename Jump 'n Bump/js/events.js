@@ -17,6 +17,17 @@ function checkPressedButtons(event) {
   let secondPlayer = players.secondPlayer;
   changePressedState(firstPlayer, event.keyCode, firstPlayer.movingButtons);
   changePressedState(secondPlayer, event.keyCode, secondPlayer.movingButtons);
+  changeStateOfGame(event.keyCode);
+}
+function changeStateOfGame(keyCode) {
+  switch (keyCode) {
+    case resultButton.RESULT:
+      g_world.state = statesOfGame.RESULT;
+      break;
+    case resultButton.NEW_GAME:
+      g_world.state = statesOfGame.IN_PROCESS;  //в полной версии - выбор игроков
+      break;
+  }
 }
 function changePressedState(checkingPlayer, keyCode, movingButtons) {
   switch (keyCode) {

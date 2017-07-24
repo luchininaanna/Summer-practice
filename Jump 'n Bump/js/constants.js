@@ -1,7 +1,8 @@
 const MAX_COUNTER_VALUE = 7;
 
 const colors = {
-  WHITE: "#FFFFFF"
+  WHITE: "#FFFFFF",
+  GREEN: "#008000"
 };
 const backgroundSize = {
   WIDTH: 1600,
@@ -221,4 +222,17 @@ const randomPlaces = {
   FOURTH_PLACE_Y: 475,
   FIFTH_PLACE_X: 1100,
   FIFTH_PLACE_Y: 625
+};
+const statesOfGame = {
+  IN_PROCESS: 0,
+  RESULT: 1,
+  PLAYERS_CHOOSING: 2
+};
+const resultButton = {
+  RESULT: 27,
+  NEW_GAME: 13,
+  NAME_X: 500,
+  SCORE_X: 900,
+  START_Y: 300,
+  SHIFT_Y: 100,
 };
