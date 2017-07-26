@@ -1,7 +1,4 @@
-let resources = [];
-let count = 0;
-
-function loadResources(startFunction) {
+function loadResources() {
   const images = [
     {
       name: imageNames.SCOREBOARD,
@@ -30,19 +27,28 @@ function loadResources(startFunction) {
     {
       name: imageNames.ROCKS,
       src: "image/rocks.png"
+    },
+    {
+      name: imageNames.RESULT_BACKGROUND,
+      src: "image/resultBackground.png"
     }
   ];
-  let loader = new LoadResources(startFunction);
+  let resources = [];
+  let count = 0;
+  let loader = new LoadResources(resources, count);
   loader.addImages(images);
+  let isLoad = loader.checkLoading();
+  if (isLoad) {
+    g_context.resources = loader.getImages();
+  }
 }
 
-function LoadResources(startFunction) {
+function LoadResources(resources, count) {
   this.checkLoading = function () {
     if (count === MAX_COUNTER_VALUE) {
-      g_context.resources = this.getImages();
-      startFunction();
-      return g_context.resources;
+      return true;
     }
+    return false;
   };
 
   this.increaseCounter = function () {

@@ -134,11 +134,9 @@ function updatePromptTime(deltaTime, scoreboards) {
   if (prompt.timeInterval >= promptInformation.TIME_INTERVAL) {
     switch (prompt.state) {
       case states.INACTIVE:
-        console.log("ACTIVE");
         prompt.state = states.ACTIVE;
         break;
       case states.ACTIVE:
-        console.log("INACTIVE");
         prompt.state = states.INACTIVE;
         break;
     }
