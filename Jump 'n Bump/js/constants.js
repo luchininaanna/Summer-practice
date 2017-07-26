@@ -1,4 +1,4 @@
-const MAX_COUNTER_VALUE = 8;
+const MAX_COUNTER_VALUE = 13;
 const PLAYERS_AMOUNT = 3;
 
 const colors = {
@@ -101,12 +101,12 @@ const thirdPlayerMoveButton = {
   RIGHT: 186 //:;
 };
 const playerInformation = {
-  IMAGE_X: 24,
-  IMAGE_Y: 75,
-  IMAGE_WIDTH: 195,
-  IMAGE_HEIGHT: 270,
+  IMAGE_X: 0,
+  IMAGE_Y: 0,
+  IMAGE_WIDTH: 200,
+  IMAGE_HEIGHT: 305,
   WIDTH: 60,
-  HEIGHT: 85,
+  HEIGHT: 96,
   LEFT_FREE_SPACE: 18,
   RIGHT_FREE_SPACE: 13,
   TOP_FREE_SPACE: 38,
@@ -120,7 +120,20 @@ const playerInformation = {
   JUMP: 1,
   NO_JUMP: 0,
   UNALIVE_TIME: 2,
-  MASS: 5
+  MASS: 5,
+  ANIMATION_TIME: 0.03
+};
+const playerImage = {
+  FIRST_X: 0,
+  SECOND_X: 200,
+  THIRD_X: 400,
+  FOURTH_X: 600,
+  FIFTH_X: 800,
+  SIXTH_X: 1000,
+  SEVENTH_X: 1200,
+  EIGHTS_X: 1400,
+  NINTH_X: 1600,
+  TENTH_X: 1800,
 };
 const playerName = {
   FIRST_NAME: "1",
@@ -136,7 +149,12 @@ const imageNames = {
   ROCKS: "rocks",
   PLAYER: "player",
   SCOREBOARD: "scoreboard",
-  RESULT_BACKGROUND: "resultBackground"
+  RESULT_BACKGROUND: "resultBackground",
+  BURST: "burst",
+  FIRST_PLAYER: "firstPlayer",
+  SECOND_PLAYER: "secondPlayer",
+  THIRD_PLAYER: "thirdPlayer",
+  FOURTH_PLAYER: "fourthPlayer",
 };
 const points = {
   ZERO: {
@@ -218,6 +236,10 @@ const pointScoreboard = {
   WIDTH: 170,
   HEIGHT: 225,
   Y_POINT_SHIFT: 110,
+  X_PLAYER_SHIFT: 90,
+  Y_PLAYER_SHIFT: 10,
+  X_PLAYER_NAME_SHIFT: 50,
+  Y_PLAYER_NAME_SHIFT: 70,
   X_FIRST_POINT_SHIFT: 30,
   X_SECOND_POINT_SHIFT: 85,
   POINT_HEIGHT: 95,
@@ -235,15 +257,15 @@ const randomPlaces = {
   FOURTH: 4,
   FIFTH: 5,
   FIRST_PLACE_X: 100,
-  FIRST_PLACE_Y: 355,
+  FIRST_PLACE_Y: 345,
   SECOND_PLACE_X: 900,
-  SECOND_PLACE_Y: 75,
+  SECOND_PLACE_Y: 65,
   THIRD_PLACE_X: 1300,
-  THIRD_PLACE_Y: 525,
+  THIRD_PLACE_Y: 515,
   FOURTH_PLACE_X: 600,
-  FOURTH_PLACE_Y: 475,
+  FOURTH_PLACE_Y: 465,
   FIFTH_PLACE_X: 1100,
-  FIFTH_PLACE_Y: 625
+  FIFTH_PLACE_Y: 615
 };
 const statesOfGame = {
   IN_PROCESS: 0,

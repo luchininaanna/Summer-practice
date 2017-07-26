@@ -25,12 +25,32 @@ function loadResources() {
       src: "image/player.png"
     },
     {
+      name: imageNames.FIRST_PLAYER,
+      src: "image/firstPlayer.png"
+    },
+    {
+      name: imageNames.SECOND_PLAYER,
+      src: "image/secondPlayer.png"
+    },
+    {
+      name: imageNames.THIRD_PLAYER,
+      src: "image/thirdPlayer.png"
+    },
+    {
+      name: imageNames.FOURTH_PLAYER,
+      src: "image/fourthPlayer.png"
+    },
+    {
       name: imageNames.ROCKS,
       src: "image/rocks.png"
     },
     {
       name: imageNames.RESULT_BACKGROUND,
       src: "image/resultBackground.png"
+    },
+    {
+      name: imageNames.BURST,
+      src: "image/burst.png"
     }
   ];
   let resources = [];

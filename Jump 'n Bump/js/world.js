@@ -23,7 +23,7 @@ function World() {
       let gameWorldObjects = this.objects;
       drawObjects(ctx, gameWorldObjects);
       this.players.draw(ctx);
-      this.scoreboards.draw(ctx);
+      this.scoreboards.drawScoreboards(ctx);
     } else {
       drawResult(ctx);
     }

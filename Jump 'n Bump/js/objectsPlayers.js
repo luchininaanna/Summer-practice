@@ -85,6 +85,20 @@ function SmallStair(source, x, y) {
   this.y = y;
   this.width = smallStair.WIDTH;
   this.height = smallStair.HEIGHT;
+
+  this.getX = function() {
+    return this.x
+  };
+  this.getY = function() {
+    return this.y
+  };
+  this.getWidth = function() {
+    return this.width
+  };
+  this.getHeight = function() {
+    return this.height
+  };
+
   this.type = "land";
 }
 function BigStair(source, x, y) {
@@ -161,8 +175,7 @@ function Rock(source, x, y) {
 }
 
 function getPlayers() {
-  let playerImage = g_context.resources[imageNames.PLAYER];
-  let players = new Players(playerImage);
+  let players = new Players();
   if (PLAYERS_AMOUNT >= 1) {
     players.chooseRandomPlace(players.firstPlayer);
   }
@@ -181,7 +194,10 @@ function getPlayers() {
   }
   return players;
 }
-function Players(playerImage) {
+function Players() {
+  let firstPlayerImage = g_context.resources[imageNames.FIRST_PLAYER];
+  let secondPlayerImage = g_context.resources[imageNames.SECOND_PLAYER];
+  let thirdPlayerImage = g_context.resources[imageNames.THIRD_PLAYER];
   this.getPlayersInState = function (state) {
     let playersInState = {};
     if ((this.firstPlayer) && (this.firstPlayer.liveState === state)) {
@@ -211,13 +227,13 @@ function Players(playerImage) {
     }
   };
   if (PLAYERS_AMOUNT >= 1) {
-    this.firstPlayer = new Player(playerImage, playerName.FIRST_NAME, 0, 0, firstPlayerMoveButton);
+    this.firstPlayer = new Player(firstPlayerImage, playerName.FIRST_NAME, 0, 0, firstPlayerMoveButton);
   }
   if (PLAYERS_AMOUNT >= 2) {
-    this.secondPlayer = new Player(playerImage, playerName.SECOND_NAME, 0, 0, secondPlayerMoveButton);
+    this.secondPlayer = new Player(secondPlayerImage, playerName.SECOND_NAME, 0, 0, secondPlayerMoveButton);
   }
   if (PLAYERS_AMOUNT >= 3) {
-    this.thirdPlayer = new Player(playerImage, playerName.THIRD_NAME, 0, 0, thirdPlayerMoveButton);
+    this.thirdPlayer = new Player(thirdPlayerImage, playerName.THIRD_NAME, 0, 0, thirdPlayerMoveButton);
   }
   this.chooseRandomPlace = function (player) {
     const MIN = 1;
@@ -274,6 +290,19 @@ function Player(source, playerName, x, y, movingButtons) {
   this.width = playerInformation.WIDTH;
   this.height = playerInformation.HEIGHT;
 
+  this.getX = function() {
+    return this.x
+  };
+  this.getY = function() {
+    return this.y
+  };
+  this.getWidth = function() {
+    return this.width
+  };
+  this.getHeight = function() {
+    return this.height
+  };
+
   this.movingButtons = movingButtons;
 
   this.leftFreeSpace = playerInformation.LEFT_FREE_SPACE;
@@ -282,6 +311,7 @@ function Player(source, playerName, x, y, movingButtons) {
 
   this.liveState = playerInformation.ALIVE;
   this.unaliveTime = 0;
+  this.animationTime = 0;
 
   this.horizontalSpeed = playerInformation.HORIZONTAL_SPEED;
   this.accelerationOfGravity = playerInformation.ACCELERATION_OF_GRAVITY;
@@ -304,12 +334,16 @@ function getScoreboards() {
   return scoreboards;
 }
 function Scoreboards(scoreboardImage, x) {
-  this.firstScoreboard = new Scoreboard(scoreboardImage, playerName.FIRST_NAME, x, 0);
-  this.secondScoreboard = new Scoreboard(scoreboardImage, playerName.SECOND_NAME, x,
+  let firstPlayerImage = g_context.resources[imageNames.FIRST_PLAYER];
+  let secondPlayerImage = g_context.resources[imageNames.SECOND_PLAYER];
+  let thirdPlayerImage = g_context.resources[imageNames.THIRD_PLAYER];
+  let fourthPlayerImage = g_context.resources[imageNames.FOURTH_PLAYER];
+  this.firstScoreboard = new Scoreboard(scoreboardImage, firstPlayerImage, playerName.FIRST_NAME, x, 0);
+  this.secondScoreboard = new Scoreboard(scoreboardImage, secondPlayerImage, playerName.SECOND_NAME, x,
       this.firstScoreboard.y + pointScoreboard.HEIGHT);
-  this.thirdScoreboard = new Scoreboard(scoreboardImage, playerName.THIRD_NAME, x,
+  this.thirdScoreboard = new Scoreboard(scoreboardImage, thirdPlayerImage, playerName.THIRD_NAME, x,
       this.secondScoreboard.y + pointScoreboard.HEIGHT);
-  this.fourthScoreboard = new Scoreboard(scoreboardImage, playerName.FOURTH_NAME, x,
+  this.fourthScoreboard = new Scoreboard(scoreboardImage, fourthPlayerImage, playerName.FOURTH_NAME, x,
       this.thirdScoreboard.y + pointScoreboard.HEIGHT);
   if (PLAYERS_AMOUNT >= 1) {
     this.firstScoreboard.scoreboardState = states.ACTIVE;
@@ -323,12 +357,26 @@ function Scoreboards(scoreboardImage, x) {
   if (PLAYERS_AMOUNT === 4) {
     this.fourthScoreboard.scoreboardState = states.ACTIVE;
   }
-  this.draw = function (ctx) {
-    drawObject(ctx, this.firstScoreboard);
-    drawObject(ctx, this.secondScoreboard);
-    drawObject(ctx, this.thirdScoreboard);
-    drawObject(ctx, this.fourthScoreboard);
+  this.drawScoreboards = function (ctx) {
+    this.drawScoreboard(ctx, this.firstScoreboard);
+    this.drawScoreboard(ctx, this.secondScoreboard);
+    this.drawScoreboard(ctx, this.thirdScoreboard);
+    this.drawScoreboard(ctx, this.fourthScoreboard);
     this.drawPoints(ctx);
+  };
+  this.drawScoreboard = function(ctx, scoreboard) {
+    ctx.drawImage(scoreboard.sourceScoreboard, scoreboard.imageX, scoreboard.imageY, scoreboard.imageWidth,
+        scoreboard.imageHeight, scoreboard.x, scoreboard.y, scoreboard.width, scoreboard.height);
+    if (scoreboard.scoreboardState === states.ACTIVE) {
+      ctx.drawImage(scoreboard.sourcePlayer, playerInformation.IMAGE_X, playerInformation.IMAGE_Y,
+          playerInformation.IMAGE_WIDTH, playerInformation.IMAGE_HEIGHT,
+          scoreboard.x + pointScoreboard.X_PLAYER_SHIFT, scoreboard.y + pointScoreboard.Y_PLAYER_SHIFT,
+          playerInformation.WIDTH, playerInformation.HEIGHT);
+      ctx.fillStyle = colors.LIGHT_BLUE;
+      ctx.font = "bold 30pt Arial";
+      ctx.fillText("" + scoreboard.name, scoreboard.x + pointScoreboard.X_PLAYER_NAME_SHIFT,
+          scoreboard.y + pointScoreboard.Y_PLAYER_NAME_SHIFT);
+    }
   };
   this.drawPoints = function (ctx) {
     this.drawPoint(ctx, this.firstScoreboard);
@@ -339,7 +387,7 @@ function Scoreboards(scoreboardImage, x) {
   this.drawPoint = function (ctx, scoreboard) {
     let tens = Math.floor(scoreboard.pointsAmount / 10);
     let digitImage = this.chooseDigitImage(tens);
-    ctx.drawImage(scoreboard.source, digitImage.IMAGE_X, digitImage.IMAGE_Y,
+    ctx.drawImage(scoreboard.sourceScoreboard, digitImage.IMAGE_X, digitImage.IMAGE_Y,
         digitImage.IMAGE_WIDTH, digitImage.IMAGE_HEIGHT,
         x + pointScoreboard.X_FIRST_POINT_SHIFT, scoreboard.y + pointScoreboard.Y_POINT_SHIFT,
         pointScoreboard.POINT_WIDTH, pointScoreboard.POINT_HEIGHT);
@@ -347,7 +395,7 @@ function Scoreboards(scoreboardImage, x) {
     let ones = scoreboard.pointsAmount - tens * 10;
     digitImage = this.chooseDigitImage(ones);
 
-    ctx.drawImage(scoreboard.source, digitImage.IMAGE_X, digitImage.IMAGE_Y,
+    ctx.drawImage(scoreboard.sourceScoreboard, digitImage.IMAGE_X, digitImage.IMAGE_Y,
         digitImage.IMAGE_WIDTH, digitImage.IMAGE_HEIGHT,
         x + pointScoreboard.X_SECOND_POINT_SHIFT, scoreboard.y + pointScoreboard.Y_POINT_SHIFT,
         pointScoreboard.POINT_WIDTH, pointScoreboard.POINT_HEIGHT);
@@ -381,9 +429,10 @@ function Scoreboards(scoreboardImage, x) {
     timeInterval: 0
   }
 }
-function Scoreboard(source, playerName, x, y) {
+function Scoreboard(sourceScoreboard, sourcePlayer, playerName, x, y) {
   this.name = playerName;
-  this.source = source;
+  this.sourceScoreboard = sourceScoreboard;
+  this.sourcePlayer = sourcePlayer;
   this.imageX = pointScoreboard.IMAGE_X;
   this.imageY = pointScoreboard.IMAGE_Y;
   this.imageWidth = pointScoreboard.IMAGE_WIDTH;
