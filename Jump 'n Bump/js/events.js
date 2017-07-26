@@ -15,8 +15,16 @@ function checkPressedButtons(event) {
   let players = g_world.players;
   let firstPlayer = players.firstPlayer;
   let secondPlayer = players.secondPlayer;
-  changePressedState(firstPlayer, event.keyCode, firstPlayer.movingButtons);
-  changePressedState(secondPlayer, event.keyCode, secondPlayer.movingButtons);
+  let thirdPlayer = players.thirdPlayer;
+  if (firstPlayer) {
+    changePressedState(firstPlayer, event.keyCode, firstPlayer.movingButtons);
+  }
+  if (secondPlayer) {
+    changePressedState(secondPlayer, event.keyCode, secondPlayer.movingButtons);
+  }
+  if (thirdPlayer) {
+    changePressedState(thirdPlayer, event.keyCode, thirdPlayer.movingButtons);
+  }
   changeStateOfGame(event.keyCode);
 }
 function changeStateOfGame(keyCode) {
@@ -26,6 +34,8 @@ function changeStateOfGame(keyCode) {
       break;
     case resultButton.NEW_GAME:
       g_world.state = statesOfGame.IN_PROCESS;  //в полной версии - выбор игроков
+      g_world.players = getPlayers();
+      g_world.scoreboards = getScoreboards();
       break;
   }
 }
@@ -47,8 +57,16 @@ function checkReleasedButtons(event) {
   let players = g_world.players;
   let firstPlayer = players.firstPlayer;
   let secondPlayer = players.secondPlayer;
-  changeReleasedState(firstPlayer, event.keyCode, firstPlayer.movingButtons);
-  changeReleasedState(secondPlayer, event.keyCode, secondPlayer.movingButtons);
+  let thirdPlayer = players.thirdPlayer;
+  if (firstPlayer) {
+    changeReleasedState(firstPlayer, event.keyCode, firstPlayer.movingButtons);
+  }
+  if (secondPlayer) {
+    changeReleasedState(secondPlayer, event.keyCode, secondPlayer.movingButtons);
+  }
+  if (thirdPlayer) {
+    changeReleasedState(thirdPlayer, event.keyCode, thirdPlayer.movingButtons);
+  }
 }
 function changeReleasedState(checkingPlayer, keyCode, movingButtons) {
   switch (keyCode) {

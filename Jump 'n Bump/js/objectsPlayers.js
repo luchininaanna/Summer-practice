@@ -163,16 +163,35 @@ function Rock(source, x, y) {
 function getPlayers() {
   let playerImage = g_context.resources[imageNames.PLAYER];
   let players = new Players(playerImage);
+  if (PLAYERS_AMOUNT >= 1) {
+    players.chooseRandomPlace(players.firstPlayer);
+  }
+  if (PLAYERS_AMOUNT >= 2) {
+    players.chooseRandomPlace(players.secondPlayer);
+    while ((players.firstPlayer.x === players.secondPlayer.x) && (players.firstPlayer.y === players.secondPlayer.y)) {
+      players.chooseRandomPlace(players.secondPlayer);
+    }
+  }
+  if (PLAYERS_AMOUNT >= 3) {
+    players.chooseRandomPlace(players.thirdPlayer);
+    while (((players.firstPlayer.x === players.thirdPlayer.x) && (players.firstPlayer.y === players.thirdPlayer.y))
+    || ((players.secondPlayer.x === players.thirdPlayer.x) && (players.secondPlayer.y === players.thirdPlayer.y))) {
+      players.chooseRandomPlace(players.thirdPlayer);
+    }
+  }
   return players;
 }
 function Players(playerImage) {
   this.getPlayersInState = function (state) {
     let playersInState = {};
-    if (this.firstPlayer.liveState === state) {
+    if ((this.firstPlayer) && (this.firstPlayer.liveState === state)) {
       playersInState.firstPlayer = this.firstPlayer;
     }
-    if (this.secondPlayer.liveState === state) {
-      playersInState.secondPlayerr = this.secondPlayer;
+    if ((this.secondPlayer) && (this.secondPlayer.liveState === state)) {
+      playersInState.secondPlayer = this.secondPlayer;
+    }
+    if ((this.thirdPlayer) && (this.thirdPlayer.liveState === state)) {
+      playersInState.thirdPlayer = this.secondPlayer;
     }
     return playersInState;
   };
@@ -191,6 +210,15 @@ function Players(playerImage) {
       }
     }
   };
+  if (PLAYERS_AMOUNT >= 1) {
+    this.firstPlayer = new Player(playerImage, playerName.FIRST_NAME, 0, 0, firstPlayerMoveButton);
+  }
+  if (PLAYERS_AMOUNT >= 2) {
+    this.secondPlayer = new Player(playerImage, playerName.SECOND_NAME, 0, 0, secondPlayerMoveButton);
+  }
+  if (PLAYERS_AMOUNT >= 3) {
+    this.thirdPlayer = new Player(playerImage, playerName.THIRD_NAME, 0, 0, thirdPlayerMoveButton);
+  }
   this.chooseRandomPlace = function (player) {
     const MIN = 1;
     const MAX = 5;
@@ -221,14 +249,15 @@ function Players(playerImage) {
   this.chooseRandomDigit = function (min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   };
-  this.firstPlayer = new Player(playerImage, playerName.FIRST_NAME, 600, 785, firstPlayerMoveButton);
-  this.secondPlayer = new Player(playerImage, playerName.SECOND_NAME, 900, 785, secondPlayerMoveButton);
   this.draw = function (ctx) {
-    if (this.firstPlayer.liveState === playerInformation.ALIVE) {
+    if ((this.firstPlayer) && (this.firstPlayer.liveState === playerInformation.ALIVE)) {
       drawObject(ctx, this.firstPlayer);
     }
-    if (this.secondPlayer.liveState === playerInformation.ALIVE) {
+    if ((this.secondPlayer) && (this.secondPlayer.liveState === playerInformation.ALIVE)) {
       drawObject(ctx, this.secondPlayer);
+    }
+    if ((this.thirdPlayer) && (this.thirdPlayer.liveState === playerInformation.ALIVE)) {
+      drawObject(ctx, this.thirdPlayer);
     }
   }
 }
@@ -257,6 +286,7 @@ function Player(source, playerName, x, y, movingButtons) {
   this.horizontalSpeed = playerInformation.HORIZONTAL_SPEED;
   this.accelerationOfGravity = playerInformation.ACCELERATION_OF_GRAVITY;
   this.verticalSpeed = playerInformation.START_BIG_VERTICAL_SPEED;
+  this.jumpState = playerInformation.NO_JUMP;
 
   this.rightMove = 0;
   this.leftMove = 0;
@@ -281,6 +311,18 @@ function Scoreboards(scoreboardImage, x) {
       this.secondScoreboard.y + pointScoreboard.HEIGHT);
   this.fourthScoreboard = new Scoreboard(scoreboardImage, playerName.FOURTH_NAME, x,
       this.thirdScoreboard.y + pointScoreboard.HEIGHT);
+  if (PLAYERS_AMOUNT >= 1) {
+    this.firstScoreboard.scoreboardState = states.ACTIVE;
+  }
+  if (PLAYERS_AMOUNT >= 2) {
+    this.secondScoreboard.scoreboardState = states.ACTIVE;
+  }
+  if (PLAYERS_AMOUNT >= 3) {
+    this.thirdScoreboard.scoreboardState = states.ACTIVE;
+  }
+  if (PLAYERS_AMOUNT === 4) {
+    this.fourthScoreboard.scoreboardState = states.ACTIVE;
+  }
   this.draw = function (ctx) {
     drawObject(ctx, this.firstScoreboard);
     drawObject(ctx, this.secondScoreboard);
@@ -334,6 +376,10 @@ function Scoreboards(scoreboardImage, x) {
         return points.NINE;
     }
   }
+  this.prompt = {
+    state: states.INACTIVE,
+    timeInterval: 0
+  }
 }
 function Scoreboard(source, playerName, x, y) {
   this.name = playerName;
@@ -347,4 +393,5 @@ function Scoreboard(source, playerName, x, y) {
   this.width = pointScoreboard.WIDTH;
   this.height = pointScoreboard.HEIGHT;
   this.pointsAmount = 0;
+  this.scoreboardState = states.INACTIVE;
 }

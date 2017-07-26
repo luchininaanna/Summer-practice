@@ -54,10 +54,9 @@ function leftMoving(players, player, deltaTime) {
   }
 }
 function jump(players, player, deltaTime) {
-  let updatedSpeed = player.verticalSpeed - player.accelerationOfGravity * deltaTime / 100;
-
+  let updatedSpeed = player.verticalSpeed - player.accelerationOfGravity * deltaTime / 90;
   player.verticalSpeed = updatedSpeed;
-  let updatedY = player.y - updatedSpeed * deltaTime / 100;
+  let updatedY = player.y - updatedSpeed * deltaTime / 100 * playerInformation.MASS;
   let alivePlayers = players.getPlayersInState(playerInformation.ALIVE);
   let freeHorizontallySpace = g_world.checkHorizontallyFree(player, player.x, alivePlayers);
   let freeBottomSpace = g_world.checkBottomFree(player, updatedY, alivePlayers);
@@ -75,7 +74,7 @@ function jump(players, player, deltaTime) {
   }
   let isLand = g_world.checkLand(player);
 
-  if ((updatedSpeed < 0) && (updatedY < player.nextLandY - playerInformation.HEIGHT + smallStair.TOP_FREE_SPACE)){
+  if ((updatedSpeed < 0) && (updatedY < player.nextLandY - playerInformation.HEIGHT + smallStair.TOP_FREE_SPACE)) {
     player.y = updatedY;
   }
   if (isLand && (updatedY > player.nextLandY - playerInformation.HEIGHT)
@@ -128,4 +127,24 @@ function searchKilledPlayers(players, player) {
     }
   }
   return players;
+}
+
+function updatePromptTime(deltaTime, scoreboards) {
+  let prompt = scoreboards.prompt;
+  if (prompt.timeInterval >= promptInformation.TIME_INTERVAL) {
+    switch (prompt.state) {
+      case states.INACTIVE:
+        console.log("ACTIVE");
+        prompt.state = states.ACTIVE;
+        break;
+      case states.ACTIVE:
+        console.log("INACTIVE");
+        prompt.state = states.INACTIVE;
+        break;
+    }
+    prompt.timeInterval = 0;
+  } else {
+    let timeSum = prompt.timeInterval + deltaTime / 1000;
+    prompt.timeInterval = timeSum;
+  }
 }

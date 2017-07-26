@@ -4,9 +4,15 @@ function World() {
   this.players = getPlayers();
   this.scoreboards = getScoreboards();
   this.update = function (deltaTime) {
-    let players = g_world.players;
-    players.animatePlayers(deltaTime);
-    updatePlayersCoordinates(this.players, deltaTime);
+    if (this.state === statesOfGame.IN_PROCESS) {
+      let players = g_world.players;
+      players.animatePlayers(deltaTime);
+      updatePlayersCoordinates(this.players, deltaTime);
+    }
+    if (this.state === statesOfGame.RESULT) {
+      let scoreboards = this.scoreboards;
+      updatePromptTime(deltaTime, scoreboards);
+    }
   };
   this.clean = function (ctx) {
     ctx.fillStyle = colors.WHITE;
@@ -61,8 +67,8 @@ function World() {
     if (elements) {
       for (let key in elements) {
         if ((elements[key] != player) && (elements[key] != imageNames.BACKGROUND)) {
-          let otherElement  = elements[key];
-          if ((updatedY + player.topFreeSpace) < (otherElement .y + otherElement .height))
+          let otherElement = elements[key];
+          if ((updatedY + player.topFreeSpace) < (otherElement.y + otherElement.height))
             return false;
         }
       }
@@ -74,7 +80,7 @@ function World() {
       for (let key in elements) {
         if (elements[key] != player) {
           let otherElement = elements[key];
-          if ((updatedY + player.height) > (otherElement .y + otherElement .topFreeSpace))
+          if ((updatedY + player.height) > (otherElement.y + otherElement.topFreeSpace))
             return false;
         }
       }
@@ -88,7 +94,7 @@ function World() {
     player.distanceToLand = 0;
     player.underLand = 0;
     for (let key in this.objects) {
-      if (this.objects[key].type === bottomType.LAND){
+      if (this.objects[key].type === bottomType.LAND) {
         let playerAfterLeftLandSide = player.x + playerInformation.WIDTH / 2 >= this.objects[key].x;
         let playerAfterRightLandSide = player.x + playerInformation.WIDTH / 2 <= this.objects[key].x + this.objects[key].width;
         let underLand = playerAfterLeftLandSide && playerAfterRightLandSide;
@@ -97,7 +103,7 @@ function World() {
         }
 
         if (underLand && (this.objects[key].y >= (player.y + player.height))) {
-           //находим ближайшую ступень
+          //находим ближайшую ступень
           let distanceToLand = this.objects[key].y + smallStair.TOP_FREE_SPACE - (player.y + player.height);
           if ((player.distanceToLand >= distanceToLand) || (player.distanceToLand === 0)) {
             player.distanceToLand = distanceToLand;
@@ -106,7 +112,7 @@ function World() {
         }
       }
     }
-    if (player.underLand){
+    if (player.underLand) {
       return true;
     } else {
       return false;

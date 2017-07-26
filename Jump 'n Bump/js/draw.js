@@ -21,32 +21,65 @@ function drawRectangle(ctx, x, y, width, height, amount, shiftRight, shiftDown) 
 function drawResult(ctx) {
   drawBackground(ctx);
   drawScores(ctx);
+  drawPrompt(ctx);
 }
 function drawBackground(ctx) {
   let backgroundImage = g_context.resources[imageNames.BACKGROUND];
   ctx.drawImage(backgroundImage, 0, 0, backgroundSize.WIDTH, backgroundSize.HEIGHT,
       0, 0, canvasSize.WIDTH, canvasSize.HEIGHT);
+  let resultBackgroundImage = g_context.resources[imageNames.RESULT_BACKGROUND];
+  ctx.drawImage(resultBackgroundImage, resultBackgroundSize.IMAGE_X, resultBackgroundSize.IMAGE_Y,
+      resultBackgroundSize.IMAGE_WIDTH, resultBackgroundSize.HEIGHT,
+      resultBackgroundSize.X, resultBackgroundSize.Y,
+      resultBackgroundSize.WIDTH, resultBackgroundSize.HEIGHT);
+
+  ctx.strokeStyle = colors.LIGHT_YELLOW;
+  ctx.lineWidth = 5;
+  drawLine(ctx, resultBackgroundSize.X, resultBackgroundSize.Y + resultBackgroundSize.VERTICAL_SHIFT,
+      resultBackgroundSize.X + resultBackgroundSize.WIDTH,
+      resultBackgroundSize.Y + resultBackgroundSize.VERTICAL_SHIFT);
+  drawLine(ctx, resultBackgroundSize.X + resultBackgroundSize.HORIZONTAL_SHIFT, resultBackgroundSize.Y,
+      resultBackgroundSize.X + resultBackgroundSize.HORIZONTAL_SHIFT,
+      resultBackgroundSize.Y + resultBackgroundSize.HEIGHT);
 }
 function drawScores(ctx) {
-  ctx.fillStyle = colors.GREEN;
+  ctx.fillStyle = colors.LIGHT_BLUE;
   ctx.font = "40pt Arial";
-  ctx.fillText("Имя игрока", resultButton.NAME_X, resultButton.START_Y);
-  ctx.fillText("Баллы", resultButton.SCORE_X, resultButton.START_Y);
-  let players = g_world.players;
-  if (players) {
-    for (let key in players) {
-      let playerName = players[key].name;
-      let scoreboards = g_world.scoreboards;
-      if (scoreboards) {
-        for (let key in scoreboards) {
-          if (playerName === scoreboards[key].name) {
-            ctx.fillText(playerName, resultButton.NAME_X,
-                resultButton.START_Y + (+scoreboards.name)* resultButton.SHIFT_Y);
-            ctx.fillText(scoreboards[key].pointsAmount, resultButton.SCORE_X,
-                resultButton.START_Y + (+scoreboards.name)* resultButton.SHIFT_Y);
-          }
-        }
+  ctx.fillText(result.PLAYER_NAME_HEADING, result.PLAYER_NAME_HEADING_X, result.START_Y);
+  ctx.fillText(result.SCORE_HEADING, result.SCORE_HEADING_X, result.START_Y);
+  let scoreboards = g_world.scoreboards;
+  let recordNumber = 0;
+  if (scoreboards) {
+    for (let key in scoreboards) {
+      if (scoreboards[key].scoreboardState === states.ACTIVE) {
+        ctx.fillText(result.PLAYER + scoreboards[key].name, result.PLAYER_NAME_X,
+            result.RECORD_START_Y + result.SHIFT_Y * recordNumber);
+        ctx.fillText(scoreboards[key].pointsAmount, result.SCORE_X,
+            result.RECORD_START_Y + result.SHIFT_Y * recordNumber);
+        recordNumber++;
+      }
+      if (scoreboards[key].scoreboardState === states.INACTIVE) {
+        ctx.fillText(result.PLAYER + scoreboards[key].name, result.PLAYER_NAME_X,
+            result.RECORD_START_Y + result.SHIFT_Y * recordNumber);
+        ctx.fillText(result.EMPTY_RECORD, result.EMPTY_RECORD_X,
+            result.RECORD_START_Y + result.SHIFT_Y * recordNumber);
+        recordNumber++;
       }
     }
   }
+}
+function drawPrompt(ctx) {
+  let prompt = g_world.scoreboards.prompt;
+  ctx.fillStyle = colors.RED;
+  ctx.font = "bold 30pt Arial";
+  if (prompt.state === states.ACTIVE) {
+    ctx.fillText(promptInformation.TEXT, promptInformation.X, promptInformation.Y);
+  }
+}
+function drawLine(ctx, firstX, firstY, lastX, lastY) {
+  ctx.beginPath();
+  ctx.moveTo(firstX, firstY);
+  ctx.lineTo(lastX, lastY);
+  ctx.closePath();
+  ctx.stroke();
 }

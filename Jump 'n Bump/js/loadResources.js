@@ -44,5 +44,10 @@ function loadResources(startFunction) {
   scoreboard.onload = increment;
   resources[imageNames.SCOREBOARD] = scoreboard;
 
+  let resultBackground = new Image();
+  resultBackground.src = "image/resultBackground.png";
+  resultBackground.onload = increment;
+  resources[imageNames.RESULT_BACKGROUND] = resultBackground;
+
   g_context.resources = resources;
 }
