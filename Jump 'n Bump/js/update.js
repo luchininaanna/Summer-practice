@@ -22,17 +22,11 @@ function updatePlayerCoordinates(players, player, deltaTime) {
 }
 
 function rightMoving(players, player, deltaTime) {
-  if (player.animationTime >= playerInformation.ANIMATION_TIME) {
-    changeImage(player);
-    player.animationTime = 0;
-  } else {
-    let sumDeltaTime = player.animationTime + deltaTime / 1000;
-    player.animationTime = sumDeltaTime;
-  }
+  player.updateImage(deltaTime);
 
   let updatedX = player.x + player.horizontalSpeed * deltaTime;
   let isScreen = (updatedX > 0) && (updatedX < canvasSize.WIDTH - pointScoreboard.WIDTH - player.width);
-  let alivePlayers = players.getPlayersInState(playerInformation.ALIVE);
+  let alivePlayers = g_world.getPlayersInState(playerInformation.ALIVE);
   let freeHorizontallySpace = g_world.checkHorizontallyFree(player, updatedX, alivePlayers);
 
   if ((isScreen && freeHorizontallySpace)) {
@@ -46,9 +40,11 @@ function rightMoving(players, player, deltaTime) {
   }
 }
 function leftMoving(players, player, deltaTime) {
+  player.updateImage(deltaTime);
+
   let updatedX = player.x - player.horizontalSpeed * deltaTime;
   let isScreen = (updatedX > 0) && (updatedX < canvasSize.WIDTH - pointScoreboard.WIDTH - player.width);
-  let alivePlayers = players.getPlayersInState(playerInformation.ALIVE);
+  let alivePlayers = g_world.getPlayersInState(playerInformation.ALIVE);
   let freeHorizontallySpace = g_world.checkHorizontallyFree(player, updatedX, alivePlayers);
 
   if ((isScreen && freeHorizontallySpace)) {
@@ -62,10 +58,10 @@ function leftMoving(players, player, deltaTime) {
   }
 }
 function jump(players, player, deltaTime) {
-  let updatedSpeed = player.verticalSpeed - player.accelerationOfGravity * deltaTime / 90;
+  let updatedSpeed = player.verticalSpeed - player.accelerationOfGravity * deltaTime / 50;
   player.verticalSpeed = updatedSpeed;
   let updatedY = player.y - updatedSpeed * deltaTime / 100 * playerInformation.MASS;
-  let alivePlayers = players.getPlayersInState(playerInformation.ALIVE);
+  let alivePlayers = g_world.getPlayersInState(playerInformation.ALIVE);
   let freeHorizontallySpace = g_world.checkHorizontallyFree(player, player.x, alivePlayers);
   let freeBottomSpace = g_world.checkBottomFree(player, updatedY, alivePlayers);
 
@@ -137,6 +133,14 @@ function searchKilledPlayers(players, player) {
   return players;
 }
 
+function animatePlayers(unalivePlayers, deltaTime){
+  if (unalivePlayers) {
+    for (let key in unalivePlayers) {
+      unalivePlayers[key].animate(deltaTime);
+    }
+  }
+}
+
 function updatePromptTime(deltaTime, scoreboards) {
   let prompt = scoreboards.prompt;
   if (prompt.timeInterval >= promptInformation.TIME_INTERVAL) {
@@ -152,54 +156,5 @@ function updatePromptTime(deltaTime, scoreboards) {
   } else {
     let timeSum = prompt.timeInterval + deltaTime / 1000;
     prompt.timeInterval = timeSum;
-  }
-}
-
-function changeImage(player) {
-  let newImageX = chooseNextImage(player.imageX);
-  player.imageX = newImageX;
-}
-function chooseNextImage(imageX) {
-  switch (imageX) {
-    case playerImage.FIRST_X:
-      imageX = playerImage.SECOND_X;
-      return imageX;
-      break;
-    case playerImage.SECOND_X:
-      imageX = playerImage.THIRD_X;
-      return imageX;
-      break;
-    case playerImage.THIRD_X:
-      imageX = playerImage.FOURTH_X;
-      return imageX;
-      break;
-    case playerImage.FOURTH_X:
-      imageX = playerImage.FIFTH_X;
-      return imageX;
-      break;
-    case playerImage.FIFTH_X:
-      imageX = playerImage.SIXTH_X;
-      return imageX;
-      break;
-    case playerImage.SIXTH_X:
-      imageX = playerImage.SEVENTH_X;
-      return imageX;
-      break;
-    case playerImage.SEVENTH_X:
-      imageX = playerImage.EIGHTS_X;
-      return imageX;
-      break;
-    case playerImage.EIGHTS_X:
-      imageX = playerImage.NINTH_X;
-      return imageX;
-      break;
-    case playerImage.NINTH_X:
-      imageX = playerImage.TENTH_X;
-      return imageX;
-      break;
-    case playerImage.TENTH_X:
-      imageX = playerImage.FIRST_X;
-      return imageX;
-      break;
   }
 }

@@ -10,6 +10,21 @@ function drawObject(ctx, object) {
   ctx.drawImage(object.source, object.imageX, object.imageY, object.imageWidth, object.imageHeight,
       object.x, object.y, object.width, object.height);
 }
+function drawPlayers(ctx, players) {
+  for (let key in players) {
+    if (players[key].liveState === playerInformation.ALIVE) {
+      players[key].draw(ctx);
+    }
+  }
+}
+function drawScoreboards(ctx, scoreboards) {
+  for (let key in scoreboards) {
+    scoreboards[key].draw(ctx);
+    if (scoreboards[key].scoreboardState === states.ACTIVE) {
+      scoreboards[key].drawPoint(ctx);
+    }
+  }
+}
 
 function drawRectangle(ctx, x, y, width, height, amount, shiftRight, shiftDown) {
   for (let i = 0; i < amount; i++) {

@@ -25,20 +25,36 @@ function loadResources() {
       src: "image/player.png"
     },
     {
-      name: imageNames.FIRST_PLAYER,
-      src: "image/firstPlayer.png"
+      name: imageNames.RIGHT_FIRST_PLAYER,
+      src: "image/rightFirstPlayer.png"
     },
     {
-      name: imageNames.SECOND_PLAYER,
-      src: "image/secondPlayer.png"
+      name: imageNames.RIGHT_SECOND_PLAYER,
+      src: "image/rightSecondPlayer.png"
     },
     {
-      name: imageNames.THIRD_PLAYER,
-      src: "image/thirdPlayer.png"
+      name: imageNames.RIGHT_THIRD_PLAYER,
+      src: "image/rightThirdPlayer.png"
     },
     {
-      name: imageNames.FOURTH_PLAYER,
-      src: "image/fourthPlayer.png"
+      name: imageNames.RIGHT_FOURTH_PLAYER,
+      src: "image/rightFourthPlayer.png"
+    },
+    {
+      name: imageNames.LEFT_FIRST_PLAYER,
+      src: "image/leftFirstPlayer.png"
+    },
+    {
+      name: imageNames.LEFT_SECOND_PLAYER,
+      src: "image/leftSecondPlayer.png"
+    },
+    {
+      name: imageNames.LEFT_THIRD_PLAYER,
+      src: "image/leftThirdPlayer.png"
+    },
+    {
+      name: imageNames.LEFT_FOURTH_PLAYER,
+      src: "image/leftFourthPlayer.png"
     },
     {
       name: imageNames.ROCKS,

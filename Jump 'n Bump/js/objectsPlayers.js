@@ -177,110 +177,46 @@ function Rock(source, x, y) {
 function getPlayers() {
   let players = new Players();
   if (PLAYERS_AMOUNT >= 1) {
-    players.chooseRandomPlace(players.firstPlayer);
+    players.firstPlayer.chooseRandomPlace();
   }
   if (PLAYERS_AMOUNT >= 2) {
-    players.chooseRandomPlace(players.secondPlayer);
+    players.secondPlayer.chooseRandomPlace();
     while ((players.firstPlayer.x === players.secondPlayer.x) && (players.firstPlayer.y === players.secondPlayer.y)) {
-      players.chooseRandomPlace(players.secondPlayer);
+      players.secondPlayer.chooseRandomPlace();
     }
   }
   if (PLAYERS_AMOUNT >= 3) {
-    players.chooseRandomPlace(players.thirdPlayer);
+    players.thirdPlayer.chooseRandomPlace();
     while (((players.firstPlayer.x === players.thirdPlayer.x) && (players.firstPlayer.y === players.thirdPlayer.y))
     || ((players.secondPlayer.x === players.thirdPlayer.x) && (players.secondPlayer.y === players.thirdPlayer.y))) {
-      players.chooseRandomPlace(players.thirdPlayer);
+      players.thirdPlayer.chooseRandomPlace();
     }
   }
   return players;
 }
 function Players() {
-  let firstPlayerImage = g_context.resources[imageNames.FIRST_PLAYER];
-  let secondPlayerImage = g_context.resources[imageNames.SECOND_PLAYER];
-  let thirdPlayerImage = g_context.resources[imageNames.THIRD_PLAYER];
-  this.getPlayersInState = function (state) {
-    let playersInState = {};
-    if ((this.firstPlayer) && (this.firstPlayer.liveState === state)) {
-      playersInState.firstPlayer = this.firstPlayer;
-    }
-    if ((this.secondPlayer) && (this.secondPlayer.liveState === state)) {
-      playersInState.secondPlayer = this.secondPlayer;
-    }
-    if ((this.thirdPlayer) && (this.thirdPlayer.liveState === state)) {
-      playersInState.thirdPlayer = this.secondPlayer;
-    }
-    return playersInState;
-  };
-  this.animatePlayers = function (deltaTime) {
-    let unalivePlayers = this.getPlayersInState(playerInformation.UNALIVE);
-    let time;
-    if (unalivePlayers) {
-      for (let key in unalivePlayers) {
-        time = unalivePlayers[key].unaliveTime + deltaTime / 1000;
-        unalivePlayers[key].unaliveTime = time;
-        if (unalivePlayers[key].unaliveTime >= playerInformation.UNALIVE_TIME) {
-          unalivePlayers[key].liveState = playerInformation.ALIVE;
-          unalivePlayers[key].unaliveTime = 0;
-          this.chooseRandomPlace(unalivePlayers[key]);
-        }
-      }
-    }
-  };
+  let rightFirstPlayerImage = g_context.resources[imageNames.RIGHT_FIRST_PLAYER];
+  let rightSecondPlayerImage = g_context.resources[imageNames.RIGHT_SECOND_PLAYER];
+  let rightThirdPlayerImage = g_context.resources[imageNames.RIGHT_THIRD_PLAYER];
+  let leftFirstPlayerImage = g_context.resources[imageNames.LEFT_FIRST_PLAYER];
+  let leftSecondPlayerImage = g_context.resources[imageNames.LEFT_SECOND_PLAYER];
+  let leftThirdPlayerImage = g_context.resources[imageNames.LEFT_THIRD_PLAYER];
   if (PLAYERS_AMOUNT >= 1) {
-    this.firstPlayer = new Player(firstPlayerImage, playerName.FIRST_NAME, 0, 0, firstPlayerMoveButton);
+    this.firstPlayer = new Player(rightFirstPlayerImage, leftFirstPlayerImage, playerName.FIRST_NAME, 0, 0, firstPlayerMoveButton);
   }
   if (PLAYERS_AMOUNT >= 2) {
-    this.secondPlayer = new Player(secondPlayerImage, playerName.SECOND_NAME, 0, 0, secondPlayerMoveButton);
+    this.secondPlayer = new Player(rightSecondPlayerImage, leftSecondPlayerImage, playerName.SECOND_NAME, 0, 0, secondPlayerMoveButton);
   }
   if (PLAYERS_AMOUNT >= 3) {
-    this.thirdPlayer = new Player(thirdPlayerImage, playerName.THIRD_NAME, 0, 0, thirdPlayerMoveButton);
-  }
-  this.chooseRandomPlace = function (player) {
-    const MIN = 1;
-    const MAX = 5;
-    let placeVariant = this.chooseRandomDigit(MIN, MAX);
-    switch (placeVariant) {
-      case randomPlaces.FIRST:
-        player.x = randomPlaces.FIRST_PLACE_X;
-        player.y = randomPlaces.FIRST_PLACE_Y;
-        break;
-      case randomPlaces.SECOND:
-        player.x = randomPlaces.SECOND_PLACE_X;
-        player.y = randomPlaces.SECOND_PLACE_Y;
-        break;
-      case randomPlaces.THIRD:
-        player.x = randomPlaces.THIRD_PLACE_X;
-        player.y = randomPlaces.THIRD_PLACE_Y;
-        break;
-      case randomPlaces.FOURTH:
-        player.x = randomPlaces.FOURTH_PLACE_X;
-        player.y = randomPlaces.FOURTH_PLACE_Y;
-        break;
-      case randomPlaces.FIFTH:
-        player.x = randomPlaces.FIFTH_PLACE_X;
-        player.y = randomPlaces.FIFTH_PLACE_Y;
-        break;
-    }
-  };
-  this.chooseRandomDigit = function (min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-  };
-  this.draw = function (ctx) {
-    if ((this.firstPlayer) && (this.firstPlayer.liveState === playerInformation.ALIVE)) {
-      drawObject(ctx, this.firstPlayer);
-    }
-    if ((this.secondPlayer) && (this.secondPlayer.liveState === playerInformation.ALIVE)) {
-      drawObject(ctx, this.secondPlayer);
-    }
-    if ((this.thirdPlayer) && (this.thirdPlayer.liveState === playerInformation.ALIVE)) {
-      drawObject(ctx, this.thirdPlayer);
-    }
+    this.thirdPlayer = new Player(rightThirdPlayerImage, leftThirdPlayerImage, playerName.THIRD_NAME, 0, 0, thirdPlayerMoveButton);
   }
 }
-function Player(source, playerName, x, y, movingButtons) {
+function Player(sourceRightMoving, sourceLeftMoving, playerName, x, y, movingButtons) {
   this.name = playerName;
 
-  this.source = source;
+  this.rightMovingImage = sourceRightMoving;
+  this.leftMovingImage = sourceLeftMoving;
+  this.source = sourceRightMoving;
   this.imageX = playerInformation.IMAGE_X;
   this.imageY = playerInformation.IMAGE_Y;
   this.imageWidth = playerInformation.IMAGE_WIDTH;
@@ -289,19 +225,6 @@ function Player(source, playerName, x, y, movingButtons) {
   this.y = y;
   this.width = playerInformation.WIDTH;
   this.height = playerInformation.HEIGHT;
-
-  this.getX = function() {
-    return this.x
-  };
-  this.getY = function() {
-    return this.y
-  };
-  this.getWidth = function() {
-    return this.width
-  };
-  this.getHeight = function() {
-    return this.height
-  };
 
   this.movingButtons = movingButtons;
 
@@ -325,6 +248,114 @@ function Player(source, playerName, x, y, movingButtons) {
   this.distanceToLand = 0;
   this.underLand = 0;
   this.nextLandY = 0;
+
+  this.getX = function() {
+    return this.x
+  };
+  this.getY = function() {
+    return this.y
+  };
+  this.getWidth = function() {
+    return this.width
+  };
+  this.getHeight = function() {
+    return this.height
+  };
+
+  this.draw = function(ctx) {
+    ctx.drawImage(this.source, this.imageX, this.imageY, this.imageWidth, this.imageHeight,
+        this.x, this.y, this.width,this.height);
+  };
+
+  this.updateImage = function(deltaTime) {
+    if ((this.rightMove === 1) && (this.source === this.leftMovingImage)) {
+      this.source = this.rightMovingImage;
+    }
+    if ((this.leftMove === 1) && (this.source === this.rightMovingImage)) {
+      this.source = this.leftMovingImage;
+    }
+    if (this.animationTime >= playerInformation.ANIMATION_TIME) {
+      this.changeImage();
+      this.animationTime = 0;
+    } else {
+      let sumDeltaTime = this.animationTime + deltaTime / 1000;
+      this.animationTime = sumDeltaTime;
+    }
+  };
+  this.changeImage = function() {
+    switch (this.imageX) {
+      case playerImage.FIRST_X:
+        this.imageX = playerImage.SECOND_X;
+        break;
+      case playerImage.SECOND_X:
+        this.imageX = playerImage.THIRD_X;
+        break;
+      case playerImage.THIRD_X:
+        this.imageX = playerImage.FOURTH_X;
+        break;
+      case playerImage.FOURTH_X:
+        this.imageX = playerImage.FIFTH_X;
+        break;
+      case playerImage.FIFTH_X:
+        this.imageX = playerImage.SIXTH_X;
+        break;
+      case playerImage.SIXTH_X:
+        this.imageX = playerImage.SEVENTH_X;
+        break;
+      case playerImage.SEVENTH_X:
+        this.imageX = playerImage.EIGHTS_X;
+        break;
+      case playerImage.EIGHTS_X:
+        this.imageX = playerImage.NINTH_X;
+        break;
+      case playerImage.NINTH_X:
+        this.imageX = playerImage.TENTH_X;
+        break;
+      case playerImage.TENTH_X:
+        this.imageX = playerImage.FIRST_X;
+        break;
+    }
+  };
+  this.chooseRandomPlace = function () {
+    const MIN = 1;
+    const MAX = 5;
+    let placeVariant = this.chooseRandomDigit(MIN, MAX);
+    switch (placeVariant) {
+      case randomPlaces.FIRST:
+        this.x = randomPlaces.FIRST_PLACE_X;
+        this.y = randomPlaces.FIRST_PLACE_Y;
+        break;
+      case randomPlaces.SECOND:
+        this.x = randomPlaces.SECOND_PLACE_X;
+        this.y = randomPlaces.SECOND_PLACE_Y;
+        break;
+      case randomPlaces.THIRD:
+        this.x = randomPlaces.THIRD_PLACE_X;
+        this.y = randomPlaces.THIRD_PLACE_Y;
+        break;
+      case randomPlaces.FOURTH:
+        this.x = randomPlaces.FOURTH_PLACE_X;
+        this.y = randomPlaces.FOURTH_PLACE_Y;
+        break;
+      case randomPlaces.FIFTH:
+        this.x = randomPlaces.FIFTH_PLACE_X;
+        this.y = randomPlaces.FIFTH_PLACE_Y;
+        break;
+    }
+  };
+  this.chooseRandomDigit = function (min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  };
+
+  this.animate = function (deltaTime) {
+    let time = this.unaliveTime + deltaTime / 1000;
+    this.unaliveTime = time;
+    if (this.unaliveTime >= playerInformation.UNALIVE_TIME) {
+      this.liveState = playerInformation.ALIVE;
+      this.unaliveTime = 0;
+      this.chooseRandomPlace();
+    }
+  };
 }
 
 function getScoreboards() {
@@ -334,10 +365,10 @@ function getScoreboards() {
   return scoreboards;
 }
 function Scoreboards(scoreboardImage, x) {
-  let firstPlayerImage = g_context.resources[imageNames.FIRST_PLAYER];
-  let secondPlayerImage = g_context.resources[imageNames.SECOND_PLAYER];
-  let thirdPlayerImage = g_context.resources[imageNames.THIRD_PLAYER];
-  let fourthPlayerImage = g_context.resources[imageNames.FOURTH_PLAYER];
+  let firstPlayerImage = g_context.resources[imageNames.RIGHT_FIRST_PLAYER];
+  let secondPlayerImage = g_context.resources[imageNames.RIGHT_SECOND_PLAYER];
+  let thirdPlayerImage = g_context.resources[imageNames.RIGHT_THIRD_PLAYER];
+  let fourthPlayerImage = g_context.resources[imageNames.RIGHT_FOURTH_PLAYER];
   this.firstScoreboard = new Scoreboard(scoreboardImage, firstPlayerImage, playerName.FIRST_NAME, x, 0);
   this.secondScoreboard = new Scoreboard(scoreboardImage, secondPlayerImage, playerName.SECOND_NAME, x,
       this.firstScoreboard.y + pointScoreboard.HEIGHT);
@@ -357,47 +388,50 @@ function Scoreboards(scoreboardImage, x) {
   if (PLAYERS_AMOUNT === 4) {
     this.fourthScoreboard.scoreboardState = states.ACTIVE;
   }
-  this.drawScoreboards = function (ctx) {
-    this.drawScoreboard(ctx, this.firstScoreboard);
-    this.drawScoreboard(ctx, this.secondScoreboard);
-    this.drawScoreboard(ctx, this.thirdScoreboard);
-    this.drawScoreboard(ctx, this.fourthScoreboard);
-    this.drawPoints(ctx);
-  };
-  this.drawScoreboard = function(ctx, scoreboard) {
-    ctx.drawImage(scoreboard.sourceScoreboard, scoreboard.imageX, scoreboard.imageY, scoreboard.imageWidth,
-        scoreboard.imageHeight, scoreboard.x, scoreboard.y, scoreboard.width, scoreboard.height);
-    if (scoreboard.scoreboardState === states.ACTIVE) {
-      ctx.drawImage(scoreboard.sourcePlayer, playerInformation.IMAGE_X, playerInformation.IMAGE_Y,
+}
+function Scoreboard(sourceScoreboard, sourcePlayer, playerName, x, y) {
+  this.name = playerName;
+  this.sourceScoreboard = sourceScoreboard;
+  this.sourcePlayer = sourcePlayer;
+  this.imageX = pointScoreboard.IMAGE_X;
+  this.imageY = pointScoreboard.IMAGE_Y;
+  this.imageWidth = pointScoreboard.IMAGE_WIDTH;
+  this.imageHeight = pointScoreboard.IMAGE_HEIGHT;
+  this.x = x;
+  this.y = y;
+  this.width = pointScoreboard.WIDTH;
+  this.height = pointScoreboard.HEIGHT;
+  this.pointsAmount = 0;
+  this.scoreboardState = states.INACTIVE;
+
+  this.draw = function(ctx) {
+    ctx.drawImage(this.sourceScoreboard, this.imageX, this.imageY, this.imageWidth,
+        this.imageHeight, this.x, this.y, this.width, this.height);
+    if (this.scoreboardState === states.ACTIVE) {
+      ctx.drawImage(this.sourcePlayer, playerInformation.IMAGE_X, playerInformation.IMAGE_Y,
           playerInformation.IMAGE_WIDTH, playerInformation.IMAGE_HEIGHT,
-          scoreboard.x + pointScoreboard.X_PLAYER_SHIFT, scoreboard.y + pointScoreboard.Y_PLAYER_SHIFT,
+          this.x + pointScoreboard.X_PLAYER_SHIFT, this.y + pointScoreboard.Y_PLAYER_SHIFT,
           playerInformation.WIDTH, playerInformation.HEIGHT);
       ctx.fillStyle = colors.LIGHT_BLUE;
       ctx.font = "bold 30pt Arial";
-      ctx.fillText("" + scoreboard.name, scoreboard.x + pointScoreboard.X_PLAYER_NAME_SHIFT,
-          scoreboard.y + pointScoreboard.Y_PLAYER_NAME_SHIFT);
+      ctx.fillText("" + this.name, this.x + pointScoreboard.X_PLAYER_NAME_SHIFT,
+          this.y + pointScoreboard.Y_PLAYER_NAME_SHIFT);
     }
   };
-  this.drawPoints = function (ctx) {
-    this.drawPoint(ctx, this.firstScoreboard);
-    this.drawPoint(ctx, this.secondScoreboard);
-    this.drawPoint(ctx, this.thirdScoreboard);
-    this.drawPoint(ctx, this.fourthScoreboard);
-  };
-  this.drawPoint = function (ctx, scoreboard) {
-    let tens = Math.floor(scoreboard.pointsAmount / 10);
+  this.drawPoint = function (ctx) {
+    let tens = Math.floor(this.pointsAmount / 10);
     let digitImage = this.chooseDigitImage(tens);
-    ctx.drawImage(scoreboard.sourceScoreboard, digitImage.IMAGE_X, digitImage.IMAGE_Y,
+    ctx.drawImage(this.sourceScoreboard, digitImage.IMAGE_X, digitImage.IMAGE_Y,
         digitImage.IMAGE_WIDTH, digitImage.IMAGE_HEIGHT,
-        x + pointScoreboard.X_FIRST_POINT_SHIFT, scoreboard.y + pointScoreboard.Y_POINT_SHIFT,
+        x + pointScoreboard.X_FIRST_POINT_SHIFT, this.y + pointScoreboard.Y_POINT_SHIFT,
         pointScoreboard.POINT_WIDTH, pointScoreboard.POINT_HEIGHT);
 
-    let ones = scoreboard.pointsAmount - tens * 10;
+    let ones = this.pointsAmount - tens * 10;
     digitImage = this.chooseDigitImage(ones);
 
-    ctx.drawImage(scoreboard.sourceScoreboard, digitImage.IMAGE_X, digitImage.IMAGE_Y,
+    ctx.drawImage(this.sourceScoreboard, digitImage.IMAGE_X, digitImage.IMAGE_Y,
         digitImage.IMAGE_WIDTH, digitImage.IMAGE_HEIGHT,
-        x + pointScoreboard.X_SECOND_POINT_SHIFT, scoreboard.y + pointScoreboard.Y_POINT_SHIFT,
+        x + pointScoreboard.X_SECOND_POINT_SHIFT, this.y + pointScoreboard.Y_POINT_SHIFT,
         pointScoreboard.POINT_WIDTH, pointScoreboard.POINT_HEIGHT);
   };
   this.chooseDigitImage = function (digit) {
@@ -423,24 +457,9 @@ function Scoreboards(scoreboardImage, x) {
       case points.NINE.VALUE:
         return points.NINE;
     }
-  }
+  };
   this.prompt = {
     state: states.INACTIVE,
     timeInterval: 0
   }
-}
-function Scoreboard(sourceScoreboard, sourcePlayer, playerName, x, y) {
-  this.name = playerName;
-  this.sourceScoreboard = sourceScoreboard;
-  this.sourcePlayer = sourcePlayer;
-  this.imageX = pointScoreboard.IMAGE_X;
-  this.imageY = pointScoreboard.IMAGE_Y;
-  this.imageWidth = pointScoreboard.IMAGE_WIDTH;
-  this.imageHeight = pointScoreboard.IMAGE_HEIGHT;
-  this.x = x;
-  this.y = y;
-  this.width = pointScoreboard.WIDTH;
-  this.height = pointScoreboard.HEIGHT;
-  this.pointsAmount = 0;
-  this.scoreboardState = states.INACTIVE;
 }

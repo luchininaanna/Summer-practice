@@ -1,4 +1,4 @@
-const MAX_COUNTER_VALUE = 13;
+const MAX_COUNTER_VALUE = 17;
 const PLAYERS_AMOUNT = 3;
 
 const colors = {
@@ -111,8 +111,8 @@ const playerInformation = {
   RIGHT_FREE_SPACE: 13,
   TOP_FREE_SPACE: 38,
   HORIZONTAL_SPEED: 0.5,
-  START_BIG_VERTICAL_SPEED: 35,
-  START_SMALL_VERTICAL_SPEED: 25,
+  START_BIG_VERTICAL_SPEED: 55,
+  START_SMALL_VERTICAL_SPEED: 15,
   START_ZERO_VERTICAL_SPEED: 0,
   ACCELERATION_OF_GRAVITY: 9.8,
   ALIVE: 1,
@@ -120,7 +120,7 @@ const playerInformation = {
   JUMP: 1,
   NO_JUMP: 0,
   UNALIVE_TIME: 2,
-  MASS: 5,
+  MASS: 3,
   ANIMATION_TIME: 0.03
 };
 const playerImage = {
@@ -151,10 +151,14 @@ const imageNames = {
   SCOREBOARD: "scoreboard",
   RESULT_BACKGROUND: "resultBackground",
   BURST: "burst",
-  FIRST_PLAYER: "firstPlayer",
-  SECOND_PLAYER: "secondPlayer",
-  THIRD_PLAYER: "thirdPlayer",
-  FOURTH_PLAYER: "fourthPlayer",
+  RIGHT_FIRST_PLAYER: "rightFirstPlayer",
+  RIGHT_SECOND_PLAYER: "rightSecondPlayer",
+  RIGHT_THIRD_PLAYER: "rightThirdPlayer",
+  RIGHT_FOURTH_PLAYER: "rightFourthPlayer",
+  LEFT_FIRST_PLAYER: "leftFirstPlayer",
+  LEFT_SECOND_PLAYER: "leftSecondPlayer",
+  LEFT_THIRD_PLAYER: "leftThirdPlayer",
+  LEFT_FOURTH_PLAYER: "leftFourthPlayer",
 };
 const points = {
   ZERO: {

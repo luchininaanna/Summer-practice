@@ -5,8 +5,10 @@ function World() {
   this.scoreboards = getScoreboards();
   this.update = function (deltaTime) {
     if (this.state === statesOfGame.IN_PROCESS) {
-      let players = g_world.players;
-      players.animatePlayers(deltaTime);
+      let unalivePlayers = this.getPlayersInState(playerInformation.UNALIVE);
+      if (unalivePlayers) {
+        animatePlayers(unalivePlayers, deltaTime);
+      }
       updatePlayersCoordinates(this.players, deltaTime);
     }
     if (this.state === statesOfGame.RESULT) {
@@ -22,11 +24,26 @@ function World() {
     if (this.state === statesOfGame.IN_PROCESS) {
       let gameWorldObjects = this.objects;
       drawObjects(ctx, gameWorldObjects);
-      this.players.draw(ctx);
-      this.scoreboards.drawScoreboards(ctx);
+      let players = this.players;
+      drawPlayers(ctx, players);
+      let scoreboards = this.scoreboards;
+      drawScoreboards(ctx, scoreboards);
     } else {
       drawResult(ctx);
     }
+  };
+  this.getPlayersInState = function (state) {
+    let playersInState = {};
+    if ((this.players.firstPlayer) && (this.players.firstPlayer.liveState === state)) {
+      playersInState.firstPlayer = this.players.firstPlayer;
+    }
+    if ((this.players.secondPlayer) && (this.players.secondPlayer.liveState === state)) {
+      playersInState.secondPlayer = this.players.secondPlayer;
+    }
+    if ((this.players.thirdPlayer) && (this.players.thirdPlayer.liveState === state)) {
+      playersInState.thirdPlayer = this.players.secondPlayer;
+    }
+    return playersInState;
   };
   this.checkHorizontallyFree = function (player, updatedX, elements) {
     if (elements) {
@@ -112,11 +129,7 @@ function World() {
         }
       }
     }
-    if (player.underLand) {
-      return true;
-    } else {
-      return false;
-    }
+    return player.underLand;
   };
   this.checkOnLand = function (player) {
     if (!this.objects) {
