@@ -1,63 +1,62 @@
 function updatePlayersCoordinates(players, deltaTime) {
   if (players) {
     for (let key in players) {
-      updatePlayerCoordinates(players, players[key], deltaTime);
+      updatePlayerCoordinates(players[key], deltaTime);
     }
   }
   return players;
 }
-function updatePlayerCoordinates(players, player, deltaTime) {
+function updatePlayerCoordinates(player, deltaTime) {
   if (player.rightMove === 1) {
-    rightMoving(players, player, deltaTime);
+    rightMoving(player, deltaTime);
   }
 
   if (player.leftMove === 1) {
-    leftMoving(players, player, deltaTime);
+    leftMoving(player, deltaTime);
   }
 
   if (player.upMove === 1) {
     player.jumpState = playerInformation.JUMP;
-    jump(players, player, deltaTime);
+    jump(player, deltaTime);
   }
 }
 
-function rightMoving(players, player, deltaTime) {
+function rightMoving(player, deltaTime) {
   player.updateImage(deltaTime);
 
-  let updatedX = player.x + player.horizontalSpeed * deltaTime;
-  let isScreen = (updatedX > 0) && (updatedX < canvasSize.WIDTH - pointScoreboard.WIDTH - player.width);
+  player.updatedX = player.x + player.horizontalSpeed * deltaTime;
+  let isScreen = (player.updatedX > 0) &&
+      (player.updatedX < canvasSize.WIDTH - pointScoreboard.WIDTH - player.width);
+
   let alivePlayers = g_world.getPlayersInState(playerInformation.ALIVE);
-  let freeHorizontallySpace = g_world.checkHorizontallyFree(player, updatedX, alivePlayers);
+  let freeHorizontallySpaceFromPlayers = g_world.checkHorizontallyFree(player, alivePlayers);
 
-  if ((isScreen && freeHorizontallySpace)) {
-    player.x = updatedX;
-  }
-
-  let onLand = g_world.checkOnLand(player);
-  if (!onLand && (player.jumpState === playerInformation.NO_JUMP)) {
-    player.upMove = 1;
-    player.verticalSpeed = playerInformation.START_ZERO_VERTICAL_SPEED;
+  let stairs = g_world.stairs;
+  let freeHorizontallySpaceFromStairs = g_world.checkHorizontallyFree(player, stairs); //пока что не включено в условие
+                                                                                       //обовление координаты
+  if (isScreen && freeHorizontallySpaceFromPlayers) {
+    player.x = player.updatedX;
   }
 }
-function leftMoving(players, player, deltaTime) {
+
+function leftMoving(player, deltaTime) {
   player.updateImage(deltaTime);
 
-  let updatedX = player.x - player.horizontalSpeed * deltaTime;
-  let isScreen = (updatedX > 0) && (updatedX < canvasSize.WIDTH - pointScoreboard.WIDTH - player.width);
+  player.updatedX = player.x - player.horizontalSpeed * deltaTime;
+  let isScreen = (player.updatedX > 0) &&
+      (player.updatedX < canvasSize.WIDTH - pointScoreboard.WIDTH - player.width);
+
   let alivePlayers = g_world.getPlayersInState(playerInformation.ALIVE);
-  let freeHorizontallySpace = g_world.checkHorizontallyFree(player, updatedX, alivePlayers);
+  let freeHorizontallySpaceFromPlayers = g_world.checkHorizontallyFree(player, alivePlayers);
 
-  if ((isScreen && freeHorizontallySpace)) {
-    player.x = updatedX;
-  }
-
-  let onLand = g_world.checkOnLand(player);
-  if (!onLand && (player.jumpState === playerInformation.NO_JUMP)) {
-    player.upMove = 1;
-    player.verticalSpeed = playerInformation.START_ZERO_VERTICAL_SPEED;
+  let stairs = g_world.stairs;
+  let freeHorizontallySpaceFromStairs = g_world.checkHorizontallyFree(player, stairs);//пока что не включено в условие
+                                                                                      //обовление координаты
+  if (isScreen && freeHorizontallySpaceFromPlayers) {
+    player.x = player.updatedX;
   }
 }
-function jump(players, player, deltaTime) {
+function jump(player, deltaTime) {
   let updatedSpeed = player.verticalSpeed - player.accelerationOfGravity * deltaTime / 50;
   player.verticalSpeed = updatedSpeed;
   let updatedY = player.y - updatedSpeed * deltaTime / 100 * playerInformation.MASS;
@@ -142,19 +141,22 @@ function animatePlayers(unalivePlayers, deltaTime){
 }
 
 function updatePromptTime(deltaTime, scoreboards) {
-  let prompt = scoreboards.prompt;
-  if (prompt.timeInterval >= promptInformation.TIME_INTERVAL) {
-    switch (prompt.state) {
-      case states.INACTIVE:
-        prompt.state = states.ACTIVE;
-        break;
-      case states.ACTIVE:
-        prompt.state = states.INACTIVE;
-        break;
+  if (scoreboards) {
+    for (let key in scoreboards) {
+      if (scoreboards[key].prompt.timeInterval >= promptInformation.TIME_INTERVAL) {
+        switch (scoreboards[key].prompt.state) {
+          case states.INACTIVE:
+            scoreboards[key].prompt.state = states.ACTIVE;
+            break;
+          case states.ACTIVE:
+            scoreboards[key].prompt.state = states.INACTIVE;
+            break;
+        }
+        scoreboards[key].prompt.timeInterval = 0;
+      } else {
+        let timeSum = scoreboards[key].prompt.timeInterval + deltaTime / 1000;
+        scoreboards[key].prompt.timeInterval = timeSum;
+      }
     }
-    prompt.timeInterval = 0;
-  } else {
-    let timeSum = prompt.timeInterval + deltaTime / 1000;
-    prompt.timeInterval = timeSum;
   }
 }

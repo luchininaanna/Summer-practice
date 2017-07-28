@@ -13,17 +13,10 @@ changeCanvasSize();
 
 function checkPressedButtons(event) {
   let players = g_world.players;
-  let firstPlayer = players.firstPlayer;
-  let secondPlayer = players.secondPlayer;
-  let thirdPlayer = players.thirdPlayer;
-  if (firstPlayer) {
-    changePressedState(firstPlayer, event.keyCode, firstPlayer.movingButtons);
-  }
-  if (secondPlayer) {
-    changePressedState(secondPlayer, event.keyCode, secondPlayer.movingButtons);
-  }
-  if (thirdPlayer) {
-    changePressedState(thirdPlayer, event.keyCode, thirdPlayer.movingButtons);
+  if (players) {
+    for (let key in players) {
+      changePressedState(players[key], event.keyCode, players[key].movingButtons);
+    }
   }
   changeStateOfGame(event.keyCode);
 }
@@ -55,17 +48,10 @@ function changePressedState(checkingPlayer, keyCode, movingButtons) {
 
 function checkReleasedButtons(event) {
   let players = g_world.players;
-  let firstPlayer = players.firstPlayer;
-  let secondPlayer = players.secondPlayer;
-  let thirdPlayer = players.thirdPlayer;
-  if (firstPlayer) {
-    changeReleasedState(firstPlayer, event.keyCode, firstPlayer.movingButtons);
-  }
-  if (secondPlayer) {
-    changeReleasedState(secondPlayer, event.keyCode, secondPlayer.movingButtons);
-  }
-  if (thirdPlayer) {
-    changeReleasedState(thirdPlayer, event.keyCode, thirdPlayer.movingButtons);
+  if (players) {
+    for (let key in players) {
+      changeReleasedState(players[key], event.keyCode, players[key].movingButtons);
+    }
   }
 }
 function changeReleasedState(checkingPlayer, keyCode, movingButtons) {

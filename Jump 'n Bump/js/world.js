@@ -1,6 +1,7 @@
 function World() {
   this.state = statesOfGame.IN_PROCESS;
   this.objects = getObjects();
+  this.stairs = getStairs();
   this.players = getPlayers();
   this.scoreboards = getScoreboards();
   this.update = function (deltaTime) {
@@ -24,6 +25,8 @@ function World() {
     if (this.state === statesOfGame.IN_PROCESS) {
       let gameWorldObjects = this.objects;
       drawObjects(ctx, gameWorldObjects);
+      let stairs = this.stairs;
+      drawObjects(ctx, stairs);
       let players = this.players;
       drawPlayers(ctx, players);
       let scoreboards = this.scoreboards;
@@ -45,40 +48,37 @@ function World() {
     }
     return playersInState;
   };
-  this.checkHorizontallyFree = function (player, updatedX, elements) {
+  this.checkHorizontallyFree = function (player, elements) {
     if (elements) {
       for (let key in elements) {
-        if ((elements[key] != player) &&
-            ((elements[key].name === playerName.FIRST_NAME) ||
-            (elements[key].name === playerName.SECOND_NAME) ||
-            (elements[key].name === playerName.THIRD_NAME) ||
-            (elements[key].name === playerName.FOURTH_NAME))) {
-          let otherElement = elements[key];
-          let verticallyFree = ((player.y + player.topFreeSpace) > (otherElement.y + otherElement.height)) ||
-              ((player.y + player.height) < (otherElement.y + otherElement.topFreeSpace));
-          let afterLeftSideAnotherPlayer = (updatedX + player.width - player.rightFreeSpace) >
-              (otherElement.x + otherElement.leftFreeSpace);
-          let beforeRightAnotherPlayerFree = (updatedX + player.width - player.rightFreeSpace) <
-              (otherElement.x + otherElement.width - otherElement.rightFreeSpace);
-          let afterRightSideAnotherPlayer = (updatedX + player.leftFreeSpace) >
-              (otherElement.x + otherElement.leftFreeSpace);
-          let beforeLeftAnotherPlayerFree = (updatedX + player.leftFreeSpace) <
-              (otherElement.x + otherElement.width -
-              otherElement.rightFreeSpace);
-
-          if (verticallyFree) {
-            return true
-          } else {
-            if ((afterLeftSideAnotherPlayer && beforeRightAnotherPlayerFree)//проверка игрока справа
-                ||
-                (afterRightSideAnotherPlayer && beforeLeftAnotherPlayerFree)) { //проверка игрока слева
-              return false;
-            }
+        if (elements[key] != player) {
+          let crossH = this.horizontallyCrossing(player, elements[key]);
+          let crossV = this.verticallyCrossing(player, elements[key]);
+          if (crossV && crossH) {
+            return false;
           }
         }
       }
     }
     return true;
+  };
+  this.horizontallyCrossing = function(firstObject, secondObject) {
+    if (((secondObject.x > firstObject.x) &&
+        (secondObject.x < firstObject.x + firstObject.width)) || //игрок левее объекта
+        ((firstObject.x > secondObject.x) &&
+        (firstObject.x > secondObject.x + secondObject.width))) { //игрок правее объекта
+      return true;
+    }
+    return false;
+  };
+  this.verticallyCrossing = function(firstObject, secondObject) {
+    if (((secondObject.y > firstObject.y) &&
+        (secondObject.y < firstObject.y + firstObject.height)) || //игрок выше объекта
+        ((firstObject.y > secondObject.y) &&
+        (firstObject.y > secondObject.y + secondObject.height))) { //игрок ниже объектом
+      return true;
+    }
+    return false;
   };
   this.checkTopFree = function (player, updatedY, elements) {
     if (elements) {

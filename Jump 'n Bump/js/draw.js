@@ -84,7 +84,7 @@ function drawScores(ctx) {
   }
 }
 function drawPrompt(ctx) {
-  let prompt = g_world.scoreboards.prompt;
+  let prompt = g_world.scoreboards.firstScoreboard.prompt;
   ctx.fillStyle = colors.RED;
   ctx.font = "bold 30pt Arial";
   if (prompt.state === states.ACTIVE) {

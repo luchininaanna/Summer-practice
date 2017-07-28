@@ -1,67 +1,7 @@
 function getObjects() {
   let backgroundImage = g_context.resources[imageNames.BACKGROUND];
-  let firstTypeImage = g_context.resources[imageNames.FIRST_LAND];
-  let secondTypeImage = g_context.resources[imageNames.SECOND_LAND];
-  let iceBoxImage = g_context.resources[imageNames.ICE_BOX];
-  let rocksImage = g_context.resources[imageNames.ROCKS];
   let objects = [];
   objects.push(new Background(backgroundImage, 0, 0));
-  let stairsAmount = 20;
-  let startX = 600;
-  let stairWidth = 45;
-  let stairY = 150;
-  for (let i = 0; i < stairsAmount; i++) {
-    objects.push(new SmallStair(firstTypeImage, startX + stairWidth * i, stairY));
-  }
-  stairsAmount = 3;
-  startX = 450;
-  stairWidth = 45;
-  stairY = 200;
-  for (let i = 0; i < stairsAmount; i++) {
-    objects.push(new SmallStair(firstTypeImage, startX + stairWidth * i, stairY));
-  }
-  stairsAmount = 3;
-  startX = 300;
-  stairWidth = 45;
-  stairY = 300;
-  for (let i = 0; i < stairsAmount; i++) {
-    objects.push(new SmallStair(firstTypeImage, startX + stairWidth * i, stairY));
-  }
-  stairsAmount = 7;
-  startX = 100;
-  stairWidth = 45;
-  stairY = 430;
-  for (let i = 0; i < stairsAmount; i++) {
-    objects.push(new SmallStair(firstTypeImage, startX + stairWidth * i, stairY));
-  }
-  stairsAmount = 8;
-  startX = 550;
-  stairWidth = 45;
-  stairY = 550;
-  for (let i = 0; i < stairsAmount; i++) {
-    objects.push(new SmallStair(firstTypeImage, startX + stairWidth * i, stairY));
-  }
-  stairsAmount = 3;
-  startX = 1300;
-  stairWidth = 45;
-  stairY = 600;
-  for (let i = 0; i < stairsAmount; i++) {
-    objects.push(new SmallStair(firstTypeImage, startX + stairWidth * i, stairY));
-  }
-  stairsAmount = 5;
-  startX = 1000;
-  stairWidth = 45;
-  stairY = 700;
-  for (let i = 0; i < stairsAmount; i++) {
-    objects.push(new SmallStair(firstTypeImage, startX + stairWidth * i, stairY));
-  }
-  stairsAmount = 33;
-  startX = -10;
-  stairWidth = 45;
-  stairY = 860;
-  for (let i = 0; i < stairsAmount; i++) {
-    objects.push(new SmallStair(firstTypeImage, startX + stairWidth * i, stairY));
-  }
   return objects;
 }
 function Background(source, x, y) {
@@ -75,6 +15,73 @@ function Background(source, x, y) {
   this.width = canvasSize.WIDTH;
   this.height = canvasSize.HEIGHT;
 }
+
+function getStairs() {
+  let firstTypeImage = g_context.resources[imageNames.FIRST_LAND];
+  let secondTypeImage = g_context.resources[imageNames.SECOND_LAND];
+  let iceBoxImage = g_context.resources[imageNames.ICE_BOX];
+  let rocksImage = g_context.resources[imageNames.ROCKS];
+  let stairs = [];
+
+  let stairsAmount = 20;
+  let startX = 600;
+  let stairWidth = 45;
+  let stairY = 150;
+  for (let i = 0; i < stairsAmount; i++) {
+    stairs.push(new SmallStair(firstTypeImage, startX + stairWidth * i, stairY));
+  }
+  stairsAmount = 3;
+  startX = 450;
+  stairWidth = 45;
+  stairY = 200;
+  for (let i = 0; i < stairsAmount; i++) {
+    stairs.push(new SmallStair(firstTypeImage, startX + stairWidth * i, stairY));
+  }
+  stairsAmount = 3;
+  startX = 300;
+  stairWidth = 45;
+  stairY = 300;
+  for (let i = 0; i < stairsAmount; i++) {
+    stairs.push(new SmallStair(firstTypeImage, startX + stairWidth * i, stairY));
+  }
+  stairsAmount = 7;
+  startX = 100;
+  stairWidth = 45;
+  stairY = 430;
+  for (let i = 0; i < stairsAmount; i++) {
+    stairs.push(new SmallStair(firstTypeImage, startX + stairWidth * i, stairY));
+  }
+  stairsAmount = 8;
+  startX = 550;
+  stairWidth = 45;
+  stairY = 550;
+  for (let i = 0; i < stairsAmount; i++) {
+    stairs.push(new SmallStair(firstTypeImage, startX + stairWidth * i, stairY));
+  }
+  stairsAmount = 3;
+  startX = 1300;
+  stairWidth = 45;
+  stairY = 600;
+  for (let i = 0; i < stairsAmount; i++) {
+    stairs.push(new SmallStair(firstTypeImage, startX + stairWidth * i, stairY));
+  }
+  stairsAmount = 5;
+  startX = 1000;
+  stairWidth = 45;
+  stairY = 700;
+  for (let i = 0; i < stairsAmount; i++) {
+    stairs.push(new SmallStair(firstTypeImage, startX + stairWidth * i, stairY));
+  }
+  stairsAmount = 33;
+  startX = -10;
+  stairWidth = 45;
+  stairY = 860;
+  for (let i = 0; i < stairsAmount; i++) {
+    stairs.push(new SmallStair(firstTypeImage, startX + stairWidth * i, stairY));
+  }
+  return stairs;
+}
+
 function SmallStair(source, x, y) {
   this.source = source;
   this.imageX = smallStair.IMAGE_X;
@@ -223,6 +230,8 @@ function Player(sourceRightMoving, sourceLeftMoving, playerName, x, y, movingBut
   this.imageHeight = playerInformation.IMAGE_HEIGHT;
   this.x = x;
   this.y = y;
+  this.updatedX = x;
+  this.updatedY = y;
   this.width = playerInformation.WIDTH;
   this.height = playerInformation.HEIGHT;
 
