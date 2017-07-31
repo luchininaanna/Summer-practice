@@ -32,9 +32,9 @@ function rightMoving(player, deltaTime) {
   let freeHorizontallySpaceFromPlayers = g_world.checkHorizontallyFree(player, alivePlayers);
 
   let stairs = g_world.stairs;
-  let freeHorizontallySpaceFromStairs = g_world.checkHorizontallyFree(player, stairs); //пока что не включено в условие
-                                                                                       //обовление координаты
-  if (isScreen && freeHorizontallySpaceFromPlayers) {
+  let freeHorizontallySpaceFromStairs = g_world.checkHorizontallyFree(player, stairs);
+
+  if (freeHorizontallySpaceFromPlayers && isScreen) {
     player.x = player.updatedX;
   }
 }
@@ -50,9 +50,9 @@ function leftMoving(player, deltaTime) {
   let freeHorizontallySpaceFromPlayers = g_world.checkHorizontallyFree(player, alivePlayers);
 
   let stairs = g_world.stairs;
-  let freeHorizontallySpaceFromStairs = g_world.checkHorizontallyFree(player, stairs);//пока что не включено в условие
-                                                                                      //обовление координаты
-  if (isScreen && freeHorizontallySpaceFromPlayers) {
+  let freeHorizontallySpaceFromStairs = g_world.checkHorizontallyFree(player, stairs);
+
+  if (freeHorizontallySpaceFromPlayers && isScreen) {
     player.x = player.updatedX;
   }
 }

@@ -44,38 +44,40 @@ function World() {
       playersInState.secondPlayer = this.players.secondPlayer;
     }
     if ((this.players.thirdPlayer) && (this.players.thirdPlayer.liveState === state)) {
-      playersInState.thirdPlayer = this.players.secondPlayer;
+      playersInState.thirdPlayer = this.players.thirdPlayer;
     }
     return playersInState;
   };
   this.checkHorizontallyFree = function (player, elements) {
-    if (elements) {
-      for (let key in elements) {
-        if (elements[key] != player) {
-          let crossH = this.horizontallyCrossing(player, elements[key]);
-          let crossV = this.verticallyCrossing(player, elements[key]);
-          if (crossV && crossH) {
-            return false;
-          }
+    for (let key in elements) {
+      if (elements[key] != player) {
+        let crossH = this.horizontallyCrossing(player, elements[key]);
+        let crossV = this.verticallyCrossing(player, elements[key]);
+        if (crossH && crossV) {
+          return false;
         }
       }
     }
     return true;
   };
   this.horizontallyCrossing = function(firstObject, secondObject) {
-    if (((secondObject.x > firstObject.x) &&
-        (secondObject.x < firstObject.x + firstObject.width)) || //игрок левее объекта
-        ((firstObject.x > secondObject.x) &&
-        (firstObject.x > secondObject.x + secondObject.width))) { //игрок правее объекта
+    if (((secondObject.x >= firstObject.x) &&
+        (secondObject.x <= firstObject.x + firstObject.width)) ||
+        ((firstObject.x >= secondObject.x) &&
+        (firstObject.x <= secondObject.x + secondObject.width))) {
       return true;
     }
     return false;
   };
   this.verticallyCrossing = function(firstObject, secondObject) {
-    if (((secondObject.y > firstObject.y) &&
-        (secondObject.y < firstObject.y + firstObject.height)) || //игрок выше объекта
-        ((firstObject.y > secondObject.y) &&
-        (firstObject.y > secondObject.y + secondObject.height))) { //игрок ниже объектом
+    let shift = 0;
+    if (secondObject.type === bottomType.LAND) {
+      shift = smallStair.TOP_FREE_SPACE;
+    }
+    if (((secondObject.y + shift >= firstObject.y) &&
+        (secondObject.y + shift <= firstObject.y + firstObject.height)) ||
+        ((firstObject.y >= secondObject.y) &&
+        (firstObject.y <= secondObject.y + secondObject.height))) {
       return true;
     }
     return false;
