@@ -304,3 +304,7 @@ const promptInformation = {
   TEXT: "Для начала новой игры нажмите клавишу Enter",
   TIME_INTERVAL: 0.6
 };
+const speedCoefficients = {
+  RIGHT_MOVING: 1,
+  LEFT_MOVING: -1
+};

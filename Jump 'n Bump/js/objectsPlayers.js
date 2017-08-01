@@ -240,6 +240,8 @@ function Player(sourceRightMoving, sourceLeftMoving, playerName, x, y, movingBut
   this.leftFreeSpace = playerInformation.LEFT_FREE_SPACE;
   this.rightFreeSpace = playerInformation.RIGHT_FREE_SPACE;
   this.topFreeSpace = playerInformation.TOP_FREE_SPACE;
+  this.distanceToLand = 0;
+  this.nextLand = 0;
 
   this.liveState = playerInformation.ALIVE;
   this.unaliveTime = 0;
@@ -248,15 +250,11 @@ function Player(sourceRightMoving, sourceLeftMoving, playerName, x, y, movingBut
   this.horizontalSpeed = playerInformation.HORIZONTAL_SPEED;
   this.accelerationOfGravity = playerInformation.ACCELERATION_OF_GRAVITY;
   this.verticalSpeed = playerInformation.START_BIG_VERTICAL_SPEED;
-  this.jumpState = playerInformation.NO_JUMP;
+  this.speedCoefficient = speedCoefficients.RIGHT_MOVING;
 
   this.rightMove = 0;
   this.leftMove = 0;
   this.upMove = 0;
-
-  this.distanceToLand = 0;
-  this.underLand = 0;
-  this.nextLandY = 0;
 
   this.getX = function() {
     return this.x

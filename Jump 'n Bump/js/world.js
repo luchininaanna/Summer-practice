@@ -82,71 +82,36 @@ function World() {
     }
     return false;
   };
-  this.checkTopFree = function (player, updatedY, elements) {
-    if (elements) {
-      for (let key in elements) {
-        if ((elements[key] != player) && (elements[key] != imageNames.BACKGROUND)) {
-          let otherElement = elements[key];
-          if ((updatedY + player.topFreeSpace) < (otherElement.y + otherElement.height))
-            return false;
-        }
-      }
+  this.topCrossing = function(firstObject, secondObject) {
+    if ((secondObject.y + secondObject.height >= firstObject.y) &&
+        (secondObject.y + secondObject.height <= firstObject.y + firstObject.height)) {
+      return true;
     }
-    return true;
+    return false;
   };
-  this.checkBottomFree = function (player, updatedY, elements) {
-    if (elements) {
-      for (let key in elements) {
-        if (elements[key] != player) {
-          let otherElement = elements[key];
-          if ((updatedY + player.height) > (otherElement.y + otherElement.topFreeSpace))
-            return false;
-        }
-      }
+  this.bottomCrossing = function(firstObject, secondObject) {
+    if ((firstObject.y + firstObject.height >= secondObject.y + smallStair.TOP_FREE_SPACE) &&
+        (firstObject.y + firstObject.height <= secondObject.y + secondObject.height + smallStair.TOP_FREE_SPACE)) {
+      return true;
     }
-    return true;
+    return false;
   };
-  this.checkLand = function (player) {
-    if (!this.objects) {
-      return false;
-    }
-    player.distanceToLand = 0;
-    player.underLand = 0;
-    for (let key in this.objects) {
-      if (this.objects[key].type === bottomType.LAND) {
-        let playerAfterLeftLandSide = player.x + playerInformation.WIDTH / 2 >= this.objects[key].x;
-        let playerAfterRightLandSide = player.x + playerInformation.WIDTH / 2 <= this.objects[key].x + this.objects[key].width;
-        let underLand = playerAfterLeftLandSide && playerAfterRightLandSide;
-        if (underLand) {
-          player.underLand = 1;
-        }
+  this.findNearestLandCoordinates = function(player, stairs) {
+    if (stairs) {
+      for (let key in stairs) {
+        if ((stairs[key].x < player.x + playerInformation.WIDTH/2) &&
+            (stairs[key].x + smallStair.WIDTH > player.x + playerInformation.WIDTH / 2) &&
+            (stairs[key].y + smallStair.TOP_FREE_SPACE > player.y + playerInformation.HEIGHT)) {
 
-        if (underLand && (this.objects[key].y >= (player.y + player.height))) {
-          //находим ближайшую ступень
-          let distanceToLand = this.objects[key].y + smallStair.TOP_FREE_SPACE - (player.y + player.height);
-          if ((player.distanceToLand >= distanceToLand) || (player.distanceToLand === 0)) {
+          let distanceToLand = stairs[key].y - player.y;
+
+          if ((distanceToLand < player.distanceToLand) || (player.distanceToLand === 0)) {
             player.distanceToLand = distanceToLand;
-            player.nextLandY = this.objects[key].y;
+            player.nextLand = stairs[key].y;
           }
         }
       }
     }
-    return player.underLand;
-  };
-  this.checkOnLand = function (player) {
-    if (!this.objects) {
-      return false;
-    }
-    for (let key in this.objects) {
-      let playerAfterLeftLandSide = player.x + playerInformation.WIDTH / 2 >= this.objects[key].x;
-      let playerAfterRightLandSide = player.x + playerInformation.WIDTH / 2 <= this.objects[key].x + this.objects[key].width;
-      let underLand = playerAfterLeftLandSide && playerAfterRightLandSide;
-      let onLand = player.y === this.objects[key].y - playerInformation.HEIGHT + smallStair.TOP_FREE_SPACE;
-
-      if (underLand && onLand) {
-        return true;
-      }
-    }
-    return false;
+    return player;
   }
 }
