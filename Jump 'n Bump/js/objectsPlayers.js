@@ -40,11 +40,11 @@ function getStairs() {
   stairsAmount = 3;
   startX = 300;
   stairWidth = 45;
-  stairY = 300;
+  stairY = 250;
   for (let i = 0; i < stairsAmount; i++) {
     stairs.push(new SmallStair(firstTypeImage, startX + stairWidth * i, stairY));
   }
-  stairsAmount = 7;
+  stairsAmount = 10;
   startX = 100;
   stairWidth = 45;
   stairY = 430;
@@ -92,20 +92,6 @@ function SmallStair(source, x, y) {
   this.y = y;
   this.width = smallStair.WIDTH;
   this.height = smallStair.HEIGHT;
-
-  this.getX = function() {
-    return this.x
-  };
-  this.getY = function() {
-    return this.y
-  };
-  this.getWidth = function() {
-    return this.width
-  };
-  this.getHeight = function() {
-    return this.height
-  };
-
   this.type = "land";
 }
 function BigStair(source, x, y) {
@@ -240,8 +226,8 @@ function Player(sourceRightMoving, sourceLeftMoving, playerName, x, y, movingBut
   this.leftFreeSpace = playerInformation.LEFT_FREE_SPACE;
   this.rightFreeSpace = playerInformation.RIGHT_FREE_SPACE;
   this.topFreeSpace = playerInformation.TOP_FREE_SPACE;
-  this.distanceToLand = 0;
   this.nextLand = 0;
+  this.landed = states.ACTIVE;
 
   this.liveState = playerInformation.ALIVE;
   this.unaliveTime = 0;
@@ -255,20 +241,6 @@ function Player(sourceRightMoving, sourceLeftMoving, playerName, x, y, movingBut
   this.rightMove = 0;
   this.leftMove = 0;
   this.upMove = 0;
-
-  this.getX = function() {
-    return this.x
-  };
-  this.getY = function() {
-    return this.y
-  };
-  this.getWidth = function() {
-    return this.width
-  };
-  this.getHeight = function() {
-    return this.height
-  };
-
   this.draw = function(ctx) {
     ctx.drawImage(this.source, this.imageX, this.imageY, this.imageWidth, this.imageHeight,
         this.x, this.y, this.width,this.height);
@@ -362,6 +334,25 @@ function Player(sourceRightMoving, sourceLeftMoving, playerName, x, y, movingBut
       this.unaliveTime = 0;
       this.chooseRandomPlace();
     }
+  };
+
+  this.increaseScores = function() {
+    let scoreboards = g_world.scoreboards;
+    let newScore;
+    if (scoreboards) {
+      for (let key in scoreboards) {
+        if (scoreboards[key].name === this.name) {
+          newScore = scoreboards[key].pointsAmount + 1;
+          scoreboards[key].pointsAmount = newScore;
+        }
+      }
+    }
+    return scoreboards;
+  };
+
+  this.dye = function() {
+    this.liveState = playerInformation.UNALIVE;
+    g_world.collisionEvent = states.INACTIVE;
   };
 }
 

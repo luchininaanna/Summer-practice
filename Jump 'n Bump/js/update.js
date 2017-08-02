@@ -33,17 +33,26 @@ function moveHorizontally(player, deltaTime) {
       (player.updatedX < canvasSize.WIDTH - pointScoreboard.WIDTH - player.width);
 
   let alivePlayers = g_world.getPlayersInState(playerInformation.ALIVE);
-  let freeHorizontallySpaceFromPlayers = g_world.checkHorizontallyFree(player, alivePlayers);
+  let isFreeSpaceFromPlayers = g_world.checkSpaceFree(player, alivePlayers);
 
   let stairs = g_world.stairs;
-  let freeHorizontallySpaceFromStairs = g_world.checkHorizontallyFree(player, stairs);
+  let isFreeSpaceFromStairs = g_world.checkSpaceFree(player, stairs);
 
-  if ((!freeHorizontallySpaceFromPlayers && !freeHorizontallySpaceFromStairs && isScreen) || (!isScreen)) {
+  let isPlayerLanded = g_world.checkLandUnderPlayer(player, stairs);
+  if (!isPlayerLanded) {
+    if ((player.upMove === 0) && (player.landed === states.INACTIVE)) {
+      player.upMove = 1;
+      player.verticalSpeed = playerInformation.START_ZERO_VERTICAL_SPEED;
+    }
+  }
+
+  if (((!isFreeSpaceFromPlayers || !isFreeSpaceFromStairs) && isScreen && player.upMove === 0) || (!isScreen)) {
     player.x = prevX;
   }
 }
 
 function jump(player, deltaTime) {
+  player.landed = states.INACTIVE;
   let updatedSpeed = player.verticalSpeed - player.accelerationOfGravity * deltaTime / 50;
   player.verticalSpeed = updatedSpeed;
   player.updatedY = player.y - updatedSpeed * deltaTime / 100 * playerInformation.MASS;
@@ -53,88 +62,39 @@ function jump(player, deltaTime) {
 
   if (updatedSpeed < 0) { // игрок падает => проверяем землю
     let alivePlayers = g_world.getPlayersInState(playerInformation.ALIVE);
-    let freeBottomSpaceFromPlayers = g_world.bottomCrossing(player, alivePlayers);
-    let freeHorizontallySpaceFromPlayers = g_world.checkHorizontallyFree(player, alivePlayers);
+    let isFreeSpaceFromPlayers = g_world.checkSpaceFree(player, alivePlayers);
 
-    if (!freeBottomSpaceFromPlayers && !freeHorizontallySpaceFromPlayers) {
-      console.log("Collision");
+    if (!isFreeSpaceFromPlayers) {
+      if (g_world.collisionEvent === states.INACTIVE) {
+        g_world.collisionEvent = states.ACTIVE;
+        g_world.searchCollisionPlayers(player, alivePlayers);
+      }
     }
 
     let stairs = g_world.stairs;
-    let freeBottomSpaceFromStairs = g_world.bottomCrossing(player, stairs);
-    let freeHorizontallySpaceFromStairs = g_world.checkHorizontallyFree(player, stairs);
+    let isFreeSpaceFromStairs = g_world.checkSpaceFree(player, stairs);
 
-    if (!freeBottomSpaceFromStairs) {
-      player.distanceToLand = 0;
-      g_world.findNearestLandCoordinates(player, stairs);
-      console.log(player.nextLand);
-      //prevY = player.nextLand - playerInformation.HEIGHT+ smallStair.TOP_FREE_SPACE;
-    }
-
-    if (!freeBottomSpaceFromStairs  && !freeHorizontallySpaceFromStairs) {
-      player.y = prevY;
+    if (!isFreeSpaceFromStairs) {
+      player.y = player.nextLand - playerInformation.HEIGHT + smallStair.TOP_FREE_SPACE;
+      player.landed = states.ACTIVE;
       player.upMove = 0;
       player.verticalSpeed = playerInformation.START_BIG_VERTICAL_SPEED;
     }
   } else {  // игрок летит наверх => проверяем препятствия
     let alivePlayers = g_world.getPlayersInState(playerInformation.ALIVE);
-    let freeTopSpaceFromPlayers = g_world.topCrossing(player, alivePlayers);
-    let freeHorizontallySpaceFromPlayers = g_world.checkHorizontallyFree(player, alivePlayers);
+    let isFreeSpaceFromPlayers = g_world.checkSpaceFree(player, alivePlayers);
 
-    if (!freeTopSpaceFromPlayers && !freeHorizontallySpaceFromPlayers) {
-      console.log("Collision");
+    if (!isFreeSpaceFromPlayers) {
+      g_world.searchCollisionPlayers(player, alivePlayers);
     }
 
     let stairs = g_world.stairs;
-    let freeTopSpaceFromStairs = g_world.topCrossing(player, stairs);
-    let freeHorizontallySpaceFromStairs = g_world.checkHorizontallyFree(player, stairs);
+    let isFreeSpaceFromStairs = g_world.checkSpaceFree(player, stairs);
 
-    if (!freeTopSpaceFromStairs && !freeHorizontallySpaceFromStairs) {
+    if (!isFreeSpaceFromStairs) {
       player.y = prevY;
     }
   }
-}
-
-function increaseScores(player) {
-  let scoreboards = g_world.scoreboards;
-  let newScore;
-  if (scoreboards) {
-    for (let key in scoreboards) {
-      if (scoreboards[key].name === player.name) {
-        newScore = scoreboards[key].pointsAmount + 1;
-        scoreboards[key].pointsAmount = newScore;
-      }
-    }
-  }
-  return scoreboards;
-}
-function searchKilledPlayers(players, player) {
-  if (players) {
-    for (let key in players) {
-      if ((players[key] != player) && (players[key].liveState === playerInformation.ALIVE)) {
-        let otherPlayer = players[key];
-        let afterLeftSideAnotherPlayer = (player.x + player.width - player.rightFreeSpace) >
-            (otherPlayer.x + otherPlayer.leftFreeSpace);
-        let beforeRightAnotherPlayerFree = (player.x + player.width - player.rightFreeSpace) <
-            (otherPlayer.x + otherPlayer.width - otherPlayer.rightFreeSpace);
-        let afterRightSideAnotherPlayer = (player.x + player.leftFreeSpace) >
-            (otherPlayer.x + otherPlayer.leftFreeSpace);
-        let beforeLeftAnotherPlayerFree = (player.x + player.leftFreeSpace) <
-            (otherPlayer.x + otherPlayer.width -
-            otherPlayer.rightFreeSpace);
-        let underAnotherPlayerFree = (otherPlayer.y + otherPlayer.topFreeSpace) <= (player.y + player.height);
-
-        if ((afterLeftSideAnotherPlayer && beforeRightAnotherPlayerFree
-            && underAnotherPlayerFree)
-            ||
-            (afterRightSideAnotherPlayer && beforeLeftAnotherPlayerFree
-            && underAnotherPlayerFree)) {
-          players[key].liveState = playerInformation.UNALIVE;
-        }
-      }
-    }
-  }
-  return players;
 }
 
 function animatePlayers(unalivePlayers, deltaTime){

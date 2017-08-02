@@ -48,70 +48,95 @@ function World() {
     }
     return playersInState;
   };
-  this.checkHorizontallyFree = function (player, elements) {
+  this.checkSpaceFree = function (player, elements) {
     for (let key in elements) {
       if (elements[key] != player) {
-        let crossH = this.horizontallyCrossing(player, elements[key]);
-        let crossV = this.verticallyCrossing(player, elements[key]);
-        if (crossH && crossV) {
+        let cross = this.checkCross(player, elements[key]);
+        if (cross) {
           return false;
         }
       }
     }
     return true;
   };
-  this.horizontallyCrossing = function(firstObject, secondObject) {
-    if (((secondObject.x >= firstObject.x) &&
-        (secondObject.x <= firstObject.x + firstObject.width)) ||
-        ((firstObject.x >= secondObject.x) &&
-        (firstObject.x <= secondObject.x + secondObject.width))) {
-      return true;
-    }
-    return false;
-  };
-  this.verticallyCrossing = function(firstObject, secondObject) {
+  this.checkCross = function (firstObject, secondObject) {
     let shift = 0;
+    let isXNoFree;
+    let isYNoFree;
+    isXNoFree = (((secondObject.x >= firstObject.x) &&
+    (secondObject.x <= firstObject.x + firstObject.width)) ||
+    ((firstObject.x >= secondObject.x) &&
+    (firstObject.x <= secondObject.x + secondObject.width)));
     if (secondObject.type === bottomType.LAND) {
       shift = smallStair.TOP_FREE_SPACE;
+      isYNoFree =(((secondObject.y + shift > firstObject.y) &&
+      (secondObject.y + shift < firstObject.y + firstObject.height)) ||
+      ((firstObject.y > secondObject.y) &&
+      (firstObject.y < secondObject.y + secondObject.height)));
+    } else {
+      isYNoFree =(((secondObject.y + shift >= firstObject.y) &&
+      (secondObject.y + shift <= firstObject.y + firstObject.height)) ||
+      ((firstObject.y >= secondObject.y) &&
+      (firstObject.y <= secondObject.y + secondObject.height)));
     }
-    if (((secondObject.y + shift >= firstObject.y) &&
-        (secondObject.y + shift <= firstObject.y + firstObject.height)) ||
-        ((firstObject.y >= secondObject.y) &&
-        (firstObject.y <= secondObject.y + secondObject.height))) {
+    if (isXNoFree && isYNoFree) {
+      if ((firstObject.y < secondObject.y) && (secondObject.type === bottomType.LAND)) {
+        firstObject.nextLand = secondObject.y;
+      }
       return true;
     }
     return false;
   };
-  this.topCrossing = function(firstObject, secondObject) {
-    if ((secondObject.y + secondObject.height >= firstObject.y) &&
-        (secondObject.y + secondObject.height <= firstObject.y + firstObject.height)) {
-      return true;
+  this.checkLandUnderPlayer = function(player, stairs) {
+    for (let key in stairs) {
+      let underLand = (((stairs[key].x >= player.x) &&
+      (stairs[key].x <= player.x + player.width)) ||
+      ((player.x >= stairs[key].x) &&
+      (player.x <= stairs[key].x + stairs[key].width)));
+      let onLand = (player.y + player.height) === (stairs[key].y + smallStair.TOP_FREE_SPACE);
+      if (underLand && onLand) {
+        player.landed = states.INACTIVE;
+        return true;
+      }
     }
     return false;
   };
-  this.bottomCrossing = function(firstObject, secondObject) {
-    if ((firstObject.y + firstObject.height >= secondObject.y + smallStair.TOP_FREE_SPACE) &&
-        (firstObject.y + firstObject.height <= secondObject.y + secondObject.height + smallStair.TOP_FREE_SPACE)) {
-      return true;
-    }
-    return false;
-  };
-  this.findNearestLandCoordinates = function(player, stairs) {
-    if (stairs) {
-      for (let key in stairs) {
-        if ((stairs[key].x < player.x + playerInformation.WIDTH/2) &&
-            (stairs[key].x + smallStair.WIDTH > player.x + playerInformation.WIDTH / 2) &&
-            (stairs[key].y + smallStair.TOP_FREE_SPACE > player.y + playerInformation.HEIGHT)) {
+  this.searchCollisionPlayers = function(player, alivePlayers) {
+    if (alivePlayers) {
+      for (let key in alivePlayers) {
+        if (alivePlayers[key] != player) {
+          let isXNoFree = (((alivePlayers[key].x >= player.x) &&
+          (alivePlayers[key].x <= player.x + player.width)) ||
+          ((player.x >= alivePlayers[key].x) &&
+          (player.x <= alivePlayers[key].x + alivePlayers[key].width)));
 
-          let distanceToLand = stairs[key].y - player.y;
+          let isYNoFree =(((alivePlayers[key].y >= player.y) &&
+          (alivePlayers[key].y <= player.y + player.height)) ||
+          ((player.y >= alivePlayers[key].y) &&
+          (player.y <= alivePlayers[key].y + alivePlayers[key].height)));
 
-          if ((distanceToLand < player.distanceToLand) || (player.distanceToLand === 0)) {
-            player.distanceToLand = distanceToLand;
-            player.nextLand = stairs[key].y;
+          if (isXNoFree && isYNoFree) {
+            let alivePlayer;
+            let unalivePlayer;
+            if (player.y < alivePlayers[key].y) {
+              alivePlayer = player;
+              unalivePlayer = alivePlayers[key];
+            } else {
+              alivePlayer = alivePlayers[key];
+              unalivePlayer = player;
+            }
+            //if (alivePlayer.y + alivePlayer.height <=  unalivePlayer.y + playerInformation.TOP_FREE_SPACE) {
+            //  alivePlayer.upMove = 1;
+            //  alivePlayers.verticalSpeed = playerInformation.START_SMALL_VERTICAL_SPEED;
+            //}
+            if ((alivePlayer.liveState === playerInformation.ALIVE)
+                && (unalivePlayer.liveState === playerInformation.ALIVE)){
+              alivePlayer.increaseScores();
+              unalivePlayer.dye();
+            }
           }
         }
       }
     }
-    return player;
   }
 }
