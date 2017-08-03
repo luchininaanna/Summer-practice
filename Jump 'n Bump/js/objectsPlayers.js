@@ -16,94 +16,260 @@ function Background(source, x, y) {
   this.height = canvasSize.HEIGHT;
 }
 
-function getStairs() {
+function getWorldElements() {
   let firstTypeImage = g_context.resources[imageNames.FIRST_LAND];
   let secondTypeImage = g_context.resources[imageNames.SECOND_LAND];
   let iceBoxImage = g_context.resources[imageNames.ICE_BOX];
   let rocksImage = g_context.resources[imageNames.ROCKS];
-  let stairs = [];
+  let worldElements = [];
 
-  let stairsAmount = 20;
-  let startX = 600;
-  let stairWidth = 45;
-  let stairY = 150;
-  for (let i = 0; i < stairsAmount; i++) {
-    stairs.push(new SmallStair(firstTypeImage, startX + stairWidth * i, stairY));
-  }
-  stairsAmount = 3;
-  startX = 450;
-  stairWidth = 45;
-  stairY = 200;
-  for (let i = 0; i < stairsAmount; i++) {
-    stairs.push(new SmallStair(firstTypeImage, startX + stairWidth * i, stairY));
-  }
-  stairsAmount = 3;
-  startX = 300;
-  stairWidth = 45;
-  stairY = 250;
-  for (let i = 0; i < stairsAmount; i++) {
-    stairs.push(new SmallStair(firstTypeImage, startX + stairWidth * i, stairY));
-  }
-  stairsAmount = 10;
-  startX = 100;
-  stairWidth = 45;
-  stairY = 430;
-  for (let i = 0; i < stairsAmount; i++) {
-    stairs.push(new SmallStair(firstTypeImage, startX + stairWidth * i, stairY));
-  }
-  stairsAmount = 8;
-  startX = 550;
-  stairWidth = 45;
-  stairY = 550;
-  for (let i = 0; i < stairsAmount; i++) {
-    stairs.push(new SmallStair(firstTypeImage, startX + stairWidth * i, stairY));
-  }
-  stairsAmount = 3;
-  startX = 1300;
-  stairWidth = 45;
-  stairY = 600;
-  for (let i = 0; i < stairsAmount; i++) {
-    stairs.push(new SmallStair(firstTypeImage, startX + stairWidth * i, stairY));
-  }
-  stairsAmount = 5;
-  startX = 1000;
-  stairWidth = 45;
-  stairY = 700;
-  for (let i = 0; i < stairsAmount; i++) {
-    stairs.push(new SmallStair(firstTypeImage, startX + stairWidth * i, stairY));
-  }
-  stairsAmount = 33;
+  let elementAmount;
+  let startX;
+  let elementWidth;
+  let stairY;
+  let shiftX;
+  let shiftY;
+
+  elementAmount = 19;
   startX = -10;
-  stairWidth = 45;
-  stairY = 860;
-  for (let i = 0; i < stairsAmount; i++) {
-    stairs.push(new SmallStair(firstTypeImage, startX + stairWidth * i, stairY));
+  stairY = -10;
+  shiftY = 20;
+  for (let i = 0; i < elementAmount; i++) {
+    worldElements.push(new Rock(rocksImage, startX, stairY + shiftY * i));
   }
-  return stairs;
+
+  elementAmount = 18;
+  startX = -10;
+  stairY = 400;
+  shiftY = 20;
+  for (let i = 0; i < elementAmount; i++) {
+    worldElements.push(new Rock(rocksImage, startX, stairY + shiftY * i));
+  }
+
+  worldElements.push(new SmallGround(firstTypeImage, 1420, 415));
+
+  elementAmount = 37;
+  startX = 1450;
+  stairY = 150;
+  shiftY = 20;
+  for (let i = 0; i < elementAmount; i++) {
+    worldElements.push(new Rock(rocksImage, startX, stairY + shiftY * i));
+  }
+
+  elementAmount = 13;
+  startX = -35;
+  elementWidth = 45;
+  stairY = 880;
+  for (let i = 0; i < elementAmount; i++) {
+    worldElements.push(new SmallGround(secondTypeImage, startX + elementWidth * i, stairY));
+  }
+
+  elementAmount = 5;
+  startX = 1185;
+  stairY = 860;
+  shiftX = 30;
+  for (let i = 0; i < elementAmount; i++) {
+    worldElements.push(new Rock(rocksImage, startX + i * shiftX, stairY));
+  }
+
+  elementAmount = 4;
+  startX = 1185;
+  stairY = 830;
+  shiftX = 40;
+  for (let i = 0; i < elementAmount; i++) {
+    worldElements.push(new IceBox(iceBoxImage, startX + i * shiftX, stairY));
+  }
+
+  worldElements.push(new BigGround(firstTypeImage, 1345, 780));
+  worldElements.push(new BigGround(firstTypeImage, 1395, 760));
+  worldElements.push(new BigGround(firstTypeImage, 1370, 800));
+
+  worldElements.push(new Rock(rocksImage, 1325, 860));
+  worldElements.push(new Rock(rocksImage, 1325, 840));
+  worldElements.push(new Rock(rocksImage, 1355, 855));
+  worldElements.push(new Rock(rocksImage, 1375, 855));
+  worldElements.push(new Rock(rocksImage, 1405, 855));
+  worldElements.push(new Rock(rocksImage, 1385, 835));
+  worldElements.push(new Rock(rocksImage, 1445, 855));
+  worldElements.push(new Rock(rocksImage, 1425, 825));
+  worldElements.push(new Rock(rocksImage, 1445, 800));
+  worldElements.push(new Rock(rocksImage, 1410, 800));
+  worldElements.push(new Rock(rocksImage, 1435, 765));
+
+  worldElements.push(new BigGround(firstTypeImage, 1135, 830));
+
+  elementAmount = 12;
+  startX = 595;
+  stairY = 860;
+  shiftX = 45;
+  for (let i = 0; i < elementAmount; i++) {
+    worldElements.push(new SmallGround(firstTypeImage, startX + shiftX * i, stairY));
+  }
+
+  worldElements.push(new Rock(rocksImage, 1000, 870));
+  worldElements.push(new Rock(rocksImage, 1060, 880));
+  worldElements.push(new Rock(rocksImage, 1030, 875));
+
+  worldElements.push(new BigGround(secondTypeImage, 550, 800));
+  worldElements.push(new BigGround(secondTypeImage, 550, 760));
+
+  worldElements.push(new SmallGround(secondTypeImage, -10, 720));
+  worldElements.push(new ThirdTypeGrass(secondTypeImage, -10, 750));
+  worldElements.push(new SmallGround(secondTypeImage, 20, 740));
+  worldElements.push(new ThirdTypeGrass(secondTypeImage, 20, 770));
+  worldElements.push(new SmallGround(secondTypeImage, 65, 740));
+  worldElements.push(new ThirdTypeGrass(secondTypeImage, 65, 770));
+
+  worldElements.push(new SmallGround(secondTypeImage, 10, 400));
+
+  elementAmount = 4;
+  startX = 50;
+  stairY = 410;
+  shiftX = 25;
+  for (let i = 0; i < elementAmount; i++) {
+    worldElements.push(new SmallGround(secondTypeImage, startX + shiftX * i, stairY));
+  }
+
+  worldElements.push(new SmallGround(secondTypeImage, 25, 430));
+  worldElements.push(new SmallGround(secondTypeImage, 90, 425));
+  worldElements.push(new SmallGround(secondTypeImage, 60, 445));
+  worldElements.push(new SmallGround(secondTypeImage, 120, 445));
+  worldElements.push(new SmallGround(secondTypeImage, 100, 455));
+
+  worldElements.push(new Rock(rocksImage, 210, 620));
+  worldElements.push(new Rock(rocksImage, 200, 590));
+  worldElements.push(new Rock(rocksImage, 230, 610));
+  worldElements.push(new Rock(rocksImage, 250, 610));
+
+  worldElements.push(new SmallGround(secondTypeImage, 125, 580));
+  worldElements.push(new ThirdTypeGrass(secondTypeImage, 125, 610));
+  worldElements.push(new SmallGround(secondTypeImage, 95, 600));
+  worldElements.push(new SmallGround(secondTypeImage, 165, 600));
+
+  elementAmount = 3;
+  startX = 30;
+  stairY = -10;
+  shiftY = 7;
+  for (let i = 0; i < elementAmount; i++) {
+    worldElements.push(new Rock(rocksImage, startX, stairY + shiftY * i));
+  }
+
+  elementAmount = 2;
+  startX = 70;
+  stairY = -20;
+  shiftY = 7;
+  for (let i = 0; i < elementAmount; i++) {
+    worldElements.push(new Rock(rocksImage, startX, stairY + shiftY * i));
+  }
+
+  worldElements.push(new Rock(rocksImage, 60, 10));
+
+  worldElements.push(new BigGround(firstTypeImage, 930, 510));
+  worldElements.push(new BigGround(firstTypeImage, 961, 570));
+  worldElements.push(new BigGround(firstTypeImage, 1010, 570));
+
+  worldElements.push(new Rock(rocksImage, 855, 640));
+  worldElements.push(new Rock(rocksImage, 935, 640));
+  worldElements.push(new Rock(rocksImage, 950, 600));
+  worldElements.push(new Rock(rocksImage, 960, 630));
+  worldElements.push(new Rock(rocksImage, 990, 610));
+  worldElements.push(new Rock(rocksImage, 920, 600));
+  worldElements.push(new Rock(rocksImage, 900, 630));
+  worldElements.push(new Rock(rocksImage, 950, 610));
+  worldElements.push(new Rock(rocksImage, 880, 570));
+  worldElements.push(new Rock(rocksImage, 860, 600));
+  worldElements.push(new Rock(rocksImage, 890, 610));
+  worldElements.push(new Rock(rocksImage, 910, 560));
+  worldElements.push(new Rock(rocksImage, 810, 630));
+  worldElements.push(new Rock(rocksImage, 780, 635));
+  worldElements.push(new Rock(rocksImage, 830, 600));
+  worldElements.push(new Rock(rocksImage, 755, 630));
+
+  worldElements.push(new IceBox(iceBoxImage, 890, 535));
+  worldElements.push(new IceBox(iceBoxImage, 870, 570));
+  worldElements.push(new IceBox(iceBoxImage, 830, 570));
+  worldElements.push(new IceBox(iceBoxImage, 795, 610));
+  worldElements.push(new IceBox(iceBoxImage, 755, 610));
+
+  elementAmount = 2;
+  startX = 1070;
+  stairY = 620;
+  shiftX = 70;
+  for (let i = 0; i < elementAmount; i++) {
+    worldElements.push(new SmallGround(firstTypeImage, startX + shiftX * i, stairY));
+  }
+
+  elementAmount = 3;
+  startX = 1030;
+  stairY = 630;
+  shiftX = 70;
+  for (let i = 0; i < elementAmount; i++) {
+    worldElements.push(new SmallGround(firstTypeImage, startX + shiftX * i, stairY));
+  }
+
+  elementAmount = 2;
+  startX = 990;
+  stairY = 640;
+  shiftX = 150;
+  for (let i = 0; i < elementAmount; i++) {
+    worldElements.push(new SmallGround(firstTypeImage, startX + shiftX * i, stairY));
+  }
+
+  worldElements.push(new FirstTypeGrass(firstTypeImage, 1345, 760));
+  worldElements.push(new FirstTypeGrass(firstTypeImage, 1345, 775));
+  worldElements.push(new FirstTypeGrass(firstTypeImage, 1395, 740));
+  worldElements.push(new FirstTypeGrass(firstTypeImage, 1395, 755));
+  worldElements.push(new FirstTypeGrass(firstTypeImage, 1370, 780));
+  worldElements.push(new FirstTypeGrass(firstTypeImage, 1370, 795));
+
+  worldElements.push(new FirstTypeGrass(firstTypeImage, 930, 490));
+  worldElements.push(new FirstTypeGrass(firstTypeImage, 930, 505));
+  worldElements.push(new FirstTypeGrass(firstTypeImage, 960, 550));
+  worldElements.push(new FirstTypeGrass(firstTypeImage, 960, 565));
+  worldElements.push(new FirstTypeGrass(firstTypeImage, 980, 560));
+  worldElements.push(new FirstTypeGrass(firstTypeImage, 1010, 550));
+  worldElements.push(new FirstTypeGrass(firstTypeImage, 1010, 565));
+
+  worldElements.push(new FirstTypeGrass(secondTypeImage, 550, 740));
+  worldElements.push(new FirstTypeGrass(secondTypeImage, 550, 755));
+
+  elementAmount = 14;
+  startX = -15;
+  stairY = 865;
+  shiftX = 40;
+  for (let i = 0; i < elementAmount; i++) {
+    worldElements.push(new SecondTypeGrass(secondTypeImage, startX + shiftX * i, stairY));
+  }
+
+  worldElements.push(new SmallGround(firstTypeImage, 1420, 450));
+  worldElements.push(new SmallGround(firstTypeImage, 1380, 440));
+
+  return worldElements;
 }
 
-function SmallStair(source, x, y) {
+function SmallGround(source, x, y) {
   this.source = source;
-  this.imageX = smallStair.IMAGE_X;
-  this.imageY = smallStair.IMAGE_Y;
-  this.imageWidth = smallStair.IMAGE_WIDTH;
-  this.imageHeight = smallStair.IMAGE_HEIGHT;
+  this.imageX = smallGround.IMAGE_X;
+  this.imageY = smallGround.IMAGE_Y;
+  this.imageWidth = smallGround.IMAGE_WIDTH;
+  this.imageHeight = smallGround.IMAGE_HEIGHT;
   this.x = x;
   this.y = y;
-  this.width = smallStair.WIDTH;
-  this.height = smallStair.HEIGHT;
+  this.width = smallGround.WIDTH;
+  this.height = smallGround.HEIGHT;
+  this.topFreeSpace = bottomType.TOP_FREE_SPACE;
   this.type = "land";
 }
-function BigStair(source, x, y) {
+function BigGround(source, x, y) {
   this.source = source;
-  this.imageX = bigStair.IMAGE_X;
-  this.imageY = bigStair.IMAGE_Y;
-  this.imageWidth = bigStair.IMAGE_WIDTH;
-  this.imageHeight = bigStair.IMAGE_HEIGHT;
+  this.imageX = bigGround.IMAGE_X;
+  this.imageY = bigGround.IMAGE_Y;
+  this.imageWidth = bigGround.IMAGE_WIDTH;
+  this.imageHeight = bigGround.IMAGE_HEIGHT;
   this.x = x;
   this.y = y;
-  this.width = bigStair.WIDTH;
-  this.height = bigStair.HEIGHT;
+  this.width = bigGround.WIDTH;
+  this.height = bigGround.HEIGHT;
   this.type = "land";
 }
 function FirstTypeGrass(source, x, y) {
@@ -353,6 +519,10 @@ function Player(sourceRightMoving, sourceLeftMoving, playerName, x, y, movingBut
   this.dye = function() {
     this.liveState = playerInformation.UNALIVE;
     g_world.collisionEvent = states.INACTIVE;
+  };
+
+  this.getPlayerBox = function() {
+    
   };
 }
 

@@ -1,5 +1,5 @@
-const MAX_COUNTER_VALUE = 17;
-const PLAYERS_AMOUNT = 3;
+const MAX_COUNTER_VALUE = 21;
+const PLAYERS_AMOUNT = 1;
 
 const colors = {
   WHITE: "#FFFFFF",
@@ -23,22 +23,21 @@ const resultBackgroundSize = {
   VERTICAL_SHIFT: 90,
   HORIZONTAL_SHIFT: 400
 };
-const smallStair = {
+const smallGround = {
   IMAGE_X: 145,
   IMAGE_Y: 95,
   IMAGE_WIDTH: 16,
-  IMAGE_HEIGHT: 17,
+  IMAGE_HEIGHT: 16,
   WIDTH: 50,
-  HEIGHT: 50,
-  TOP_FREE_SPACE: 10
+  HEIGHT: 50
 };
-const bigStair = {
+const bigGround = {
   IMAGE_X: 48,
-  IMAGE_Y: 65,
-  IMAGE_WIDTH: 15,
-  IMAGE_HEIGHT: 48,
+  IMAGE_Y: 64,
+  IMAGE_WIDTH: 16,
+  IMAGE_HEIGHT: 32,
   WIDTH: 50,
-  HEIGHT: 150
+  HEIGHT: 100
 };
 const canvasSize = {
   WIDTH: 1650,
@@ -63,11 +62,11 @@ const secondTypeGrass = {
 };
 const thirdTypeGrass = {
   IMAGE_X: 0,
-  IMAGE_Y: 16,
+  IMAGE_Y: 48,
   IMAGE_WIDTH: 15,
-  IMAGE_HEIGHT: 47,
+  IMAGE_HEIGHT: 15,
   WIDTH: 50,
-  HEIGHT: 150
+  HEIGHT: 50
 };   //редактировать размеры
 const iceBox = {
   IMAGE_X: 0,
@@ -104,12 +103,12 @@ const playerInformation = {
   IMAGE_X: 0,
   IMAGE_Y: 0,
   IMAGE_WIDTH: 200,
-  IMAGE_HEIGHT: 305,
-  WIDTH: 60,
-  HEIGHT: 95,
+  IMAGE_HEIGHT: 310,
+  WIDTH: 54,
+  HEIGHT: 90,
   LEFT_FREE_SPACE: 18,
   RIGHT_FREE_SPACE: 13,
-  TOP_FREE_SPACE: 38,
+  TOP_FREE_SPACE: 0,
   HORIZONTAL_SPEED: 0.5,
   START_BIG_VERTICAL_SPEED: 55,
   START_SMALL_VERTICAL_SPEED: 15,
@@ -124,15 +123,15 @@ const playerInformation = {
   ANIMATION_TIME: 0.03
 };
 const playerImage = {
-  FIRST_X: 0,
-  SECOND_X: 200,
-  THIRD_X: 400,
-  FOURTH_X: 600,
-  FIFTH_X: 800,
-  SIXTH_X: 1000,
-  SEVENTH_X: 1200,
-  EIGHTS_X: 1400,
-  NINTH_X: 1600,
+  FIRST_X: 3,
+  SECOND_X: 204,
+  THIRD_X: 405,
+  FOURTH_X: 609,
+  FIFTH_X: 807,
+  SIXTH_X: 1008,
+  SEVENTH_X: 1203,
+  EIGHTS_X: 1404,
+  NINTH_X: 1602,
   TENTH_X: 1800,
 };
 const playerName = {
@@ -159,6 +158,10 @@ const imageNames = {
   LEFT_SECOND_PLAYER: "leftSecondPlayer",
   LEFT_THIRD_PLAYER: "leftThirdPlayer",
   LEFT_FOURTH_PLAYER: "leftFourthPlayer",
+  FIRST_WINNING_PLAYER: "firstWinningPlayer",
+  SECOND_WINNING_PLAYER: "secondWinningPlayer",
+  THIRD_WINNING_PLAYER: "thirdWinningPlayer",
+  FOURTH_WINNING_PLAYER: "fourthWinningPlayer",
 };
 const points = {
   ZERO: {
@@ -252,7 +255,9 @@ const pointScoreboard = {
 const bottomType = {
   LAND: "land",
   ICE: "ice",
-  AIR: "air"
+  ROCK: "rock",
+  AIR: "air",
+  TOP_FREE_SPACE : 10
 };
 const randomPlaces = {
   FIRST: 1,
@@ -261,15 +266,15 @@ const randomPlaces = {
   FOURTH: 4,
   FIFTH: 5,
   FIRST_PLACE_X: 100,
-  FIRST_PLACE_Y: 775,
-  SECOND_PLACE_X: 200,
-  SECOND_PLACE_Y: 775,
+  FIRST_PLACE_Y: 770,
+  SECOND_PLACE_X: 900,
+  SECOND_PLACE_Y: 770,
   THIRD_PLACE_X: 1300,
-  THIRD_PLACE_Y: 775,
+  THIRD_PLACE_Y: 770,
   FOURTH_PLACE_X: 600,
-  FOURTH_PLACE_Y: 775,
+  FOURTH_PLACE_Y: 770,
   FIFTH_PLACE_X: 1100,
-  FIFTH_PLACE_Y: 775
+  FIFTH_PLACE_Y: 770
 };
 const statesOfGame = {
   IN_PROCESS: 0,

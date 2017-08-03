@@ -58,9 +58,11 @@ function changeReleasedState(checkingPlayer, keyCode, movingButtons) {
   switch (keyCode) {
     case movingButtons.RIGHT:
       checkingPlayer.rightMove = 0;
+      checkingPlayer.imageX = playerImage.FIRST_X;
       break;
     case movingButtons.LEFT:
       checkingPlayer.leftMove = 0;
+      checkingPlayer.imageX = playerImage.FIRST_X;
       break;
   }
 }

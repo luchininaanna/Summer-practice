@@ -35,10 +35,10 @@ function moveHorizontally(player, deltaTime) {
   let alivePlayers = g_world.getPlayersInState(playerInformation.ALIVE);
   let isFreeSpaceFromPlayers = g_world.checkSpaceFree(player, alivePlayers);
 
-  let stairs = g_world.stairs;
-  let isFreeSpaceFromStairs = g_world.checkSpaceFree(player, stairs);
+  let worldElements = g_world.worldElements;
+  let isFreeSpaceFromWorldElements = g_world.checkSpaceFree(player, worldElements);
 
-  let isPlayerLanded = g_world.checkLandUnderPlayer(player, stairs);
+  let isPlayerLanded = g_world.checkLandUnderPlayer(player, worldElements);
   if (!isPlayerLanded) {
     if ((player.upMove === 0) && (player.landed === states.INACTIVE)) {
       player.upMove = 1;
@@ -46,7 +46,7 @@ function moveHorizontally(player, deltaTime) {
     }
   }
 
-  if (((!isFreeSpaceFromPlayers || !isFreeSpaceFromStairs) && isScreen && player.upMove === 0) || (!isScreen)) {
+  if (((!isFreeSpaceFromPlayers || !isFreeSpaceFromWorldElements) && isScreen) || (!isScreen)) {
     player.x = prevX;
   }
 }
@@ -71,11 +71,11 @@ function jump(player, deltaTime) {
       }
     }
 
-    let stairs = g_world.stairs;
-    let isFreeSpaceFromStairs = g_world.checkSpaceFree(player, stairs);
+    let worldElements = g_world.worldElements;
+    let isFreeSpaceFromWorldElements = g_world.checkSpaceFree(player, worldElements);
 
-    if (!isFreeSpaceFromStairs) {
-      player.y = player.nextLand - playerInformation.HEIGHT + smallStair.TOP_FREE_SPACE;
+    if (!isFreeSpaceFromWorldElements) {
+      player.y = player.nextLand - playerInformation.HEIGHT + bottomType.TOP_FREE_SPACE;
       player.landed = states.ACTIVE;
       player.upMove = 0;
       player.verticalSpeed = playerInformation.START_BIG_VERTICAL_SPEED;
@@ -88,11 +88,12 @@ function jump(player, deltaTime) {
       g_world.searchCollisionPlayers(player, alivePlayers);
     }
 
-    let stairs = g_world.stairs;
-    let isFreeSpaceFromStairs = g_world.checkSpaceFree(player, stairs);
+    let worldElements = g_world.worldElements;
+    let isFreeSpaceFromWorldElements = g_world.checkSpaceFree(player, worldElements);
 
-    if (!isFreeSpaceFromStairs) {
+    if (!isFreeSpaceFromWorldElements) {
       player.y = prevY;
+      player.verticalSpeed = playerInformation.START_ZERO_VERTICAL_SPEED;
     }
   }
 }
@@ -104,7 +105,6 @@ function animatePlayers(unalivePlayers, deltaTime){
     }
   }
 }
-
 function updatePromptTime(deltaTime, scoreboards) {
   if (scoreboards) {
     for (let key in scoreboards) {

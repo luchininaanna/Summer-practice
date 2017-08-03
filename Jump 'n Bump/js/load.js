@@ -57,6 +57,22 @@ function loadResources() {
       src: "image/leftFourthPlayer.png"
     },
     {
+      name: imageNames.FIRST_WINNING_PLAYER,
+      src: "image/firstWinningPlayer.png"
+    },
+    {
+      name: imageNames.SECOND_WINNING_PLAYER,
+      src: "image/secondWinningPlayer.png"
+    },
+    {
+      name: imageNames.THIRD_WINNING_PLAYER,
+      src: "image/thirdWinningPlayer.png"
+    },
+    {
+      name: imageNames.FOURTH_WINNING_PLAYER,
+      src: "image/fourthWinningPlayer.png"
+    },
+    {
       name: imageNames.ROCKS,
       src: "image/rocks.png"
     },

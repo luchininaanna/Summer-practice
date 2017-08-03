@@ -1,7 +1,7 @@
 function World() {
   this.state = statesOfGame.IN_PROCESS;
   this.objects = getObjects();
-  this.stairs = getStairs();
+  this.worldElements = getWorldElements();
   this.players = getPlayers();
   this.scoreboards = getScoreboards();
   this.update = function (deltaTime) {
@@ -25,8 +25,8 @@ function World() {
     if (this.state === statesOfGame.IN_PROCESS) {
       let gameWorldObjects = this.objects;
       drawObjects(ctx, gameWorldObjects);
-      let stairs = this.stairs;
-      drawObjects(ctx, stairs);
+      let worldElements = this.worldElements;
+      drawObjects(ctx, worldElements);
       let players = this.players;
       drawPlayers(ctx, players);
       let scoreboards = this.scoreboards;
@@ -67,8 +67,10 @@ function World() {
     (secondObject.x <= firstObject.x + firstObject.width)) ||
     ((firstObject.x >= secondObject.x) &&
     (firstObject.x <= secondObject.x + secondObject.width)));
-    if (secondObject.type === bottomType.LAND) {
-      shift = smallStair.TOP_FREE_SPACE;
+    if ((secondObject.type === bottomType.LAND) ||
+        (secondObject.type === bottomType.ICE) ||
+        (secondObject.type === bottomType.ROCK)) {
+      shift = bottomType.TOP_FREE_SPACE;
       isYNoFree =(((secondObject.y + shift > firstObject.y) &&
       (secondObject.y + shift < firstObject.y + firstObject.height)) ||
       ((firstObject.y > secondObject.y) &&
@@ -80,20 +82,23 @@ function World() {
       (firstObject.y <= secondObject.y + secondObject.height)));
     }
     if (isXNoFree && isYNoFree) {
-      if ((firstObject.y < secondObject.y) && (secondObject.type === bottomType.LAND)) {
+      if ((firstObject.y < secondObject.y) &&
+          ((secondObject.type === bottomType.LAND) ||
+          (secondObject.type === bottomType.ICE) ||
+          (secondObject.type === bottomType.ROCK))) {
         firstObject.nextLand = secondObject.y;
       }
       return true;
     }
     return false;
   };
-  this.checkLandUnderPlayer = function(player, stairs) {
-    for (let key in stairs) {
-      let underLand = (((stairs[key].x >= player.x) &&
-      (stairs[key].x <= player.x + player.width)) ||
-      ((player.x >= stairs[key].x) &&
-      (player.x <= stairs[key].x + stairs[key].width)));
-      let onLand = (player.y + player.height) === (stairs[key].y + smallStair.TOP_FREE_SPACE);
+  this.checkLandUnderPlayer = function(player, worldElements) {
+    for (let key in worldElements) {
+      let underLand = (((worldElements[key].x >= player.x) &&
+      (worldElements[key].x <= player.x + player.width)) ||
+      ((player.x >= worldElements[key].x) &&
+      (player.x <= worldElements[key].x + worldElements[key].width)));
+      let onLand = (player.y + player.height) === (worldElements[key].y + bottomType.TOP_FREE_SPACE);
       if (underLand && onLand) {
         player.landed = states.INACTIVE;
         return true;
