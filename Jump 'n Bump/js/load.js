@@ -97,6 +97,7 @@ function loadResources() {
 
 function LoadResources(resources, count) {
   this.checkLoading = function () {
+    console.log(count);
     if (count === MAX_COUNTER_VALUE) {
       return true;
     }

@@ -2,6 +2,7 @@ function World() {
   this.state = statesOfGame.IN_PROCESS;
   this.objects = getObjects();
   this.worldElements = getWorldElements();
+  this.backgroundElements = getBackgroundElements();
   this.players = getPlayers();
   this.scoreboards = getScoreboards();
   this.update = function (deltaTime) {
@@ -27,6 +28,8 @@ function World() {
       drawObjects(ctx, gameWorldObjects);
       let worldElements = this.worldElements;
       drawObjects(ctx, worldElements);
+      let backgroundElements = this.backgroundElements;
+      drawObjects(ctx, backgroundElements);
       let players = this.players;
       drawPlayers(ctx, players);
       let scoreboards = this.scoreboards;
@@ -60,27 +63,8 @@ function World() {
     return true;
   };
   this.checkCross = function (firstObject, secondObject) {
-    let shift = 0;
-    let isXNoFree;
-    let isYNoFree;
-    isXNoFree = (((secondObject.x >= firstObject.x) &&
-    (secondObject.x <= firstObject.x + firstObject.width)) ||
-    ((firstObject.x >= secondObject.x) &&
-    (firstObject.x <= secondObject.x + secondObject.width)));
-    if ((secondObject.type === bottomType.LAND) ||
-        (secondObject.type === bottomType.ICE) ||
-        (secondObject.type === bottomType.ROCK)) {
-      shift = bottomType.TOP_FREE_SPACE;
-      isYNoFree =(((secondObject.y + shift > firstObject.y) &&
-      (secondObject.y + shift < firstObject.y + firstObject.height)) ||
-      ((firstObject.y > secondObject.y) &&
-      (firstObject.y < secondObject.y + secondObject.height)));
-    } else {
-      isYNoFree =(((secondObject.y + shift >= firstObject.y) &&
-      (secondObject.y + shift <= firstObject.y + firstObject.height)) ||
-      ((firstObject.y >= secondObject.y) &&
-      (firstObject.y <= secondObject.y + secondObject.height)));
-    }
+    let isXNoFree = this.getXFree(firstObject, secondObject);
+    let isYNoFree = this.getYFree(firstObject, secondObject);
     if (isXNoFree && isYNoFree) {
       if ((firstObject.y < secondObject.y) &&
           ((secondObject.type === bottomType.LAND) ||
@@ -91,6 +75,34 @@ function World() {
       return true;
     }
     return false;
+  };
+  this.getXFree = function(firstObject, secondObject) {
+    let firstObjectBox = firstObject.getBox();
+    let secondObjectBox = secondObject.getBox();
+    let isXNotFree = (((secondObjectBox.firstX >= firstObjectBox.firstX) &&  //двигающийся игрок левее
+    (secondObjectBox.firstX <= firstObjectBox.secondX)) ||
+    ((firstObjectBox.firstX >= secondObjectBox.firstX) &&  //двигающийся игрок правее
+    (firstObjectBox.firstX <= secondObjectBox.secondX)));
+    return isXNotFree;
+  };
+  this.getYFree = function(firstObject, secondObject) {
+    let isYNotFree;
+    let firstObjectBox = firstObject.getBox();
+    let secondObjectBox = secondObject.getBox();
+    if ((secondObject.type === bottomType.LAND) ||
+        (secondObject.type === bottomType.ICE) ||
+        (secondObject.type === bottomType.ROCK)) {
+      isYNotFree =(((secondObjectBox.y > firstObjectBox.y) &&  //двигающийся игрок выше
+      (secondObjectBox.y < firstObjectBox.y + firstObject.height)) ||
+      ((firstObjectBox.y > secondObjectBox.y) &&  //двигающийся игрок ниже
+      (firstObjectBox.y < secondObjectBox.y + secondObject.height)));
+    } else {
+      isYNotFree =(((secondObjectBox.y >= firstObjectBox.y) &&  //двигающийся игрок выше
+      (secondObjectBox.y <= firstObjectBox.y + firstObject.height)) ||
+      ((firstObjectBox.y >= secondObjectBox.y) &&  //двигающийся игрок ниже
+      (firstObjectBox.y <= secondObjectBox.y + secondObject.height)));
+    }
+    return isYNotFree;
   };
   this.checkLandUnderPlayer = function(player, worldElements) {
     for (let key in worldElements) {

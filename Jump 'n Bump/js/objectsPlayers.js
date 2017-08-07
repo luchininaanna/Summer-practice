@@ -114,11 +114,8 @@ function getWorldElements() {
   worldElements.push(new BigGround(secondTypeImage, 550, 760));
 
   worldElements.push(new SmallGround(secondTypeImage, -10, 720));
-  worldElements.push(new ThirdTypeGrass(secondTypeImage, -10, 750));
   worldElements.push(new SmallGround(secondTypeImage, 20, 740));
-  worldElements.push(new ThirdTypeGrass(secondTypeImage, 20, 770));
   worldElements.push(new SmallGround(secondTypeImage, 65, 740));
-  worldElements.push(new ThirdTypeGrass(secondTypeImage, 65, 770));
 
   worldElements.push(new SmallGround(secondTypeImage, 10, 400));
 
@@ -142,7 +139,6 @@ function getWorldElements() {
   worldElements.push(new Rock(rocksImage, 250, 610));
 
   worldElements.push(new SmallGround(secondTypeImage, 125, 580));
-  worldElements.push(new ThirdTypeGrass(secondTypeImage, 125, 610));
   worldElements.push(new SmallGround(secondTypeImage, 95, 600));
   worldElements.push(new SmallGround(secondTypeImage, 165, 600));
 
@@ -215,36 +211,59 @@ function getWorldElements() {
     worldElements.push(new SmallGround(firstTypeImage, startX + shiftX * i, stairY));
   }
 
-  worldElements.push(new FirstTypeGrass(firstTypeImage, 1345, 760));
-  worldElements.push(new FirstTypeGrass(firstTypeImage, 1345, 775));
-  worldElements.push(new FirstTypeGrass(firstTypeImage, 1395, 740));
-  worldElements.push(new FirstTypeGrass(firstTypeImage, 1395, 755));
-  worldElements.push(new FirstTypeGrass(firstTypeImage, 1370, 780));
-  worldElements.push(new FirstTypeGrass(firstTypeImage, 1370, 795));
+  worldElements.push(new SmallGround(firstTypeImage, 1420, 450));
+  worldElements.push(new SmallGround(firstTypeImage, 1380, 440));
 
-  worldElements.push(new FirstTypeGrass(firstTypeImage, 930, 490));
-  worldElements.push(new FirstTypeGrass(firstTypeImage, 930, 505));
-  worldElements.push(new FirstTypeGrass(firstTypeImage, 960, 550));
-  worldElements.push(new FirstTypeGrass(firstTypeImage, 960, 565));
-  worldElements.push(new FirstTypeGrass(firstTypeImage, 980, 560));
-  worldElements.push(new FirstTypeGrass(firstTypeImage, 1010, 550));
-  worldElements.push(new FirstTypeGrass(firstTypeImage, 1010, 565));
+  return worldElements;
+}
 
-  worldElements.push(new FirstTypeGrass(secondTypeImage, 550, 740));
-  worldElements.push(new FirstTypeGrass(secondTypeImage, 550, 755));
+function getBackgroundElements() {
+  let firstTypeImage = g_context.resources[imageNames.FIRST_LAND];
+  let secondTypeImage = g_context.resources[imageNames.SECOND_LAND];
+  let iceBoxImage = g_context.resources[imageNames.ICE_BOX];
+  let rocksImage = g_context.resources[imageNames.ROCKS];
+  let backgroundElements = [];
+
+  let elementAmount;
+  let startX;
+  let elementWidth;
+  let stairY;
+  let shiftX;
+  let shiftY;
+
+  backgroundElements.push(new ThirdTypeGrass(secondTypeImage, -10, 750));
+  backgroundElements.push(new ThirdTypeGrass(secondTypeImage, 20, 770));
+  backgroundElements.push(new ThirdTypeGrass(secondTypeImage, 65, 770));
+
+  backgroundElements.push(new ThirdTypeGrass(secondTypeImage, 125, 610));
+
+  backgroundElements.push(new FirstTypeGrass(firstTypeImage, 1345, 760));
+  backgroundElements.push(new FirstTypeGrass(firstTypeImage, 1345, 775));
+  backgroundElements.push(new FirstTypeGrass(firstTypeImage, 1395, 740));
+  backgroundElements.push(new FirstTypeGrass(firstTypeImage, 1395, 755));
+  backgroundElements.push(new FirstTypeGrass(firstTypeImage, 1370, 780));
+  backgroundElements.push(new FirstTypeGrass(firstTypeImage, 1370, 795));
+
+  backgroundElements.push(new FirstTypeGrass(firstTypeImage, 930, 490));
+  backgroundElements.push(new FirstTypeGrass(firstTypeImage, 930, 505));
+  backgroundElements.push(new FirstTypeGrass(firstTypeImage, 960, 550));
+  backgroundElements.push(new FirstTypeGrass(firstTypeImage, 960, 565));
+  backgroundElements.push(new FirstTypeGrass(firstTypeImage, 980, 560));
+  backgroundElements.push(new FirstTypeGrass(firstTypeImage, 1010, 550));
+  backgroundElements.push(new FirstTypeGrass(firstTypeImage, 1010, 565));
+
+  backgroundElements.push(new FirstTypeGrass(secondTypeImage, 550, 740));
+  backgroundElements.push(new FirstTypeGrass(secondTypeImage, 550, 755));
 
   elementAmount = 14;
   startX = -15;
   stairY = 865;
   shiftX = 40;
   for (let i = 0; i < elementAmount; i++) {
-    worldElements.push(new SecondTypeGrass(secondTypeImage, startX + shiftX * i, stairY));
+    backgroundElements.push(new SecondTypeGrass(secondTypeImage, startX + shiftX * i, stairY));
   }
 
-  worldElements.push(new SmallGround(firstTypeImage, 1420, 450));
-  worldElements.push(new SmallGround(firstTypeImage, 1380, 440));
-
-  return worldElements;
+  return backgroundElements;
 }
 
 function SmallGround(source, x, y) {
@@ -258,7 +277,16 @@ function SmallGround(source, x, y) {
   this.width = smallGround.WIDTH;
   this.height = smallGround.HEIGHT;
   this.topFreeSpace = bottomType.TOP_FREE_SPACE;
+  this.leftFreeSpace = bottomType.LEFT_FREE_SPACE;
+  this.rightFreeSpace = bottomType.RIGHT_FREE_SPACE;
   this.type = "land";
+  this.getBox = function() {
+    let landBox = {};
+    landBox.firstX = this.x + this.leftFreeSpace;
+    landBox.secondX = this.x + this.width - this.rightFreeSpace;
+    landBox.y = this.y + this.topFreeSpace;
+    return landBox;
+  };
 }
 function BigGround(source, x, y) {
   this.source = source;
@@ -270,7 +298,17 @@ function BigGround(source, x, y) {
   this.y = y;
   this.width = bigGround.WIDTH;
   this.height = bigGround.HEIGHT;
+  this.topFreeSpace = bottomType.TOP_FREE_SPACE;
+  this.leftFreeSpace = bottomType.LEFT_FREE_SPACE;
+  this.rightFreeSpace = bottomType.RIGHT_FREE_SPACE;
   this.type = "land";
+  this.getBox = function() {
+    let landBox = {};
+    landBox.firstX = this.x + this.leftFreeSpace;
+    landBox.secondX = this.x + this.width - this.rightFreeSpace;
+    landBox.y = this.y + this.topFreeSpace;
+    return landBox;
+  };
 }
 function FirstTypeGrass(source, x, y) {
   this.source = source;
@@ -318,7 +356,17 @@ function IceBox(source, x, y) {
   this.y = y;
   this.width = iceBox.WIDTH;
   this.height = iceBox.HEIGHT;
+  this.topFreeSpace = bottomType.TOP_FREE_SPACE;
+  this.leftFreeSpace = bottomType.LEFT_FREE_SPACE;
+  this.rightFreeSpace = bottomType.RIGHT_FREE_SPACE;
   this.type = "ice";
+  this.getBox = function() {
+    let iceBox = {};
+    iceBox.firstX = this.x + this.leftFreeSpace;
+    iceBox.secondX = this.x + this.width - this.rightFreeSpace;
+    iceBox.y = this.y + this.topFreeSpace;
+    return iceBox;
+  };
 }
 function Rock(source, x, y) {
   this.source = source;
@@ -330,7 +378,17 @@ function Rock(source, x, y) {
   this.y = y;
   this.width = rock.WIDTH;
   this.height = rock.HEIGHT;
+  this.topFreeSpace = bottomType.TOP_FREE_SPACE;
+  this.leftFreeSpace = bottomType.LEFT_FREE_SPACE;
+  this.rightFreeSpace = bottomType.RIGHT_FREE_SPACE;
   this.type = "land";
+  this.getBox = function() {
+    let rockBox = {};
+    rockBox.firstX = this.x + this.leftFreeSpace;
+    rockBox.secondX = this.x + this.width - this.rightFreeSpace;
+    rockBox.y = this.y + this.topFreeSpace;
+    return rockBox;
+  };
 }
 
 function getPlayers() {
@@ -389,8 +447,8 @@ function Player(sourceRightMoving, sourceLeftMoving, playerName, x, y, movingBut
 
   this.movingButtons = movingButtons;
 
-  this.leftFreeSpace = playerInformation.LEFT_FREE_SPACE;
-  this.rightFreeSpace = playerInformation.RIGHT_FREE_SPACE;
+  this.leftFreeSpace = playerInformation.LEFT_FREE_SPACE_RIGHT_MOVE;
+  this.rightFreeSpace = playerInformation.RIGHT_FREE_SPACE_RIGHT_MOVE;
   this.topFreeSpace = playerInformation.TOP_FREE_SPACE;
   this.nextLand = 0;
   this.landed = states.ACTIVE;
@@ -428,36 +486,70 @@ function Player(sourceRightMoving, sourceLeftMoving, playerName, x, y, movingBut
     }
   };
   this.changeImage = function() {
+    let firstX = playerImage.FIRST_LEFT_X;
+    let secondX = playerImage.SECOND_LEFT_X;
+    let thirdX = playerImage.THIRD_LEFT_X;
+    let fourthX = playerImage.FOURTH_LEFT_X;
+    let fifthX = playerImage.FIFTH_LEFT_X;
+    let sixthX = playerImage.SIXTH_LEFT_X;
+    let seventhX = playerImage.SEVENTH_LEFT_X;
+    let eightsX = playerImage.EIGHTS_LEFT_X;
+    let ninthX = playerImage.NINTH_LEFT_X;
+    let tensX = playerImage.TENTH_LEFT_X;
+    if (this.rightMove === 1) {
+      firstX = playerImage.FIRST_RIGHT_X;
+      secondX = playerImage.SECOND_RIGHT_X;
+      thirdX = playerImage.THIRD_RIGHT_X;
+      fourthX = playerImage.FOURTH_RIGHT_X;
+      fifthX = playerImage.FIFTH_RIGHT_X;
+      sixthX = playerImage.SIXTH_RIGHT_X;
+      seventhX = playerImage.SEVENTH_RIGHT_X;
+      eightsX = playerImage.EIGHTS_RIGHT_X;
+      ninthX = playerImage.NINTH_RIGHT_X;
+      tensX = playerImage.TENTH_RIGHT_X;
+    }
+    if (this.leftMove === 1) {
+      firstX = playerImage.FIRST_LEFT_X;
+      secondX = playerImage.SECOND_LEFT_X;
+      thirdX = playerImage.THIRD_LEFT_X;
+      fourthX = playerImage.FOURTH_LEFT_X;
+      fifthX = playerImage.FIFTH_LEFT_X;
+      sixthX = playerImage.SIXTH_LEFT_X;
+      seventhX = playerImage.SEVENTH_LEFT_X;
+      eightsX = playerImage.EIGHTS_LEFT_X;
+      ninthX = playerImage.NINTH_LEFT_X;
+      tensX = playerImage.TENTH_LEFT_X;
+    }
     switch (this.imageX) {
-      case playerImage.FIRST_X:
-        this.imageX = playerImage.SECOND_X;
+      case firstX:
+        this.imageX = secondX;
         break;
-      case playerImage.SECOND_X:
-        this.imageX = playerImage.THIRD_X;
+      case secondX:
+        this.imageX = thirdX;
         break;
-      case playerImage.THIRD_X:
-        this.imageX = playerImage.FOURTH_X;
+      case thirdX:
+        this.imageX = fourthX;
         break;
-      case playerImage.FOURTH_X:
-        this.imageX = playerImage.FIFTH_X;
+      case fourthX:
+        this.imageX = fifthX;
         break;
-      case playerImage.FIFTH_X:
-        this.imageX = playerImage.SIXTH_X;
+      case fifthX:
+        this.imageX = sixthX;
         break;
-      case playerImage.SIXTH_X:
-        this.imageX = playerImage.SEVENTH_X;
+      case sixthX:
+        this.imageX = seventhX;
         break;
-      case playerImage.SEVENTH_X:
-        this.imageX = playerImage.EIGHTS_X;
+      case seventhX:
+        this.imageX = eightsX;
         break;
-      case playerImage.EIGHTS_X:
-        this.imageX = playerImage.NINTH_X;
+      case eightsX:
+        this.imageX = ninthX;
         break;
-      case playerImage.NINTH_X:
-        this.imageX = playerImage.TENTH_X;
+      case ninthX:
+        this.imageX = tensX;
         break;
-      case playerImage.TENTH_X:
-        this.imageX = playerImage.FIRST_X;
+      case tensX:
+        this.imageX = firstX;
         break;
     }
   };
@@ -521,8 +613,12 @@ function Player(sourceRightMoving, sourceLeftMoving, playerName, x, y, movingBut
     g_world.collisionEvent = states.INACTIVE;
   };
 
-  this.getPlayerBox = function() {
-    
+  this.getBox = function() {
+    let playerBox = {};
+    playerBox.firstX = this.x + this.leftFreeSpace;
+    playerBox.secondX = this.x + this.width - this.rightFreeSpace;
+    playerBox.y = this.y + this.topFreeSpace;
+    return playerBox;
   };
 }
 
