@@ -52,6 +52,11 @@ function moveHorizontally(player, deltaTime) {
 }
 
 function jump(player, deltaTime) {
+  if (player.killState === states.ACTIVE) {
+    player.verticalSpeed = playerInformation.START_SMALL_VERTICAL_SPEED;
+    player.killState = states.INACTIVE;
+  }
+
   player.landed = states.INACTIVE;
   let updatedSpeed = player.verticalSpeed - player.accelerationOfGravity * deltaTime / 50;
   player.verticalSpeed = updatedSpeed;
@@ -75,7 +80,7 @@ function jump(player, deltaTime) {
     let isFreeSpaceFromWorldElements = g_world.checkSpaceFree(player, worldElements);
 
     if (!isFreeSpaceFromWorldElements) {
-      player.y = player.nextLand - playerInformation.HEIGHT + bottomType.TOP_FREE_SPACE;
+      player.y = player.nextLand - playerInformation.HEIGHT;
       player.landed = states.ACTIVE;
       player.upMove = 0;
       player.verticalSpeed = playerInformation.START_BIG_VERTICAL_SPEED;
@@ -123,5 +128,11 @@ function updatePromptTime(deltaTime, scoreboards) {
         scoreboards[key].prompt.timeInterval = timeSum;
       }
     }
+  }
+}
+
+function updateInsectsSwarm(swarm) {
+  for (let i = 0; i < insectsSwarm.AMOUNT_INSECTS; i++) {
+    swarm.swarm[i].chooseRandomCoordinates();
   }
 }

@@ -133,14 +133,14 @@ function getWorldElements() {
   worldElements.push(new SmallGround(secondTypeImage, 120, 445));
   worldElements.push(new SmallGround(secondTypeImage, 100, 455));
 
-  worldElements.push(new Rock(rocksImage, 210, 620));
-  worldElements.push(new Rock(rocksImage, 200, 590));
-  worldElements.push(new Rock(rocksImage, 230, 610));
-  worldElements.push(new Rock(rocksImage, 250, 610));
+  worldElements.push(new Rock(rocksImage, 260, 620));
+  worldElements.push(new Rock(rocksImage, 250, 590));
+  worldElements.push(new Rock(rocksImage, 280, 610));
+  worldElements.push(new Rock(rocksImage, 300, 610));
 
-  worldElements.push(new SmallGround(secondTypeImage, 125, 580));
-  worldElements.push(new SmallGround(secondTypeImage, 95, 600));
-  worldElements.push(new SmallGround(secondTypeImage, 165, 600));
+  worldElements.push(new SmallGround(secondTypeImage, 175, 600));
+  worldElements.push(new SmallGround(secondTypeImage, 145, 600));
+  worldElements.push(new SmallGround(secondTypeImage, 215, 600));
 
   elementAmount = 3;
   startX = 30;
@@ -216,7 +216,6 @@ function getWorldElements() {
 
   return worldElements;
 }
-
 function getBackgroundElements() {
   let firstTypeImage = g_context.resources[imageNames.FIRST_LAND];
   let secondTypeImage = g_context.resources[imageNames.SECOND_LAND];
@@ -235,7 +234,8 @@ function getBackgroundElements() {
   backgroundElements.push(new ThirdTypeGrass(secondTypeImage, 20, 770));
   backgroundElements.push(new ThirdTypeGrass(secondTypeImage, 65, 770));
 
-  backgroundElements.push(new ThirdTypeGrass(secondTypeImage, 125, 610));
+  backgroundElements.push(new ThirdTypeGrass(secondTypeImage, 145, 620));
+  backgroundElements.push(new ThirdTypeGrass(secondTypeImage, 215, 620));
 
   backgroundElements.push(new FirstTypeGrass(firstTypeImage, 1345, 760));
   backgroundElements.push(new FirstTypeGrass(firstTypeImage, 1345, 775));
@@ -409,23 +409,42 @@ function getPlayers() {
       players.thirdPlayer.chooseRandomPlace();
     }
   }
+  if (PLAYERS_AMOUNT >= 4) {
+    players.fourthPlayer.chooseRandomPlace();
+    while (((players.firstPlayer.x === players.fourthPlayer.x) && (players.firstPlayer.y === players.fourthPlayer.y))
+    || ((players.secondPlayer.x === players.fourthPlayer.x) && (players.secondPlayer.y === players.fourthPlayer.y))
+    || ((players.thirdPlayer.x === players.fourthPlayer.x) && (players.thirdPlayer.y === players.fourthPlayer.y))) {
+      players.fourthPlayer.chooseRandomPlace();
+    }
+  }
   return players;
 }
 function Players() {
   let rightFirstPlayerImage = g_context.resources[imageNames.RIGHT_FIRST_PLAYER];
   let rightSecondPlayerImage = g_context.resources[imageNames.RIGHT_SECOND_PLAYER];
   let rightThirdPlayerImage = g_context.resources[imageNames.RIGHT_THIRD_PLAYER];
+  let rightFourthPlayerImage = g_context.resources[imageNames.RIGHT_FOURTH_PLAYER];
+
   let leftFirstPlayerImage = g_context.resources[imageNames.LEFT_FIRST_PLAYER];
   let leftSecondPlayerImage = g_context.resources[imageNames.LEFT_SECOND_PLAYER];
   let leftThirdPlayerImage = g_context.resources[imageNames.LEFT_THIRD_PLAYER];
+  let leftFourthPlayerImage = g_context.resources[imageNames.LEFT_FOURTH_PLAYER];
+
   if (PLAYERS_AMOUNT >= 1) {
-    this.firstPlayer = new Player(rightFirstPlayerImage, leftFirstPlayerImage, playerName.FIRST_NAME, 0, 0, firstPlayerMoveButton);
+    this.firstPlayer = new Player(rightFirstPlayerImage, leftFirstPlayerImage,
+        playerName.FIRST_NAME, 0, 0, firstPlayerMoveButton);
   }
   if (PLAYERS_AMOUNT >= 2) {
-    this.secondPlayer = new Player(rightSecondPlayerImage, leftSecondPlayerImage, playerName.SECOND_NAME, 0, 0, secondPlayerMoveButton);
+    this.secondPlayer = new Player(rightSecondPlayerImage, leftSecondPlayerImage,
+        playerName.SECOND_NAME, 0, 0, secondPlayerMoveButton);
   }
   if (PLAYERS_AMOUNT >= 3) {
-    this.thirdPlayer = new Player(rightThirdPlayerImage, leftThirdPlayerImage, playerName.THIRD_NAME, 0, 0, thirdPlayerMoveButton);
+    this.thirdPlayer = new Player(rightThirdPlayerImage, leftThirdPlayerImage,
+        playerName.THIRD_NAME, 0, 0, thirdPlayerMoveButton);
+  }
+  if (PLAYERS_AMOUNT >= 4) {
+    this.fourthPlayer = new Player(rightFourthPlayerImage, leftFourthPlayerImage,
+        playerName.FOURTH_NAME, 0, 0, fourthPlayerMoveButton);
   }
 }
 function Player(sourceRightMoving, sourceLeftMoving, playerName, x, y, movingButtons) {
@@ -456,6 +475,7 @@ function Player(sourceRightMoving, sourceLeftMoving, playerName, x, y, movingBut
   this.liveState = playerInformation.ALIVE;
   this.unaliveTime = 0;
   this.animationTime = 0;
+  this.killState = states.INACTIVE;
 
   this.horizontalSpeed = playerInformation.HORIZONTAL_SPEED;
   this.accelerationOfGravity = playerInformation.ACCELERATION_OF_GRAVITY;
@@ -616,8 +636,9 @@ function Player(sourceRightMoving, sourceLeftMoving, playerName, x, y, movingBut
   this.getBox = function() {
     let playerBox = {};
     playerBox.firstX = this.x + this.leftFreeSpace;
-    playerBox.secondX = this.x + this.width - this.rightFreeSpace;
+    playerBox.secondX = this.x + this.width - this.rightFreeSpace - this.leftFreeSpace;
     playerBox.y = this.y + this.topFreeSpace;
+    playerBox.secondY = this.y + this.height;
     return playerBox;
   };
 }
@@ -726,4 +747,141 @@ function Scoreboard(sourceScoreboard, sourcePlayer, playerName, x, y) {
     state: states.INACTIVE,
     timeInterval: 0
   }
+}
+
+function getBurst(){
+  let sourceBurst = g_context.resources[imageNames.BURST];
+  let burst = new Burst(sourceBurst);
+  return burst;
+}
+function Burst(sourceBurst){
+  this.source = sourceBurst;
+  this.stateBurst = states.INACTIVE;
+  this.animationTime = 0;
+  this.currentStage = 0;
+
+  this.x = 0;
+  this.y = 0;
+  this.width = burst.WIDTH;
+  this.height = burst.HEIGHT;
+
+  this.imageX = burst.IMAGE_X;
+  this.imageY = burst.IMAGE_Y;
+  this.imageWidth = burst.IMAGE_WIDTH;
+  this.imageHeight = burst.IMAGE_HEIGHT;
+
+  this.createAnimation = function(deltaTime) {
+    if (this.animationTime >= burst.ANIMATION_TIME) {
+      this.changeImage();
+      this.animationTime = 0;
+      this.currentStage++;
+    } else {
+      let sumDeltaTime = this.animationTime + deltaTime / 1000;
+      this.animationTime = sumDeltaTime;
+    }
+    if (this.currentStage === burst.AMOUNT_STAGE) {
+      this.stateBurst = states.INACTIVE;
+      this.currentStage = 0;
+    }
+  };
+
+  this.draw = function(ctx) {
+    ctx.drawImage(this.source, this.imageX, this.imageY, this.imageWidth, this.imageHeight,
+        this.x, this.y, this.width,this.height);
+  };
+
+  this.changeImage = function() {
+    switch (this.imageX) {
+      case burst.FIRST_X:
+        this.imageX = burst.SECOND_X;
+        break;
+      case burst.SECOND_X:
+        this.imageX = burst.THIRD_X;
+        break;
+      case burst.THIRD_X:
+        this.imageX = burst.FOURTH_X;
+        break;
+      case burst.FOURTH_X:
+        this.imageX = burst.FIFTH_X;
+        break;
+      case burst.FIFTH_X:
+        this.imageX = burst.SIXTH_X;
+        break;
+      case burst.SIXTH_X:
+        this.imageX = burst.SEVENTH_X;
+        break;
+      case burst.SEVENTH_X:
+        this.imageX = burst.EIGHTS_X;
+        break;
+      case burst.EIGHTS_X:
+        this.imageX = burst.NINTH_X;
+        break;
+      case burst.NINTH_X:
+        this.imageX = burst.TENTH_X;
+        break;
+      case burst.TENTH_X:
+        this.imageX = burst.ELEVENTH_X;
+        break;
+      case burst.ELEVENTH_X:
+        this.imageX = burst.TWELFTH_X;
+        break;
+      case burst.TWELFTH_X:
+        this.imageX = burst.FIRST_X;
+        break;
+    }
+  };
+}
+
+function getInsectsSwarm() {
+  let insectsSwarm = new Swarm(0, 0);
+  return insectsSwarm;
+}
+function Swarm(x, y) {
+  this.x = x;
+  this.y = y;
+
+  let swarm = [];
+  for (let i = 0; i < insectsSwarm.AMOUNT_INSECTS; i++) {
+    swarm[i] = new Insect(this.x, this.y);
+    swarm[i].chooseRandomCoordinates();
+  }
+
+  this.swarm = swarm;
+}
+function Insect(swarmX, swarmY) {
+  this.x = 0;
+  this.y = 0;
+  this.insectAreaRadius = insectsSwarm.INSECT_AREA_RADIUS;
+  this.chooseRandomCoordinates = function() {
+    let minX = swarmX - this.insectAreaRadius;
+    let maxX = swarmX + this.insectAreaRadius;
+    let minY = swarmY - this.insectAreaRadius;
+    let maxY = swarmY + this.insectAreaRadius;
+
+    let newX = Math.round(minX - 0.5 + Math.random() * (maxX - minX + 1));
+    let newY = Math.round(minY - 0.5 + Math.random() * (maxY - minY + 1));
+
+    let isInSwarmArea = this.isInSwarmArea(newX, newY);
+    if (isInSwarmArea) {
+      this.x = newX;
+      this.y = newY;
+    }
+  };
+  this.isInSwarmArea = function(newX, newY) {
+    let isInArea = (((newX - swarmX) * (newX - swarmX) + (newY - swarmY) * (newY - swarmY))
+    < (insectsSwarm.FIRST_SWARM_RADIUS * insectsSwarm.FIRST_SWARM_RADIUS));
+    return isInArea;
+  };
+  this.draw = function(ctx) {
+    let r = insectsSwarm.INSECT_RADIUS;
+    let corner = insectsSwarm.INSECT_CORNER;
+    ctx.fillStyle = colors.BLACK;
+    this.drawCircle(ctx, this.x, this.y, r, corner);
+  };
+  this.drawCircle = function(ctx, x, y, r, corner) {
+    ctx.beginPath();
+    ctx.arc(x, y, r, 0, corner * Math.PI, false);
+    ctx.closePath();
+    ctx.fill();
+  };
 }

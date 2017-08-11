@@ -4,13 +4,22 @@ function World() {
   this.worldElements = getWorldElements();
   this.backgroundElements = getBackgroundElements();
   this.players = getPlayers();
+  this.burst = getBurst();
   this.scoreboards = getScoreboards();
+  this.insectsSwarm = getInsectsSwarm();
   this.update = function (deltaTime) {
     if (this.state === statesOfGame.IN_PROCESS) {
       let unalivePlayers = this.getPlayersInState(playerInformation.UNALIVE);
       if (unalivePlayers) {
         animatePlayers(unalivePlayers, deltaTime);
       }
+
+      if (this.burst.stateBurst === states.ACTIVE){
+        this.burst.createAnimation(deltaTime);
+      }
+
+      //updateInsectsSwarm(this.insectsSwarm);
+
       updatePlayersCoordinates(this.players, deltaTime);
     }
     if (this.state === statesOfGame.RESULT) {
@@ -26,14 +35,27 @@ function World() {
     if (this.state === statesOfGame.IN_PROCESS) {
       let gameWorldObjects = this.objects;
       drawObjects(ctx, gameWorldObjects);
+
       let worldElements = this.worldElements;
       drawObjects(ctx, worldElements);
+
       let backgroundElements = this.backgroundElements;
       drawObjects(ctx, backgroundElements);
+
       let players = this.players;
       drawPlayers(ctx, players);
+
       let scoreboards = this.scoreboards;
       drawScoreboards(ctx, scoreboards);
+
+      let burst = this.burst;
+      if (burst.stateBurst === states.ACTIVE){
+        burst.draw(ctx);
+      }
+
+      //let insectsSwarm = this.insectsSwarm;
+      //drawInsectsSwarm(ctx, insectsSwarm);
+
     } else {
       drawResult(ctx);
     }
@@ -49,6 +71,9 @@ function World() {
     if ((this.players.thirdPlayer) && (this.players.thirdPlayer.liveState === state)) {
       playersInState.thirdPlayer = this.players.thirdPlayer;
     }
+    if ((this.players.fourthPlayer) && (this.players.fourthPlayer.liveState === state)) {
+      playersInState.fourthPlayer = this.players.fourthPlayer;
+    }
     return playersInState;
   };
   this.checkSpaceFree = function (player, elements) {
@@ -63,14 +88,15 @@ function World() {
     return true;
   };
   this.checkCross = function (firstObject, secondObject) {
-    let isXNoFree = this.getXFree(firstObject, secondObject);
-    let isYNoFree = this.getYFree(firstObject, secondObject);
-    if (isXNoFree && isYNoFree) {
+    let isXNotFree = this.getXFree(firstObject, secondObject);
+    let isYNotFree = this.getYFree(firstObject, secondObject);
+    if (isXNotFree && isYNotFree) {
       if ((firstObject.y < secondObject.y) &&
           ((secondObject.type === bottomType.LAND) ||
           (secondObject.type === bottomType.ICE) ||
           (secondObject.type === bottomType.ROCK))) {
-        firstObject.nextLand = secondObject.y;
+        let secondObjectBox = secondObject.getBox();
+        firstObject.nextLand = secondObjectBox.y;
       }
       return true;
     }
@@ -92,25 +118,28 @@ function World() {
     if ((secondObject.type === bottomType.LAND) ||
         (secondObject.type === bottomType.ICE) ||
         (secondObject.type === bottomType.ROCK)) {
-      isYNotFree =(((secondObjectBox.y > firstObjectBox.y) &&  //двигающийся игрок выше
-      (secondObjectBox.y < firstObjectBox.y + firstObject.height)) ||
+      isYNotFree = (((secondObjectBox.y > firstObjectBox.y) &&  //двигающийся игрок выше
+      (secondObjectBox.y < firstObjectBox.y + firstObject.height - firstObject.topFreeSpace)) ||
       ((firstObjectBox.y > secondObjectBox.y) &&  //двигающийся игрок ниже
-      (firstObjectBox.y < secondObjectBox.y + secondObject.height)));
+      (firstObjectBox.y < secondObjectBox.y + secondObject.height - secondObject.topFreeSpace)));
     } else {
-      isYNotFree =(((secondObjectBox.y >= firstObjectBox.y) &&  //двигающийся игрок выше
-      (secondObjectBox.y <= firstObjectBox.y + firstObject.height)) ||
+      isYNotFree = (((secondObjectBox.y >= firstObjectBox.y) &&  //двигающийся игрок выше
+      (secondObjectBox.y <= firstObjectBox.y + firstObject.height - firstObject.topFreeSpace)) ||
       ((firstObjectBox.y >= secondObjectBox.y) &&  //двигающийся игрок ниже
-      (firstObjectBox.y <= secondObjectBox.y + secondObject.height)));
+      (firstObjectBox.y <= secondObjectBox.y + secondObject.height - secondObject.topFreeSpace)));
     }
     return isYNotFree;
   };
   this.checkLandUnderPlayer = function(player, worldElements) {
+    let playerBox = player.getBox();
     for (let key in worldElements) {
-      let underLand = (((worldElements[key].x >= player.x) &&
-      (worldElements[key].x <= player.x + player.width)) ||
-      ((player.x >= worldElements[key].x) &&
-      (player.x <= worldElements[key].x + worldElements[key].width)));
-      let onLand = (player.y + player.height) === (worldElements[key].y + bottomType.TOP_FREE_SPACE);
+      let worldElementBox = worldElements[key].getBox();
+      let underLand = (((worldElementBox.firstX >= playerBox.firstX) &&
+      (worldElementBox.firstX <= playerBox.secondX)) ||
+      ((playerBox.firstX >= worldElementBox.firstX) &&
+      (playerBox.firstX <= worldElementBox.secondX)));
+      let onLand = ((playerBox.y + player.height - playerInformation.TOP_FREE_SPACE)
+      === worldElementBox.y);
       if (underLand && onLand) {
         player.landed = states.INACTIVE;
         return true;
@@ -122,38 +151,56 @@ function World() {
     if (alivePlayers) {
       for (let key in alivePlayers) {
         if (alivePlayers[key] != player) {
-          let isXNoFree = (((alivePlayers[key].x >= player.x) &&
-          (alivePlayers[key].x <= player.x + player.width)) ||
-          ((player.x >= alivePlayers[key].x) &&
-          (player.x <= alivePlayers[key].x + alivePlayers[key].width)));
+          let alivePlayerBox = alivePlayers[key].getBox();
+          let playerBox = player.getBox();
 
-          let isYNoFree =(((alivePlayers[key].y >= player.y) &&
-          (alivePlayers[key].y <= player.y + player.height)) ||
-          ((player.y >= alivePlayers[key].y) &&
-          (player.y <= alivePlayers[key].y + alivePlayers[key].height)));
+          let isXCollision = this.isXCollision(playerBox, alivePlayerBox);
+          let isYCollision = this.isYCollision(playerBox, alivePlayerBox);
 
-          if (isXNoFree && isYNoFree) {
-            let alivePlayer;
-            let unalivePlayer;
-            if (player.y < alivePlayers[key].y) {
-              alivePlayer = player;
-              unalivePlayer = alivePlayers[key];
-            } else {
-              alivePlayer = alivePlayers[key];
-              unalivePlayer = player;
-            }
-            //if (alivePlayer.y + alivePlayer.height <=  unalivePlayer.y + playerInformation.TOP_FREE_SPACE) {
-            //  alivePlayer.upMove = 1;
-            //  alivePlayers.verticalSpeed = playerInformation.START_SMALL_VERTICAL_SPEED;
-            //}
-            if ((alivePlayer.liveState === playerInformation.ALIVE)
-                && (unalivePlayer.liveState === playerInformation.ALIVE)){
-              alivePlayer.increaseScores();
-              unalivePlayer.dye();
-            }
+          if (isXCollision && isYCollision) {
+            let burst = g_world.burst;
+
+            this.collisionDataProcessing(player, alivePlayers[key], burst);
+
           }
         }
       }
+    }
+  };
+  this.isXCollision = function(playerBox, alivePlayerBox) {
+    let isXCollision = (((alivePlayerBox.firstX >= playerBox.firstX) &&
+    (alivePlayerBox.firstX <= playerBox.secondX)) ||
+    ((playerBox.firstX >= alivePlayerBox.firstX) &&
+    (playerBox.firstX <= alivePlayerBox.secondX)));
+    return isXCollision;
+  };
+  this.isYCollision = function(playerBox, alivePlayerBox) {
+    let isYCollision =(((alivePlayerBox.secondY >= playerBox.y) &&
+    (alivePlayerBox.secondY <= (playerBox.y + (playerBox.secondY - playerBox.y) / 2))) ||
+    ((playerBox.secondY >= alivePlayerBox.y) &&
+    (playerBox.secondY <= (alivePlayerBox.y + (alivePlayerBox.secondY - alivePlayerBox.y) / 2))));
+    return isYCollision;
+  };
+  this.collisionDataProcessing = function(firstPlayer, secondPlayer, burst) {
+    let alivePlayer;
+    let unalivePlayer;
+    if (firstPlayer.y < secondPlayer.y) {  //определеие убитого и убившего игрока
+      alivePlayer = firstPlayer;
+      unalivePlayer = secondPlayer;
+    } else {
+      alivePlayer = secondPlayer;
+      unalivePlayer = firstPlayer;
+    }
+    alivePlayer.killState = states.ACTIVE;
+
+    burst.stateBurst = states.ACTIVE;  //задаются данные для взрыва
+    burst.x = unalivePlayer.x;
+    burst.y = unalivePlayer.y;
+
+    if ((alivePlayer.liveState === playerInformation.ALIVE)
+        && (unalivePlayer.liveState === playerInformation.ALIVE)){
+      alivePlayer.increaseScores();
+      unalivePlayer.dye();
     }
   }
 }

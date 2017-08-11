@@ -98,3 +98,9 @@ function drawLine(ctx, firstX, firstY, lastX, lastY) {
   ctx.closePath();
   ctx.stroke();
 }
+
+function drawInsectsSwarm(ctx, swarm) {
+  for (let i = 0; i < insectsSwarm.AMOUNT_INSECTS; i++) {
+    swarm[i].swarm.draw(ctx);
+  }
+}

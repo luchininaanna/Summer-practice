@@ -87,32 +87,34 @@ function loadResources() {
   ];
   let resources = [];
   let count = 0;
-  let loader = new LoadResources(resources, count);
+  let loader = new Loader(resources, count);
   loader.addImages(images);
   let isLoad = loader.checkLoading();
   if (isLoad) {
+    //console.log(resources);
     g_context.resources = loader.getImages();
   }
 }
 
-function LoadResources(resources, count) {
+function Loader(resources, count) {
   this.checkLoading = function () {
-    console.log(count);
+    //console.log(count);
     if (count === MAX_COUNTER_VALUE) {
       return true;
     }
     return false;
   };
 
-  this.increaseCounter = function () {
+  this.increaseCounter = function() {
     count++;
   };
 
   this.addImage = function (name, src) {
     let image = new Image();
     image.src = src;
-    image.onload = this.increaseCounter();
+    image.onload = this.increaseCounter(); // если image.onload = this.increaseCounter, то count не изменяется
     resources[name] = image;
+    //console.log(resources);
     this.checkLoading();
   };
 

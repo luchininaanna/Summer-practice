@@ -3,14 +3,20 @@ let g_context = {};
 g_context.canvas = document.getElementById("canvas");
 g_context.ctx = document.getElementById("canvas").getContext("2d");
 g_context.prevTime = new Date();
-g_context.resources = [];
 
 loadResources();
-g_world = new World();
-gameLoop();
+let check = setInterval(function() {
+  if (g_context.resources) {
+    //console.log(g_context.resources);
+    //console.log("+");
+    g_world = new World();
+    gameLoop();
+    clearInterval(check);
+  }
+}, 1000);
 
 function gameLoop() {
-  console.log("GameLoop");
+  //console.log("GameLoop");
   let ctx = g_context.ctx;
   let currTime = new Date();
   let prevTime = g_context.prevTime;
