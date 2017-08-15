@@ -55,29 +55,18 @@ function checkReleasedButtons(event) {
   }
 }
 function changeReleasedState(checkingPlayer, keyCode, movingButtons) {
-  if (checkingPlayer.typeBottomUnderPlayer === bottomType.ICE) {
-    console.log("скольжение");
-    reduceSpeed(checkingPlayer);
-  }
-  let isMoving = isMovingCapability(checkingPlayer);
   switch (keyCode) {
     case movingButtons.RIGHT:
-      if (isMoving) {
-        checkingPlayer.rightMove = 0;
-        checkingPlayer.imageX = playerImage.FIRST_RIGHT_X;
-        checkingPlayer.rightFreeSpace = playerInformation.RIGHT_FREE_SPACE_RIGHT_MOVE;
-        checkingPlayer.leftFreeSpace = playerInformation.LEFT_FREE_SPACE_RIGHT_MOVE;
-        checkingPlayer.horizontalSpeed = playerInformation.HORIZONTAL_SPEED;
-      }
+      checkingPlayer.rightMove = 0;
+      checkingPlayer.imageX = playerImage.FIRST_RIGHT_X;
+      checkingPlayer.rightFreeSpace = playerInformation.RIGHT_FREE_SPACE_RIGHT_MOVE;
+      checkingPlayer.leftFreeSpace = playerInformation.LEFT_FREE_SPACE_RIGHT_MOVE;
       break;
     case movingButtons.LEFT:
-      if (isMoving) {
-        checkingPlayer.leftMove = 0;
-        checkingPlayer.imageX = playerImage.FIRST_LEFT_X;
-        checkingPlayer.rightFreeSpace = playerInformation.RIGHT_FREE_SPACE_LEFT_MOVE;
-        checkingPlayer.leftFreeSpace = playerInformation.LEFT_FREE_SPACE_LEFT_MOVE;
-        checkingPlayer.horizontalSpeed = playerInformation.HORIZONTAL_SPEED;
-      }
+      checkingPlayer.leftMove = 0;
+      checkingPlayer.imageX = playerImage.FIRST_LEFT_X;
+      checkingPlayer.rightFreeSpace = playerInformation.RIGHT_FREE_SPACE_LEFT_MOVE;
+      checkingPlayer.leftFreeSpace = playerInformation.LEFT_FREE_SPACE_LEFT_MOVE;
       break;
   }
 }
