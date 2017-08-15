@@ -17,10 +17,10 @@ const resultBackgroundSize = {
   IMAGE_Y: 0,
   IMAGE_WIDTH: 500,
   IMAGE_HEIGHT: 500,
-  WIDTH: 750,
+  WIDTH: 1350,
   HEIGHT: 400,
-  X: 450,
-  Y: 200,
+  X: 150,
+  Y: 50,
   VERTICAL_SHIFT: 90,
   HORIZONTAL_SHIFT: 400
 };
@@ -159,10 +159,10 @@ const playerImage = {
   TENTH_LEFT_X: 1795
 };
 const playerName = {
-  FIRST_NAME: "1",
-  SECOND_NAME: "2",
-  THIRD_NAME: "3",
-  FOURTH_NAME: "4"
+  FIRST_NAME: "DOTT",
+  SECOND_NAME: "JIFFY",
+  THIRD_NAME: "FIZZ",
+  FOURTH_NAME: "MIJJI"
 };
 const imageNames = {
   BACKGROUND: "background",
@@ -269,7 +269,7 @@ const pointScoreboard = {
   Y_POINT_SHIFT: 110,
   X_PLAYER_SHIFT: 90,
   Y_PLAYER_SHIFT: 10,
-  X_PLAYER_NAME_SHIFT: 50,
+  X_PLAYER_NAME_SHIFT: 20,
   Y_PLAYER_NAME_SHIFT: 70,
   X_FIRST_POINT_SHIFT: 30,
   X_SECOND_POINT_SHIFT: 85,
@@ -332,7 +332,7 @@ const states = {
 };
 const promptInformation = {
   X: 350,
-  Y: 700,
+  Y: 850,
   TEXT: "Для начала новой игры нажмите клавишу Enter",
   TIME_INTERVAL: 0.6
 };
@@ -365,9 +365,11 @@ const burst = {
   TWELFTH_X: 2200,
 };
 const insectsSwarm = {
-  AMOUNT_INSECTS: 20,
+  AMOUNT_INSECTS: 100,
   FIRST_SWARM_RADIUS: 100,
-  INSECT_AREA_RADIUS: 20,
-  INSECT_RADIUS: 2,
-  INSECT_CORNER: 2
+  SWARM_RADIUS: 10,
+  INSECT_AREA_RADIUS: 5,
+  INSECT_RADIUS: 1,
+  INSECT_CORNER: 2,
+  INSECT_ANIMATION_TIME: 0.1
 };

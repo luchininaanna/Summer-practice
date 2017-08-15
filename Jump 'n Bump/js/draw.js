@@ -35,13 +35,13 @@ function drawRectangle(ctx, x, y, width, height, amount, shiftRight, shiftDown) 
 
 function drawResult(ctx) {
   drawBackground(ctx);
-  drawScores(ctx);
   drawPrompt(ctx);
 }
 function drawBackground(ctx) {
   let backgroundImage = g_context.resources[imageNames.BACKGROUND];
   ctx.drawImage(backgroundImage, 0, 0, backgroundSize.WIDTH, backgroundSize.HEIGHT,
       0, 0, canvasSize.WIDTH, canvasSize.HEIGHT);
+
   let resultBackgroundImage = g_context.resources[imageNames.RESULT_BACKGROUND];
   ctx.drawImage(resultBackgroundImage, resultBackgroundSize.IMAGE_X, resultBackgroundSize.IMAGE_Y,
       resultBackgroundSize.IMAGE_WIDTH, resultBackgroundSize.HEIGHT,
@@ -55,7 +55,7 @@ function drawBackground(ctx) {
       resultBackgroundSize.Y + resultBackgroundSize.VERTICAL_SHIFT);
   drawLine(ctx, resultBackgroundSize.X + resultBackgroundSize.HORIZONTAL_SHIFT, resultBackgroundSize.Y,
       resultBackgroundSize.X + resultBackgroundSize.HORIZONTAL_SHIFT,
-      resultBackgroundSize.Y + resultBackgroundSize.HEIGHT);
+      resultBackgroundSize.Y);
 }
 function drawScores(ctx) {
   ctx.fillStyle = colors.LIGHT_BLUE;
@@ -101,6 +101,6 @@ function drawLine(ctx, firstX, firstY, lastX, lastY) {
 
 function drawInsectsSwarm(ctx, swarm) {
   for (let i = 0; i < insectsSwarm.AMOUNT_INSECTS; i++) {
-    swarm[i].swarm.draw(ctx);
+    swarm.swarm[i].draw(ctx);
   }
 }

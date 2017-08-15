@@ -18,7 +18,7 @@ function World() {
         this.burst.createAnimation(deltaTime);
       }
 
-      //updateInsectsSwarm(this.insectsSwarm);
+      this.insectsSwarm.createAnimation(deltaTime);
 
       updatePlayersCoordinates(this.players, deltaTime);
     }
@@ -53,8 +53,8 @@ function World() {
         burst.draw(ctx);
       }
 
-      //let insectsSwarm = this.insectsSwarm;
-      //drawInsectsSwarm(ctx, insectsSwarm);
+      let insectsSwarm = this.insectsSwarm;
+      drawInsectsSwarm(ctx, insectsSwarm);
 
     } else {
       drawResult(ctx);
@@ -140,8 +140,12 @@ function World() {
       (playerBox.firstX <= worldElementBox.secondX)));
       let onLand = ((playerBox.y + player.height - playerInformation.TOP_FREE_SPACE)
       === worldElementBox.y);
+      // иногда onLand - true даже если игрок в воздухе, поэтому не заходит в следующее условие,
+      // которое отвечает за прыжок с нулевой начальной скоростью (падение)
       if (underLand && onLand) {
         player.landed = states.INACTIVE;
+        player.typeBottomUnderPlayer = worldElements[key].type;
+        console.log(player.typeBottomUnderPlayer);
         return true;
       }
     }
@@ -199,7 +203,7 @@ function World() {
 
     if ((alivePlayer.liveState === playerInformation.ALIVE)
         && (unalivePlayer.liveState === playerInformation.ALIVE)){
-      alivePlayer.increaseScores();
+      alivePlayer.increaseScores(unalivePlayer);
       unalivePlayer.dye();
     }
   }

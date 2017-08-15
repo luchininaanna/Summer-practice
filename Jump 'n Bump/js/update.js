@@ -131,8 +131,22 @@ function updatePromptTime(deltaTime, scoreboards) {
   }
 }
 
-function updateInsectsSwarm(swarm) {
+function updateInsectsSwarm(swarm, deltaTime) {
   for (let i = 0; i < insectsSwarm.AMOUNT_INSECTS; i++) {
-    swarm.swarm[i].chooseRandomCoordinates();
+    swarm.swarm[i].createAnimation(deltaTime);
+  }
+}
+
+function reduceSpeed(player) {
+  let newHorizontalScore = player.horizontalSpeed - 0.01;
+  player.horizontalSpeed = newHorizontalScore;
+  console.log(player.horizontalSpeed);
+}
+
+function isMovingCapability(player) {
+  if ((player.horizontalSpeed > 0) && (player.typeBottomUnderPlayer === bottomType.ICE)) {
+    return false;
+  } else {
+    return true;
   }
 }
