@@ -145,7 +145,6 @@ function World() {
       if (underLand && onLand) {
         player.landed = states.ACTIVE;
         player.typeBottomUnderPlayer = worldElements[key].type;
-        console.log(player.typeBottomUnderPlayer);
         return true;
       }
     }

@@ -33,13 +33,25 @@ function changeStateOfGame(keyCode) {
   }
 }
 function changePressedState(checkingPlayer, keyCode, movingButtons) {
+  checkLandForMoving(checkingPlayer);
+
   switch (keyCode) {
     case movingButtons.RIGHT:
+      if ((checkingPlayer.typeBottomUnderPlayer === bottomType.ICE) && (checkingPlayer.rightMove === 0)){
+        checkingPlayer.iceStartMoving = states.ACTIVE;
+        checkingPlayer.horizontalSpeed = playerInformation.ZERO_HORIZONTAL_SPEED;
+      }
       checkingPlayer.rightMove = 1;
       break;
+
     case movingButtons.LEFT:
+      if ((checkingPlayer.typeBottomUnderPlayer === bottomType.ICE) && (checkingPlayer.leftMove === 0)){
+        checkingPlayer.iceStartMoving = states.ACTIVE;
+        checkingPlayer.horizontalSpeed = playerInformation.ZERO_HORIZONTAL_SPEED;
+      }
       checkingPlayer.leftMove = 1;
       break;
+
     case movingButtons.UP:
       checkingPlayer.upMove = 1;
       break;
@@ -55,6 +67,8 @@ function checkReleasedButtons(event) {
   }
 }
 function changeReleasedState(checkingPlayer, keyCode, movingButtons) {
+  checkLandForMoving(checkingPlayer);
+
   switch (keyCode) {
     case movingButtons.RIGHT:
       checkingPlayer.rightMove = 0;
@@ -62,6 +76,7 @@ function changeReleasedState(checkingPlayer, keyCode, movingButtons) {
       checkingPlayer.rightFreeSpace = playerInformation.RIGHT_FREE_SPACE_RIGHT_MOVE;
       checkingPlayer.leftFreeSpace = playerInformation.LEFT_FREE_SPACE_RIGHT_MOVE;
       break;
+
     case movingButtons.LEFT:
       checkingPlayer.leftMove = 0;
       checkingPlayer.imageX = playerImage.FIRST_LEFT_X;
@@ -89,4 +104,27 @@ function scalingWindow(ctx, canvas) {
   canvas.width = canvasSize.WIDTH * coefficient;
   canvas.height = canvasSize.HEIGHT * coefficient;
   ctx.scale(coefficient, coefficient);
+}
+
+function checkLandForMoving(player) {
+  let worldElements = g_world.worldElements;
+  let playerBox = player.getBox();
+  for (let key in worldElements) {
+    let worldElementBox = worldElements[key].getBox();
+
+    let underLand = (((worldElementBox.firstX >= playerBox.firstX) &&
+    (worldElementBox.firstX <= playerBox.secondX)) ||
+    ((playerBox.firstX >= worldElementBox.firstX) &&
+    (playerBox.firstX <= worldElementBox.secondX)));
+
+    let onLand = (playerBox.secondY === worldElementBox.y);
+
+    if (underLand && onLand) {
+      player.typeBottomUnderPlayer = worldElements[key].type;
+      if (worldElements[key].type !== bottomType.ICE) {
+        player.iceStartMoving = states.INACTIVE;
+      }
+    }
+  }
+
 }

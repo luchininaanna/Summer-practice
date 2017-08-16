@@ -623,10 +623,14 @@ function Player(sourceRightMoving, sourceLeftMoving, playerName, x, y, movingBut
   this.animationTime = 0;
   this.killState = states.INACTIVE;
 
+  this.startIceDelta = 0;
   this.horizontalSpeed = playerInformation.HORIZONTAL_SPEED;
   this.accelerationOfGravity = playerInformation.ACCELERATION_OF_GRAVITY;
   this.verticalSpeed = playerInformation.START_BIG_VERTICAL_SPEED;
   this.speedCoefficient = speedCoefficients.RIGHT_MOVING;
+
+  this.iceStartMoving = states.INACTIVE;
+  this.iceFinishMoving = states.INACTIVE;
 
   this.killedPlayers = playersData;
 
@@ -836,10 +840,10 @@ function getScoreboards() {
   return scoreboards;
 }
 function Scoreboards(scoreboardImage, x) {
-  let firstPlayerImage = g_context.resources[imageNames.RIGHT_FIRST_PLAYER];
-  let secondPlayerImage = g_context.resources[imageNames.RIGHT_SECOND_PLAYER];
-  let thirdPlayerImage = g_context.resources[imageNames.RIGHT_THIRD_PLAYER];
-  let fourthPlayerImage = g_context.resources[imageNames.RIGHT_FOURTH_PLAYER];
+  let firstPlayerImage = g_context.resources[imageNames.LEFT_FIRST_PLAYER];
+  let secondPlayerImage = g_context.resources[imageNames.LEFT_SECOND_PLAYER];
+  let thirdPlayerImage = g_context.resources[imageNames.LEFT_THIRD_PLAYER];
+  let fourthPlayerImage = g_context.resources[imageNames.LEFT_FOURTH_PLAYER];
   this.firstScoreboard = new Scoreboard(scoreboardImage, firstPlayerImage, playerName.FIRST_NAME, x, 0);
   this.secondScoreboard = new Scoreboard(scoreboardImage, secondPlayerImage, playerName.SECOND_NAME, x,
       this.firstScoreboard.y + pointScoreboard.HEIGHT);

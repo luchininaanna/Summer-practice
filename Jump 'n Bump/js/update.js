@@ -7,12 +7,12 @@ function updatePlayersCoordinates(players, deltaTime) {
   return players;
 }
 function updatePlayerCoordinates(player, deltaTime) {
-  if (player.rightMove === 1) {
+  if ((player.rightMove === 1) || (player.iceFinishMoving === states.ACTIVE)) {
     player.speedCoefficient = speedCoefficients.RIGHT_MOVING;
     moveHorizontally(player, deltaTime);
   }
 
-  if (player.leftMove === 1) {
+  if ((player.leftMove === 1) || (player.iceFinishMoving === states.ACTIVE)) {
     player.speedCoefficient = speedCoefficients.LEFT_MOVING;
     moveHorizontally(player, deltaTime);
   }
@@ -23,6 +23,48 @@ function updatePlayerCoordinates(player, deltaTime) {
 }
 
 function moveHorizontally(player, deltaTime) {
+  let newDelta;
+
+  // постепенное увеличение скорости игрока на льду
+  if (player.iceStartMoving === states.ACTIVE) {
+    if (player.startIceDelta === 0) {
+      newDelta = playerInformation.START_ICE_DELTA;
+    } else {
+      newDelta = player.startIceDelta * playerInformation.ICE_COEFFICIENT;
+    }
+    player.startIceDelta = newDelta;
+    let newScore = player.horizontalSpeed + newDelta;
+    if (newScore < playerInformation.HORIZONTAL_SPEED) {
+      player.horizontalSpeed = newScore;
+    } else {
+      player.horizontalSpeed = playerInformation.HORIZONTAL_SPEED;
+      player.iceStartMoving = states.INACTIVE;
+      player.startIceDelta = 0;
+    }
+  } else {
+    player.horizontalSpeed = playerInformation.HORIZONTAL_SPEED;
+  }
+
+  //постепенное понижение скорости игрока на льду
+  //if (player.iceFinishMoving === states.ACTIVE) {
+  // if (player.startIceDelta === 0) {
+  //    newDelta = playerInformation.START_ICE_DELTA;
+  //  } else {
+  //    newDelta = player.startIceDelta * playerInformation.ICE_COEFFICIENT;
+  //  }
+  //  player.startIceDelta = newDelta;
+  //  let newScore = player.horizontalSpeed - newDelta;
+  //  if (newScore > 0) {
+  //    player.horizontalSpeed = newScore;
+  //  } else {
+  //    player.horizontalSpeed = 0;
+  //    player.iceFinishMoving = states.INACTIVE;
+  //   player.startIceDelta = 0;
+  //  }
+  //} else {
+  //  player.horizontalSpeed = playerInformation.HORIZONTAL_SPEED;
+  //}
+
   player.updateImage(deltaTime);
   player.updatedX = player.x + player.horizontalSpeed * deltaTime * player.speedCoefficient;
 
@@ -128,12 +170,6 @@ function updatePromptTime(deltaTime, scoreboards) {
         scoreboards[key].prompt.timeInterval = timeSum;
       }
     }
-  }
-}
-
-function updateInsectsSwarm(swarm, deltaTime) {
-  for (let i = 0; i < insectsSwarm.AMOUNT_INSECTS; i++) {
-    swarm.swarm[i].createAnimation(deltaTime);
   }
 }
 
