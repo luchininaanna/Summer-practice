@@ -134,21 +134,22 @@ function World() {
     let playerBox = player.getBox();
     for (let key in worldElements) {
       let worldElementBox = worldElements[key].getBox();
+
       let underLand = (((worldElementBox.firstX >= playerBox.firstX) &&
       (worldElementBox.firstX <= playerBox.secondX)) ||
       ((playerBox.firstX >= worldElementBox.firstX) &&
       (playerBox.firstX <= worldElementBox.secondX)));
-      let onLand = ((playerBox.y + player.height - playerInformation.TOP_FREE_SPACE)
-      === worldElementBox.y);
-      // иногда onLand - true даже если игрок в воздухе, поэтому не заходит в следующее условие,
-      // которое отвечает за прыжок с нулевой начальной скоростью (падение)
+
+      let onLand = (playerBox.secondY === worldElementBox.y);
+
       if (underLand && onLand) {
-        player.landed = states.INACTIVE;
+        player.landed = states.ACTIVE;
         player.typeBottomUnderPlayer = worldElements[key].type;
         console.log(player.typeBottomUnderPlayer);
         return true;
       }
     }
+    player.landed = states.INACTIVE;
     return false;
   };
   this.searchCollisionPlayers = function(player, alivePlayers) {

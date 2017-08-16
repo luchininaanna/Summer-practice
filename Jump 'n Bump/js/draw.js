@@ -48,40 +48,14 @@ function drawBackground(ctx) {
       resultBackgroundSize.X, resultBackgroundSize.Y,
       resultBackgroundSize.WIDTH, resultBackgroundSize.HEIGHT);
 
-  ctx.strokeStyle = colors.LIGHT_YELLOW;
-  ctx.lineWidth = 5;
-  drawLine(ctx, resultBackgroundSize.X, resultBackgroundSize.Y + resultBackgroundSize.VERTICAL_SHIFT,
-      resultBackgroundSize.X + resultBackgroundSize.WIDTH,
-      resultBackgroundSize.Y + resultBackgroundSize.VERTICAL_SHIFT);
-  drawLine(ctx, resultBackgroundSize.X + resultBackgroundSize.HORIZONTAL_SHIFT, resultBackgroundSize.Y,
-      resultBackgroundSize.X + resultBackgroundSize.HORIZONTAL_SHIFT,
-      resultBackgroundSize.Y);
-}
-function drawScores(ctx) {
-  ctx.fillStyle = colors.LIGHT_BLUE;
-  ctx.font = "40pt Arial";
-  ctx.fillText(result.PLAYER_NAME_HEADING, result.PLAYER_NAME_HEADING_X, result.START_Y);
-  ctx.fillText(result.SCORE_HEADING, result.SCORE_HEADING_X, result.START_Y);
-  let scoreboards = g_world.scoreboards;
-  let recordNumber = 0;
-  if (scoreboards) {
-    for (let key in scoreboards) {
-      if (scoreboards[key].scoreboardState === states.ACTIVE) {
-        ctx.fillText(result.PLAYER + scoreboards[key].name, result.PLAYER_NAME_X,
-            result.RECORD_START_Y + result.SHIFT_Y * recordNumber);
-        ctx.fillText(scoreboards[key].pointsAmount, result.SCORE_X,
-            result.RECORD_START_Y + result.SHIFT_Y * recordNumber);
-        recordNumber++;
-      }
-      if (scoreboards[key].scoreboardState === states.INACTIVE) {
-        ctx.fillText(result.PLAYER + scoreboards[key].name, result.PLAYER_NAME_X,
-            result.RECORD_START_Y + result.SHIFT_Y * recordNumber);
-        ctx.fillText(result.EMPTY_RECORD, result.EMPTY_RECORD_X,
-            result.RECORD_START_Y + result.SHIFT_Y * recordNumber);
-        recordNumber++;
-      }
-    }
-  }
+  //ctx.strokeStyle = colors.LIGHT_YELLOW;
+  //ctx.lineWidth = 5;
+  //drawLine(ctx, resultBackgroundSize.X, resultBackgroundSize.Y + resultBackgroundSize.VERTICAL_SHIFT,
+  //    resultBackgroundSize.X + resultBackgroundSize.WIDTH,
+  //    resultBackgroundSize.Y + resultBackgroundSize.VERTICAL_SHIFT);
+  //drawLine(ctx, resultBackgroundSize.X + resultBackgroundSize.HORIZONTAL_SHIFT, resultBackgroundSize.Y,
+  //    resultBackgroundSize.X + resultBackgroundSize.HORIZONTAL_SHIFT,
+  //    resultBackgroundSize.Y);
 }
 function drawPrompt(ctx) {
   let prompt = g_world.scoreboards.firstScoreboard.prompt;

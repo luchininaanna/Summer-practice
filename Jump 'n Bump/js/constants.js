@@ -18,11 +18,9 @@ const resultBackgroundSize = {
   IMAGE_WIDTH: 500,
   IMAGE_HEIGHT: 500,
   WIDTH: 1350,
-  HEIGHT: 400,
+  HEIGHT: 500,
   X: 150,
   Y: 50,
-  VERTICAL_SHIFT: 90,
-  HORIZONTAL_SHIFT: 400
 };
 const smallGround = {
   IMAGE_X: 145,

@@ -64,13 +64,7 @@ function getWorldElements() {
     worldElements.push(new SmallGround(secondTypeImage, startX + elementWidth * i, stairY));
   }
 
-  elementAmount = 5;
-  startX = 1185;
-  stairY = 860;
-  shiftX = 30;
-  for (let i = 0; i < elementAmount; i++) {
-    worldElements.push(new Rock(rocksImage, startX + i * shiftX, stairY));
-  }
+
 
   elementAmount = 4;
   startX = 1185;
@@ -85,7 +79,6 @@ function getWorldElements() {
   worldElements.push(new BigGround(firstTypeImage, 1370, 800));
 
   worldElements.push(new Rock(rocksImage, 1325, 860));
-  worldElements.push(new Rock(rocksImage, 1325, 840));
   worldElements.push(new Rock(rocksImage, 1355, 855));
   worldElements.push(new Rock(rocksImage, 1375, 855));
   worldElements.push(new Rock(rocksImage, 1405, 855));
@@ -133,10 +126,12 @@ function getWorldElements() {
   worldElements.push(new SmallGround(secondTypeImage, 120, 445));
   worldElements.push(new SmallGround(secondTypeImage, 100, 455));
 
-  worldElements.push(new Rock(rocksImage, 260, 620));
   worldElements.push(new Rock(rocksImage, 250, 590));
   worldElements.push(new Rock(rocksImage, 280, 610));
-  worldElements.push(new Rock(rocksImage, 300, 610));
+
+  worldElements.push(new SmallGround(secondTypeImage, 300, 610));
+  worldElements.push(new SmallGround(secondTypeImage, 340, 610));
+  worldElements.push(new SmallGround(secondTypeImage, 380, 610));
 
   worldElements.push(new SmallGround(secondTypeImage, 175, 600));
   worldElements.push(new SmallGround(secondTypeImage, 145, 600));
@@ -172,20 +167,20 @@ function getWorldElements() {
   worldElements.push(new Rock(rocksImage, 920, 600));
   worldElements.push(new Rock(rocksImage, 900, 630));
   worldElements.push(new Rock(rocksImage, 950, 610));
-  worldElements.push(new Rock(rocksImage, 880, 570));
+  worldElements.push(new Rock(rocksImage, 885, 575));
   worldElements.push(new Rock(rocksImage, 860, 600));
   worldElements.push(new Rock(rocksImage, 890, 610));
   worldElements.push(new Rock(rocksImage, 910, 560));
-  worldElements.push(new Rock(rocksImage, 810, 630));
-  worldElements.push(new Rock(rocksImage, 780, 635));
+  worldElements.push(new Rock(rocksImage, 810, 635));
+  worldElements.push(new Rock(rocksImage, 780, 640));
   worldElements.push(new Rock(rocksImage, 830, 600));
-  worldElements.push(new Rock(rocksImage, 755, 630));
+  worldElements.push(new Rock(rocksImage, 755, 640));
 
   worldElements.push(new IceBox(iceBoxImage, 890, 535));
   worldElements.push(new IceBox(iceBoxImage, 870, 570));
   worldElements.push(new IceBox(iceBoxImage, 830, 570));
-  worldElements.push(new IceBox(iceBoxImage, 795, 610));
-  worldElements.push(new IceBox(iceBoxImage, 755, 610));
+  worldElements.push(new IceBox(iceBoxImage, 805, 605));
+  worldElements.push(new IceBox(iceBoxImage, 765, 605));
 
   elementAmount = 2;
   startX = 1070;
@@ -214,6 +209,96 @@ function getWorldElements() {
   worldElements.push(new SmallGround(firstTypeImage, 1420, 450));
   worldElements.push(new SmallGround(firstTypeImage, 1380, 440));
 
+  worldElements.push(new Rock(rocksImage, 500, 480));
+  worldElements.push(new Rock(rocksImage, 530, 490));
+  worldElements.push(new Rock(rocksImage, 560, 480));
+
+  worldElements.push(new SmallGround(firstTypeImage, 600, 480));
+
+  worldElements.push(new SmallGround(firstTypeImage, 1125, 310));
+  worldElements.push(new SmallGround(firstTypeImage, 1175, 310));
+  worldElements.push(new SmallGround(firstTypeImage, 1155, 320));
+  worldElements.push(new SmallGround(firstTypeImage, 1200, 320));
+  worldElements.push(new SmallGround(firstTypeImage, 1100, 330));
+  worldElements.push(new SmallGround(firstTypeImage, 1130, 340));
+  worldElements.push(new SmallGround(firstTypeImage, 1190, 340));
+  worldElements.push(new SmallGround(firstTypeImage, 1160, 350));
+
+  worldElements.push(new Rock(rocksImage, 1415, 190));
+  worldElements.push(new Rock(rocksImage, 1430, 170));
+  worldElements.push(new Rock(rocksImage, 1400, 170));
+
+  worldElements.push(new BigGround(firstTypeImage, 770, 70));
+  worldElements.push(new BigGround(firstTypeImage, 810, 110));
+  worldElements.push(new BigGround(firstTypeImage, 730, 140));
+
+  worldElements.push(new SmallGround(firstTypeImage, 690, 196));
+  worldElements.push(new SmallGround(firstTypeImage, 690, 183));
+  worldElements.push(new SmallGround(firstTypeImage, 690, 170));
+
+  worldElements.push(new SmallGround(firstTypeImage, 650, 230));
+
+  worldElements.push(new Rock(rocksImage, 670, 250));
+  worldElements.push(new Rock(rocksImage, 640, 260));
+  worldElements.push(new Rock(rocksImage, 610, 240));
+  worldElements.push(new Rock(rocksImage, 580, 250));
+  worldElements.push(new Rock(rocksImage, 550, 240));
+  worldElements.push(new Rock(rocksImage, 520, 240));
+
+  worldElements.push(new Rock(rocksImage, 495, 260));
+  worldElements.push(new Rock(rocksImage, 450, 260));
+  worldElements.push(new Rock(rocksImage, 475, 280));
+  worldElements.push(new Rock(rocksImage, 540, 270));
+
+  worldElements.push(new IceBox(iceBoxImage, 495, 240));
+  worldElements.push(new IceBox(iceBoxImage, 455, 240));
+
+  worldElements.push(new Rock(rocksImage, 690, 240));
+  worldElements.push(new Rock(rocksImage, 730, 200));
+  worldElements.push(new Rock(rocksImage, 710, 220));
+
+  worldElements.push(new SmallGround(firstTypeImage, 850, 110));
+  worldElements.push(new Rock(rocksImage, 840, 145));
+  worldElements.push(new Rock(rocksImage, 810, 150));
+  worldElements.push(new SmallGround(firstTypeImage, 880, 130));
+  worldElements.push(new SmallGround(firstTypeImage, 850, 150));
+
+  worldElements.push(new SmallGround(firstTypeImage, 890, 150));
+  worldElements.push(new SmallGround(firstTypeImage, 930, 150));
+  worldElements.push(new SmallGround(firstTypeImage, 970, 150));
+
+  worldElements.push(new Rock(rocksImage, 770, 205));
+  worldElements.push(new Rock(rocksImage, 770, 200));
+  worldElements.push(new Rock(rocksImage, 770, 195));
+  worldElements.push(new Rock(rocksImage, 770, 190));
+  worldElements.push(new Rock(rocksImage, 770, 185));
+  worldElements.push(new Rock(rocksImage, 770, 180));
+  worldElements.push(new Rock(rocksImage, 770, 175));
+  worldElements.push(new Rock(rocksImage, 770, 170));
+  worldElements.push(new Rock(rocksImage, 770, 165));
+
+  worldElements.push(new Rock(rocksImage, 800, 180));
+  worldElements.push(new Rock(rocksImage, 840, 170));
+
+  worldElements.push(new Rock(rocksImage, 740, 220));
+  worldElements.push(new Rock(rocksImage, 710, 250));
+
+  worldElements.push(new SmallGround(secondTypeImage, 270, 110));
+  worldElements.push(new SmallGround(secondTypeImage, 330, 110));
+  worldElements.push(new SmallGround(secondTypeImage, 240, 120));
+  worldElements.push(new SmallGround(secondTypeImage, 300, 120));
+  worldElements.push(new SmallGround(secondTypeImage, 270, 130));
+
+  worldElements.push(new Rock(rocksImage, 1160, 90));
+  worldElements.push(new Rock(rocksImage, 1190, 90));
+  worldElements.push(new Rock(rocksImage, 1190, 110));
+  worldElements.push(new Rock(rocksImage, 1220, 90));
+
+  //worldElements.push(new Rock(rocksImage, 20, 250));
+  //worldElements.push(new Rock(rocksImage, 20, 230));
+  //worldElements.push(new SmallGround(firstTypeImage, 50, 230));
+  //worldElements.push(new SmallGround(firstTypeImage, 90, 230));
+
   return worldElements;
 }
 function getBackgroundElements() {
@@ -229,6 +314,18 @@ function getBackgroundElements() {
   let stairY;
   let shiftX;
   let shiftY;
+
+  elementAmount = 6;
+  startX = 1155;
+  stairY = 870;
+  shiftX = 30;
+  for (let i = 0; i < elementAmount; i++) {
+    backgroundElements.push(new Rock(rocksImage, startX + i * shiftX, stairY));
+  }
+
+  backgroundElements.push(new Rock(rocksImage, 1325, 845));
+
+  backgroundElements.push(new Rock(rocksImage, 260, 620));
 
   backgroundElements.push(new ThirdTypeGrass(secondTypeImage, -10, 750));
   backgroundElements.push(new ThirdTypeGrass(secondTypeImage, 20, 770));
@@ -263,6 +360,35 @@ function getBackgroundElements() {
     backgroundElements.push(new SecondTypeGrass(secondTypeImage, startX + shiftX * i, stairY));
   }
 
+  backgroundElements.push(new FirstTypeGrass(firstTypeImage, 500, 470));
+  backgroundElements.push(new FirstTypeGrass(firstTypeImage, 530, 470));
+  backgroundElements.push(new FirstTypeGrass(firstTypeImage, 530, 480));
+  backgroundElements.push(new FirstTypeGrass(firstTypeImage, 560, 470));
+
+  backgroundElements.push(new ThirdTypeGrass(secondTypeImage, 300, 630));
+  backgroundElements.push(new ThirdTypeGrass(secondTypeImage, 340, 630));
+  backgroundElements.push(new ThirdTypeGrass(secondTypeImage, 380, 630));
+
+  backgroundElements.push(new FirstTypeGrass(firstTypeImage, 1125, 300));
+  backgroundElements.push(new FirstTypeGrass(firstTypeImage, 1125, 310));
+  backgroundElements.push(new FirstTypeGrass(firstTypeImage, 1175, 310));
+  backgroundElements.push(new FirstTypeGrass(firstTypeImage, 1155, 320));
+  backgroundElements.push(new FirstTypeGrass(firstTypeImage, 1200, 320));
+  backgroundElements.push(new FirstTypeGrass(firstTypeImage, 1100, 330));
+  backgroundElements.push(new FirstTypeGrass(firstTypeImage, 1130, 340));
+  backgroundElements.push(new FirstTypeGrass(firstTypeImage, 1190, 340));
+  backgroundElements.push(new FirstTypeGrass(firstTypeImage, 1160, 350));
+
+  //backgroundElements.push(new ThirdTypeGrass(firstTypeImage, 50, 250));
+  //backgroundElements.push(new ThirdTypeGrass(firstTypeImage, 90, 250));
+
+  backgroundElements.push(new FirstTypeGrass(firstTypeImage,770, 55));
+  backgroundElements.push(new FirstTypeGrass(firstTypeImage,770, 70));
+  backgroundElements.push(new FirstTypeGrass(firstTypeImage, 810, 95));
+  backgroundElements.push(new FirstTypeGrass(firstTypeImage, 810, 110));
+  backgroundElements.push(new FirstTypeGrass(firstTypeImage, 730, 125));
+  backgroundElements.push(new FirstTypeGrass(firstTypeImage, 730, 140));
+
   return backgroundElements;
 }
 
@@ -279,7 +405,7 @@ function SmallGround(source, x, y) {
   this.topFreeSpace = bottomType.TOP_FREE_SPACE;
   this.leftFreeSpace = bottomType.LEFT_FREE_SPACE;
   this.rightFreeSpace = bottomType.RIGHT_FREE_SPACE;
-  this.type = "land";
+  this.type = bottomType.LAND;
   this.getBox = function() {
     let landBox = {};
     landBox.firstX = this.x + this.leftFreeSpace;
@@ -301,7 +427,7 @@ function BigGround(source, x, y) {
   this.topFreeSpace = bottomType.TOP_FREE_SPACE;
   this.leftFreeSpace = bottomType.LEFT_FREE_SPACE;
   this.rightFreeSpace = bottomType.RIGHT_FREE_SPACE;
-  this.type = "land";
+  this.type = bottomType.LAND;
   this.getBox = function() {
     let landBox = {};
     landBox.firstX = this.x + this.leftFreeSpace;
@@ -320,7 +446,7 @@ function FirstTypeGrass(source, x, y) {
   this.y = y;
   this.width = firstTypeGrass.WIDTH;
   this.height = firstTypeGrass.HEIGHT;
-  this.type = "land";
+  this.type = bottomType.LAND;
 }
 function SecondTypeGrass(source, x, y) {
   this.source = source;
@@ -332,7 +458,7 @@ function SecondTypeGrass(source, x, y) {
   this.y = y;
   this.width = secondTypeGrass.WIDTH;
   this.height = secondTypeGrass.HEIGHT;
-  this.type = "land";
+  this.type = bottomType.LAND;
 }
 function ThirdTypeGrass(source, x, y) {
   this.source = source;
@@ -344,7 +470,7 @@ function ThirdTypeGrass(source, x, y) {
   this.y = y;
   this.width = thirdTypeGrass.WIDTH;
   this.height = thirdTypeGrass.HEIGHT;
-  this.type = "land";
+  this.type = bottomType.LAND;
 }
 function IceBox(source, x, y) {
   this.source = source;
@@ -359,7 +485,7 @@ function IceBox(source, x, y) {
   this.topFreeSpace = bottomType.TOP_FREE_SPACE;
   this.leftFreeSpace = bottomType.LEFT_FREE_SPACE;
   this.rightFreeSpace = bottomType.RIGHT_FREE_SPACE;
-  this.type = "ice";
+  this.type = bottomType.ICE;
   this.getBox = function() {
     let iceBox = {};
     iceBox.firstX = this.x + this.leftFreeSpace;
@@ -381,7 +507,7 @@ function Rock(source, x, y) {
   this.topFreeSpace = bottomType.TOP_FREE_SPACE;
   this.leftFreeSpace = bottomType.LEFT_FREE_SPACE;
   this.rightFreeSpace = bottomType.RIGHT_FREE_SPACE;
-  this.type = "land";
+  this.type = bottomType.ROCK;
   this.getBox = function() {
     let rockBox = {};
     rockBox.firstX = this.x + this.leftFreeSpace;
@@ -632,8 +758,37 @@ function Player(sourceRightMoving, sourceLeftMoving, playerName, x, y, movingBut
     if (this.unaliveTime >= playerInformation.UNALIVE_TIME) {
       this.liveState = playerInformation.ALIVE;
       this.unaliveTime = 0;
-      this.chooseRandomPlace();
+      let isFreePlace = states.INACTIVE;
+      let players = g_world.players;
+      while (!isFreePlace) {
+        this.chooseRandomPlace();
+        isFreePlace = this.isFreePlace(this.name, this.x, this.y, players);
+      }
     }
+  };
+
+  this.isFreePlace = function(playerName, playerX, playerY, players) {
+    for (let key in players) {
+      if (players[key].name != playerName) {
+        let firstObjectBox = this.getBox();
+        let secondObjectBox = players[key].getBox();
+
+        let isXNotFree = (((secondObjectBox.firstX >= firstObjectBox.firstX) &&  //двигающийся игрок левее
+        (secondObjectBox.firstX <= firstObjectBox.secondX)) ||
+        ((firstObjectBox.firstX >= secondObjectBox.firstX) &&  //двигающийся игрок правее
+        (firstObjectBox.firstX <= secondObjectBox.secondX)));
+
+        let isYNotFree = (((secondObjectBox.y >= firstObjectBox.y) &&  //двигающийся игрок выше
+        (secondObjectBox.y <= firstObjectBox.y + this.height - this.topFreeSpace)) ||
+        ((firstObjectBox.y >= secondObjectBox.y) &&  //двигающийся игрок ниже
+        (firstObjectBox.y <= secondObjectBox.y + players[key].height - players[key].topFreeSpace)));
+
+        if (isXNotFree && isYNotFree) {
+          return false;
+        }
+      }
+    }
+    return true;
   };
 
   this.increaseScores = function(unalivePlayer) {
