@@ -630,7 +630,8 @@ function Player(sourceRightMoving, sourceLeftMoving, playerName, x, y, movingBut
   this.speedCoefficient = speedCoefficients.RIGHT_MOVING;
 
   this.iceStartMoving = states.INACTIVE;
-  this.iceFinishMoving = states.INACTIVE;
+  this.iceRightFinishMoving = states.INACTIVE;
+  this.iceLeftFinishMoving = states.INACTIVE;
 
   this.killedPlayers = playersData;
 

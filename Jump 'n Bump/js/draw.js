@@ -42,20 +42,13 @@ function drawBackground(ctx) {
   ctx.drawImage(backgroundImage, 0, 0, backgroundSize.WIDTH, backgroundSize.HEIGHT,
       0, 0, canvasSize.WIDTH, canvasSize.HEIGHT);
 
-  let resultBackgroundImage = g_context.resources[imageNames.RESULT_BACKGROUND];
-  ctx.drawImage(resultBackgroundImage, resultBackgroundSize.IMAGE_X, resultBackgroundSize.IMAGE_Y,
-      resultBackgroundSize.IMAGE_WIDTH, resultBackgroundSize.HEIGHT,
-      resultBackgroundSize.X, resultBackgroundSize.Y,
-      resultBackgroundSize.WIDTH, resultBackgroundSize.HEIGHT);
+  ctx.strokeStyle = colors.LIGHT_YELLOW;
+  ctx.lineWidth = 5;
 
-  //ctx.strokeStyle = colors.LIGHT_YELLOW;
-  //ctx.lineWidth = 5;
-  //drawLine(ctx, resultBackgroundSize.X, resultBackgroundSize.Y + resultBackgroundSize.VERTICAL_SHIFT,
-  //    resultBackgroundSize.X + resultBackgroundSize.WIDTH,
-  //    resultBackgroundSize.Y + resultBackgroundSize.VERTICAL_SHIFT);
-  //drawLine(ctx, resultBackgroundSize.X + resultBackgroundSize.HORIZONTAL_SHIFT, resultBackgroundSize.Y,
-  //    resultBackgroundSize.X + resultBackgroundSize.HORIZONTAL_SHIFT,
-  //    resultBackgroundSize.Y);
+  for (let i=0; i < resultTable.AMOUNT_HORIZONTAL_LINE; i++) {
+    drawLine(ctx, resultTable.START_X, resultTable.START_Y + i * resultTable.LINE_SHIFT_Y,
+        resultTable.START_X + resultTable.WIDTH, resultTable.START_Y + i * resultTable.LINE_SHIFT_Y);
+  }
 }
 function drawPrompt(ctx) {
   let prompt = g_world.scoreboards.firstScoreboard.prompt;

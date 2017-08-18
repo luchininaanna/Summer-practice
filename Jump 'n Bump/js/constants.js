@@ -6,7 +6,7 @@ const colors = {
   LIGHT_BLUE: "#E0FFFF",
   LIGHT_YELLOW: "#F8F9DF",
   RED: "#B22222",
-  BLACK: "#000000"
+  BLACK: "#000000",
 };
 const backgroundSize = {
   WIDTH: 1600,
@@ -66,7 +66,7 @@ const thirdTypeGrass = {
   IMAGE_HEIGHT: 15,
   WIDTH: 50,
   HEIGHT: 50
-};   //редактировать размеры
+};
 const iceBox = {
   IMAGE_X: 0,
   IMAGE_Y: 0,
@@ -120,7 +120,7 @@ const playerInformation = {
   HORIZONTAL_SPEED: 0.5,
   ZERO_HORIZONTAL_SPEED: 0,
   START_ICE_DELTA: 0.00005,
-  ICE_COEFFICIENT: 2,
+  ICE_COEFFICIENT: 1.2,
 
   START_BIG_VERTICAL_SPEED: 55,
   START_SMALL_VERTICAL_SPEED: 35,
@@ -314,19 +314,14 @@ const resultButton = {
   RESULT: 27,
   NEW_GAME: 13,
 };
-const result = {
-  PLAYER_NAME_HEADING_X: 500,
-  PLAYER_NAME_X: 530,
-  PLAYER_NAME_HEADING: "Имя игрока",
-  SCORE_HEADING_X: 940,
-  SCORE_HEADING: "Баллы",
-  SCORE_X: 1000,
-  START_Y: 270,
-  SHIFT_Y: 70,
-  RECORD_START_Y: 355,
-  PLAYER: "Игрок ",
-  EMPTY_RECORD: "- - - - - - - - - -",
-  EMPTY_RECORD_X: 870
+const resultTable = {
+  LINE_SHIFT_Y: 140,
+  START_Y: 50,
+  LINE_FIRST_SHIFT_X: 240,
+  LINE_SECOND_SHIFT_X: 240,
+  START_X: 150,
+  AMOUNT_HORIZONTAL_LINE: 6,
+  WIDTH: 1350
 };
 const states = {
   ACTIVE: 1,
@@ -369,7 +364,7 @@ const burst = {
 const insectsSwarm = {
   AMOUNT_INSECTS: 100,
   FIRST_SWARM_RADIUS: 100,
-  SWARM_RADIUS: 10,
+  SWARM_RADIUS: 1,
   INSECT_AREA_RADIUS: 5,
   INSECT_RADIUS: 1,
   INSECT_CORNER: 2,

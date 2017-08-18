@@ -7,12 +7,12 @@ function updatePlayersCoordinates(players, deltaTime) {
   return players;
 }
 function updatePlayerCoordinates(player, deltaTime) {
-  if ((player.rightMove === 1) || (player.iceFinishMoving === states.ACTIVE)) {
+  if ((player.rightMove === 1) || (player.iceRightFinishMoving === states.ACTIVE)) {
     player.speedCoefficient = speedCoefficients.RIGHT_MOVING;
     moveHorizontally(player, deltaTime);
   }
 
-  if ((player.leftMove === 1) || (player.iceFinishMoving === states.ACTIVE)) {
+  if ((player.leftMove === 1) || (player.iceLeftFinishMoving === states.ACTIVE)) {
     player.speedCoefficient = speedCoefficients.LEFT_MOVING;
     moveHorizontally(player, deltaTime);
   }
@@ -33,40 +33,55 @@ function moveHorizontally(player, deltaTime) {
       newDelta = player.startIceDelta * playerInformation.ICE_COEFFICIENT;
     }
     player.startIceDelta = newDelta;
-    let newScore = player.horizontalSpeed + newDelta;
-    if (newScore < playerInformation.HORIZONTAL_SPEED) {
-      player.horizontalSpeed = newScore;
+    let newSpeed = player.horizontalSpeed + newDelta;
+    if (newSpeed < playerInformation.HORIZONTAL_SPEED) {
+      player.horizontalSpeed = newSpeed;
     } else {
       player.horizontalSpeed = playerInformation.HORIZONTAL_SPEED;
       player.iceStartMoving = states.INACTIVE;
       player.startIceDelta = 0;
     }
-  } else {
-    player.horizontalSpeed = playerInformation.HORIZONTAL_SPEED;
   }
 
   //постепенное понижение скорости игрока на льду
-  //if (player.iceFinishMoving === states.ACTIVE) {
-  // if (player.startIceDelta === 0) {
-  //    newDelta = playerInformation.START_ICE_DELTA;
-  //  } else {
-  //    newDelta = player.startIceDelta * playerInformation.ICE_COEFFICIENT;
-  //  }
-  //  player.startIceDelta = newDelta;
-  //  let newScore = player.horizontalSpeed - newDelta;
-  //  if (newScore > 0) {
-  //    player.horizontalSpeed = newScore;
-  //  } else {
-  //    player.horizontalSpeed = 0;
-  //    player.iceFinishMoving = states.INACTIVE;
-  //   player.startIceDelta = 0;
-  //  }
-  //} else {
-  //  player.horizontalSpeed = playerInformation.HORIZONTAL_SPEED;
-  //}
+  if ((player.iceRightFinishMoving === states.ACTIVE) || (player.iceLeftFinishMoving === states.ACTIVE)) {
+   if (player.startIceDelta === 0) {
+      newDelta = playerInformation.START_ICE_DELTA;
+    } else {
+      newDelta = player.startIceDelta * playerInformation.ICE_COEFFICIENT;
+    }
+    player.startIceDelta = newDelta;
+    let newSpeed = player.horizontalSpeed - newDelta;
+    if (newSpeed > 0) {
+      player.horizontalSpeed = newSpeed;
+    } else {
+      if (player.rightMove === 1){
+        player.imageX = playerImage.FIRST_RIGHT_X;
+      }
+      if (player.leftMove === 1){
+        player.imageX = playerImage.FIRST_LEFT_X;
+      }
+      player.horizontalSpeed = 0;
+      player.imageX = playerImage.FIRST_RIGHT_X;
+      player.iceRightFinishMoving = states.INACTIVE;
+      player.iceLeftFinishMoving = states.INACTIVE;
+      player.startIceDelta = 0;
+    }
+  }
+
+  if ((player.iceStartMoving !== states.ACTIVE) &&
+      (player.iceRightFinishMoving !== states.ACTIVE) &&
+      (player.iceLeftFinishMoving !== states.ACTIVE)){
+    player.horizontalSpeed = playerInformation.HORIZONTAL_SPEED;
+  }
 
   player.updateImage(deltaTime);
-  player.updatedX = player.x + player.horizontalSpeed * deltaTime * player.speedCoefficient;
+  if ((player.iceLeftFinishMoving === states.ACTIVE) ||
+  (player.iceRightFinishMoving === states.ACTIVE)) {
+    player.updatedX = player.x + player.horizontalSpeed * 0.05 * deltaTime * player.speedCoefficient;
+  } else {
+    player.updatedX = player.x + player.horizontalSpeed * deltaTime * player.speedCoefficient;
+  }
 
   let prevX = player.x;
   player.x = player.updatedX;

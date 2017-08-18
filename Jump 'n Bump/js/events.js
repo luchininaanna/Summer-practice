@@ -71,6 +71,9 @@ function changeReleasedState(checkingPlayer, keyCode, movingButtons) {
 
   switch (keyCode) {
     case movingButtons.RIGHT:
+      if ((checkingPlayer.typeBottomUnderPlayer === bottomType.ICE) && (checkingPlayer.rightMove === 1)){
+        checkingPlayer.iceRightFinishMoving = states.ACTIVE;
+      }
       checkingPlayer.rightMove = 0;
       checkingPlayer.imageX = playerImage.FIRST_RIGHT_X;
       checkingPlayer.rightFreeSpace = playerInformation.RIGHT_FREE_SPACE_RIGHT_MOVE;
@@ -78,6 +81,9 @@ function changeReleasedState(checkingPlayer, keyCode, movingButtons) {
       break;
 
     case movingButtons.LEFT:
+      if ((checkingPlayer.typeBottomUnderPlayer === bottomType.ICE) && (checkingPlayer.leftMove === 1)){
+        checkingPlayer.iceLeftFinishMoving = states.ACTIVE;
+      }
       checkingPlayer.leftMove = 0;
       checkingPlayer.imageX = playerImage.FIRST_LEFT_X;
       checkingPlayer.rightFreeSpace = playerInformation.RIGHT_FREE_SPACE_LEFT_MOVE;
@@ -123,6 +129,8 @@ function checkLandForMoving(player) {
       player.typeBottomUnderPlayer = worldElements[key].type;
       if (worldElements[key].type !== bottomType.ICE) {
         player.iceStartMoving = states.INACTIVE;
+        player.iceRightFinishMoving = states.INACTIVE;
+        player.iceLeftFinishMoving = states.INACTIVE;
       }
     }
   }
