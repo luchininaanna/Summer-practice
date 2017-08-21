@@ -187,17 +187,3 @@ function updatePromptTime(deltaTime, scoreboards) {
     }
   }
 }
-
-function reduceSpeed(player) {
-  let newHorizontalScore = player.horizontalSpeed - 0.01;
-  player.horizontalSpeed = newHorizontalScore;
-  console.log(player.horizontalSpeed);
-}
-
-function isMovingCapability(player) {
-  if ((player.horizontalSpeed > 0) && (player.typeBottomUnderPlayer === bottomType.ICE)) {
-    return false;
-  } else {
-    return true;
-  }
-}

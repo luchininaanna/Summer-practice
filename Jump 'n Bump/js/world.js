@@ -163,9 +163,7 @@ function World() {
 
           if (isXCollision && isYCollision) {
             let burst = g_world.burst;
-
             this.collisionDataProcessing(player, alivePlayers[key], burst);
-
           }
         }
       }
