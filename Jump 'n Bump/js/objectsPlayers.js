@@ -64,8 +64,6 @@ function getWorldElements() {
     worldElements.push(new SmallGround(secondTypeImage, startX + elementWidth * i, stairY));
   }
 
-
-
   elementAmount = 4;
   startX = 1185;
   stairY = 830;
@@ -174,7 +172,7 @@ function getWorldElements() {
   worldElements.push(new Rock(rocksImage, 810, 635));
   worldElements.push(new Rock(rocksImage, 780, 640));
   worldElements.push(new Rock(rocksImage, 830, 600));
-  worldElements.push(new Rock(rocksImage, 755, 640));
+  worldElements.push(new Rock(rocksImage, 765, 630));
 
   worldElements.push(new IceBox(iceBoxImage, 890, 535));
   worldElements.push(new IceBox(iceBoxImage, 870, 570));
@@ -184,7 +182,7 @@ function getWorldElements() {
 
   elementAmount = 2;
   startX = 1070;
-  stairY = 620;
+  stairY = 630;
   shiftX = 70;
   for (let i = 0; i < elementAmount; i++) {
     worldElements.push(new SmallGround(firstTypeImage, startX + shiftX * i, stairY));
@@ -215,11 +213,11 @@ function getWorldElements() {
 
   worldElements.push(new SmallGround(firstTypeImage, 600, 480));
 
-  worldElements.push(new SmallGround(firstTypeImage, 1125, 310));
-  worldElements.push(new SmallGround(firstTypeImage, 1175, 310));
+  worldElements.push(new SmallGround(firstTypeImage, 1125, 320));
+  worldElements.push(new SmallGround(firstTypeImage, 1175, 320));
   worldElements.push(new SmallGround(firstTypeImage, 1155, 320));
   worldElements.push(new SmallGround(firstTypeImage, 1200, 320));
-  worldElements.push(new SmallGround(firstTypeImage, 1100, 330));
+  worldElements.push(new SmallGround(firstTypeImage, 1100, 320));
   worldElements.push(new SmallGround(firstTypeImage, 1130, 340));
   worldElements.push(new SmallGround(firstTypeImage, 1190, 340));
   worldElements.push(new SmallGround(firstTypeImage, 1160, 350));
@@ -232,16 +230,13 @@ function getWorldElements() {
   worldElements.push(new BigGround(firstTypeImage, 810, 110));
   worldElements.push(new BigGround(firstTypeImage, 730, 140));
 
-  worldElements.push(new SmallGround(firstTypeImage, 690, 196));
-  worldElements.push(new SmallGround(firstTypeImage, 690, 183));
-  worldElements.push(new SmallGround(firstTypeImage, 690, 170));
+  worldElements.push(new SmallGround(firstTypeImage, 690, 200));
+  worldElements.push(new SmallGround(firstTypeImage, 650, 200));
 
-  worldElements.push(new SmallGround(firstTypeImage, 650, 230));
-
-  worldElements.push(new Rock(rocksImage, 670, 250));
-  worldElements.push(new Rock(rocksImage, 640, 260));
+  worldElements.push(new Rock(rocksImage, 670, 230));
+  worldElements.push(new Rock(rocksImage, 640, 240));
   worldElements.push(new Rock(rocksImage, 610, 240));
-  worldElements.push(new Rock(rocksImage, 580, 250));
+  worldElements.push(new Rock(rocksImage, 580, 240));
   worldElements.push(new Rock(rocksImage, 550, 240));
   worldElements.push(new Rock(rocksImage, 520, 240));
 
@@ -283,21 +278,16 @@ function getWorldElements() {
   worldElements.push(new Rock(rocksImage, 740, 220));
   worldElements.push(new Rock(rocksImage, 710, 250));
 
-  worldElements.push(new SmallGround(secondTypeImage, 270, 110));
-  worldElements.push(new SmallGround(secondTypeImage, 330, 110));
-  worldElements.push(new SmallGround(secondTypeImage, 240, 120));
-  worldElements.push(new SmallGround(secondTypeImage, 300, 120));
-  worldElements.push(new SmallGround(secondTypeImage, 270, 130));
+  worldElements.push(new SmallGround(secondTypeImage, 220, 210));
+  worldElements.push(new SmallGround(secondTypeImage, 280, 210));
+  worldElements.push(new SmallGround(secondTypeImage, 190, 210));
+  worldElements.push(new SmallGround(secondTypeImage, 250, 210));
+  worldElements.push(new SmallGround(secondTypeImage, 220, 220));
 
   worldElements.push(new Rock(rocksImage, 1160, 90));
   worldElements.push(new Rock(rocksImage, 1190, 90));
   worldElements.push(new Rock(rocksImage, 1190, 110));
   worldElements.push(new Rock(rocksImage, 1220, 90));
-
-  //worldElements.push(new Rock(rocksImage, 20, 250));
-  //worldElements.push(new Rock(rocksImage, 20, 230));
-  //worldElements.push(new SmallGround(firstTypeImage, 50, 230));
-  //worldElements.push(new SmallGround(firstTypeImage, 90, 230));
 
   return worldElements;
 }

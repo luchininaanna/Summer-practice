@@ -7,12 +7,14 @@ function updatePlayersCoordinates(players, deltaTime) {
   return players;
 }
 function updatePlayerCoordinates(player, deltaTime) {
-  if ((player.rightMove === 1) || (player.iceRightFinishMoving === states.ACTIVE)) {
+  if ((player.rightMove === 1) ||
+      ((player.iceRightFinishMoving === states.ACTIVE) && (player.typeBottomUnderPlayer === bottomType.ICE))) {
     player.speedCoefficient = speedCoefficients.RIGHT_MOVING;
     moveHorizontally(player, deltaTime);
   }
 
-  if ((player.leftMove === 1) || (player.iceLeftFinishMoving === states.ACTIVE)) {
+  if ((player.leftMove === 1) ||
+      ((player.iceLeftFinishMoving === states.ACTIVE) && (player.typeBottomUnderPlayer === bottomType.ICE))) {
     player.speedCoefficient = speedCoefficients.LEFT_MOVING;
     moveHorizontally(player, deltaTime);
   }
@@ -55,14 +57,14 @@ function moveHorizontally(player, deltaTime) {
     if (newSpeed > 0) {
       player.horizontalSpeed = newSpeed;
     } else {
-      if (player.rightMove === 1){
+      if (player.iceRightFinishMoving === states.ACTIVE){
         player.imageX = playerImage.FIRST_RIGHT_X;
       }
-      if (player.leftMove === 1){
+      if (player.iceLeftFinishMoving === states.ACTIVE){
         player.imageX = playerImage.FIRST_LEFT_X;
       }
+
       player.horizontalSpeed = 0;
-      player.imageX = playerImage.FIRST_RIGHT_X;
       player.iceRightFinishMoving = states.INACTIVE;
       player.iceLeftFinishMoving = states.INACTIVE;
       player.startIceDelta = 0;
@@ -101,9 +103,11 @@ function moveHorizontally(player, deltaTime) {
       player.upMove = 1;
       player.verticalSpeed = playerInformation.START_ZERO_VERTICAL_SPEED;
     }
+    player.horizontalSpeed = playerInformation.HORIZONTAL_SPEED;
   }
 
-  if (((!isFreeSpaceFromPlayers || !isFreeSpaceFromWorldElements) && isScreen) || (!isScreen)) {
+  if (((!isFreeSpaceFromPlayers || !isFreeSpaceFromWorldElements) && isScreen)
+      || (!isScreen)) {
     player.x = prevX;
   }
 }

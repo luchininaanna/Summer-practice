@@ -81,6 +81,10 @@ function World() {
       if (elements[key] != player) {
         let cross = this.checkCross(player, elements[key]);
         if (cross) {
+          //console.log("+++++++++++++++");
+          //console.log(elements[key].getBox().secondX);
+          //console.log(player.getBox().firstX);
+          //console.log("+++++++++++++++");
           return false;
         }
       }
@@ -105,10 +109,10 @@ function World() {
   this.getXFree = function(firstObject, secondObject) {
     let firstObjectBox = firstObject.getBox();
     let secondObjectBox = secondObject.getBox();
-    let isXNotFree = (((secondObjectBox.firstX >= firstObjectBox.firstX) &&  //двигающийся игрок левее
+    let isXNotFree = (((secondObjectBox.firstX >= firstObject.x) &&  //двигающийся игрок левее
     (secondObjectBox.firstX <= firstObjectBox.secondX)) ||
-    ((firstObjectBox.firstX >= secondObjectBox.firstX) &&  //двигающийся игрок правее
-    (firstObjectBox.firstX <= secondObjectBox.secondX)));
+    ((firstObject.x >= secondObjectBox.firstX) &&  //двигающийся игрок правее
+    (firstObject.x <= secondObjectBox.secondX)));
     return isXNotFree;
   };
   this.getYFree = function(firstObject, secondObject) {
