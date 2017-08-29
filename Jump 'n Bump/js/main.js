@@ -5,10 +5,8 @@ g_context.ctx = document.getElementById("canvas").getContext("2d");
 g_context.prevTime = new Date();
 
 loadResources();
-let check = setInterval(function() {
+let check = setInterval(function() {  //проверка на наличие ресурсов для создаия объектов
   if (g_context.resources) {
-    //console.log(g_context.resources);
-    //console.log("+");
     g_world = new World();
     gameLoop();
     clearInterval(check);
@@ -16,7 +14,6 @@ let check = setInterval(function() {
 }, 1000);
 
 function gameLoop() {
-  //console.log("GameLoop");
   let ctx = g_context.ctx;
   let currTime = new Date();
   let prevTime = g_context.prevTime;

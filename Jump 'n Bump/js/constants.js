@@ -305,8 +305,7 @@ const randomPlaces = {
 };
 const statesOfGame = {
   IN_PROCESS: 0,
-  RESULT: 1,
-  PLAYERS_CHOOSING: 2
+  RESULT: 1
 };
 const resultButton = {
   RESULT: 27,
@@ -443,5 +442,7 @@ const insectsSwarm = {
   INSECT_AREA_RADIUS: 5,
   INSECT_RADIUS: 1,
   INSECT_CORNER: 2,
-  INSECT_ANIMATION_TIME: 0.1
+  INSECT_ANIMATION_TIME: 0.1,
+  X: 1350,
+  Y: 700
 };

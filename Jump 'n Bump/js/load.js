@@ -89,33 +89,21 @@ function loadResources() {
   let count = 0;
   let loader = new Loader(resources, count);
   loader.addImages(images);
-  let isLoad = loader.checkLoading();
-  if (isLoad) {
-    //console.log(resources);
-    g_context.resources = loader.getImages();
-  }
 }
 
 function Loader(resources, count) {
-  this.checkLoading = function () {
-    //console.log(count);
-    if (count === MAX_COUNTER_VALUE) {
-      return true;
-    }
-    return false;
-  };
-
-  this.increaseCounter = function() {
+  this.increaseElementsAmount = function(image, name) {
     count++;
+    resources[name] = image;
+    if (count === MAX_COUNTER_VALUE) {  //проверка на количество загруженных изображений
+      g_context.resources = this.getImages();
+    }
   };
 
   this.addImage = function (name, src) {
     let image = new Image();
     image.src = src;
-    image.onload = this.increaseCounter(); // если image.onload = this.increaseCounter, то count не изменяется
-    resources[name] = image;
-    //console.log(resources);
-    this.checkLoading();
+    image.onload = this.increaseElementsAmount(image, name);
   };
 
   this.addImages = function (images) {

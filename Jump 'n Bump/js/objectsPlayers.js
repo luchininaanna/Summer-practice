@@ -159,19 +159,10 @@ function getWorldElements() {
 
   worldElements.push(new Rock(rocksImage, 855, 640));
   worldElements.push(new Rock(rocksImage, 935, 640));
-  worldElements.push(new Rock(rocksImage, 950, 600));
   worldElements.push(new Rock(rocksImage, 960, 630));
-  worldElements.push(new Rock(rocksImage, 990, 610));
-  worldElements.push(new Rock(rocksImage, 920, 600));
   worldElements.push(new Rock(rocksImage, 900, 630));
-  worldElements.push(new Rock(rocksImage, 950, 610));
-  worldElements.push(new Rock(rocksImage, 885, 575));
-  worldElements.push(new Rock(rocksImage, 860, 600));
-  worldElements.push(new Rock(rocksImage, 890, 610));
-  worldElements.push(new Rock(rocksImage, 910, 560));
   worldElements.push(new Rock(rocksImage, 810, 635));
   worldElements.push(new Rock(rocksImage, 780, 640));
-  worldElements.push(new Rock(rocksImage, 830, 600));
   worldElements.push(new Rock(rocksImage, 765, 630));
 
   worldElements.push(new IceBox(iceBoxImage, 890, 535));
@@ -207,11 +198,11 @@ function getWorldElements() {
   worldElements.push(new SmallGround(firstTypeImage, 1420, 450));
   worldElements.push(new SmallGround(firstTypeImage, 1380, 440));
 
-  worldElements.push(new Rock(rocksImage, 500, 480));
-  worldElements.push(new Rock(rocksImage, 530, 490));
-  worldElements.push(new Rock(rocksImage, 560, 480));
+  worldElements.push(new Rock(rocksImage, 530, 430));
+  worldElements.push(new Rock(rocksImage, 560, 440));
+  worldElements.push(new Rock(rocksImage, 590, 430));
 
-  worldElements.push(new SmallGround(firstTypeImage, 600, 480));
+  worldElements.push(new SmallGround(firstTypeImage, 630, 430));
 
   worldElements.push(new SmallGround(firstTypeImage, 1125, 320));
   worldElements.push(new SmallGround(firstTypeImage, 1175, 320));
@@ -290,20 +281,18 @@ function getWorldElements() {
   worldElements.push(new Rock(rocksImage, 1220, 90));
 
   return worldElements;
-}
+} //значимые статические объекты
 function getBackgroundElements() {
   let firstTypeImage = g_context.resources[imageNames.FIRST_LAND];
   let secondTypeImage = g_context.resources[imageNames.SECOND_LAND];
-  let iceBoxImage = g_context.resources[imageNames.ICE_BOX];
   let rocksImage = g_context.resources[imageNames.ROCKS];
+  let iceBoxImage = g_context.resources[imageNames.ICE_BOX];
   let backgroundElements = [];
 
   let elementAmount;
   let startX;
-  let elementWidth;
   let stairY;
   let shiftX;
-  let shiftY;
 
   elementAmount = 6;
   startX = 1155;
@@ -350,10 +339,10 @@ function getBackgroundElements() {
     backgroundElements.push(new SecondTypeGrass(secondTypeImage, startX + shiftX * i, stairY));
   }
 
-  backgroundElements.push(new FirstTypeGrass(firstTypeImage, 500, 470));
-  backgroundElements.push(new FirstTypeGrass(firstTypeImage, 530, 470));
-  backgroundElements.push(new FirstTypeGrass(firstTypeImage, 530, 480));
-  backgroundElements.push(new FirstTypeGrass(firstTypeImage, 560, 470));
+  backgroundElements.push(new FirstTypeGrass(firstTypeImage, 530, 420));
+  backgroundElements.push(new FirstTypeGrass(firstTypeImage, 560, 420));
+  backgroundElements.push(new FirstTypeGrass(firstTypeImage, 560, 430));
+  backgroundElements.push(new FirstTypeGrass(firstTypeImage, 590, 420));
 
   backgroundElements.push(new ThirdTypeGrass(secondTypeImage, 300, 630));
   backgroundElements.push(new ThirdTypeGrass(secondTypeImage, 340, 630));
@@ -369,9 +358,6 @@ function getBackgroundElements() {
   backgroundElements.push(new FirstTypeGrass(firstTypeImage, 1190, 340));
   backgroundElements.push(new FirstTypeGrass(firstTypeImage, 1160, 350));
 
-  //backgroundElements.push(new ThirdTypeGrass(firstTypeImage, 50, 250));
-  //backgroundElements.push(new ThirdTypeGrass(firstTypeImage, 90, 250));
-
   backgroundElements.push(new FirstTypeGrass(firstTypeImage,770, 55));
   backgroundElements.push(new FirstTypeGrass(firstTypeImage,770, 70));
   backgroundElements.push(new FirstTypeGrass(firstTypeImage, 810, 95));
@@ -379,8 +365,24 @@ function getBackgroundElements() {
   backgroundElements.push(new FirstTypeGrass(firstTypeImage, 730, 125));
   backgroundElements.push(new FirstTypeGrass(firstTypeImage, 730, 140));
 
+  backgroundElements.push(new Rock(rocksImage, 950, 600));
+  backgroundElements.push(new Rock(rocksImage, 990, 610));
+  backgroundElements.push(new Rock(rocksImage, 920, 600));
+  backgroundElements.push(new Rock(rocksImage, 950, 610));
+  backgroundElements.push(new Rock(rocksImage, 885, 575));
+  backgroundElements.push(new Rock(rocksImage, 860, 600));
+  backgroundElements.push(new Rock(rocksImage, 890, 610));
+  backgroundElements.push(new Rock(rocksImage, 910, 560));
+  backgroundElements.push(new Rock(rocksImage, 830, 600));
+
+  backgroundElements.push(new IceBox(iceBoxImage, 890, 535));
+  backgroundElements.push(new IceBox(iceBoxImage, 870, 570));
+  backgroundElements.push(new IceBox(iceBoxImage, 830, 570));
+  backgroundElements.push(new IceBox(iceBoxImage, 805, 605));
+  backgroundElements.push(new IceBox(iceBoxImage, 765, 605));
+
   return backgroundElements;
-}
+} //второстепенные статические объекты
 
 function SmallGround(source, x, y) {
   this.source = source;
@@ -403,7 +405,7 @@ function SmallGround(source, x, y) {
     landBox.y = this.y + this.topFreeSpace;
     return landBox;
   };
-}
+} //виды поверхностей
 function BigGround(source, x, y) {
   this.source = source;
   this.imageX = bigGround.IMAGE_X;
@@ -425,42 +427,6 @@ function BigGround(source, x, y) {
     landBox.y = this.y + this.topFreeSpace;
     return landBox;
   };
-}
-function FirstTypeGrass(source, x, y) {
-  this.source = source;
-  this.imageX = firstTypeGrass.IMAGE_X;
-  this.imageY = firstTypeGrass.IMAGE_Y;
-  this.imageWidth = firstTypeGrass.IMAGE_WIDTH;
-  this.imageHeight = firstTypeGrass.IMAGE_HEIGHT;
-  this.x = x;
-  this.y = y;
-  this.width = firstTypeGrass.WIDTH;
-  this.height = firstTypeGrass.HEIGHT;
-  this.type = bottomType.LAND;
-}
-function SecondTypeGrass(source, x, y) {
-  this.source = source;
-  this.imageX = secondTypeGrass.IMAGE_X;
-  this.imageY = secondTypeGrass.IMAGE_Y;
-  this.imageWidth = secondTypeGrass.IMAGE_WIDTH;
-  this.imageHeight = secondTypeGrass.IMAGE_HEIGHT;
-  this.x = x;
-  this.y = y;
-  this.width = secondTypeGrass.WIDTH;
-  this.height = secondTypeGrass.HEIGHT;
-  this.type = bottomType.LAND;
-}
-function ThirdTypeGrass(source, x, y) {
-  this.source = source;
-  this.imageX = thirdTypeGrass.IMAGE_X;
-  this.imageY = thirdTypeGrass.IMAGE_Y;
-  this.imageWidth = thirdTypeGrass.IMAGE_WIDTH;
-  this.imageHeight = thirdTypeGrass.IMAGE_HEIGHT;
-  this.x = x;
-  this.y = y;
-  this.width = thirdTypeGrass.WIDTH;
-  this.height = thirdTypeGrass.HEIGHT;
-  this.type = bottomType.LAND;
 }
 function IceBox(source, x, y) {
   this.source = source;
@@ -507,17 +473,57 @@ function Rock(source, x, y) {
   };
 }
 
+function FirstTypeGrass(source, x, y) {
+  this.source = source;
+  this.imageX = firstTypeGrass.IMAGE_X;
+  this.imageY = firstTypeGrass.IMAGE_Y;
+  this.imageWidth = firstTypeGrass.IMAGE_WIDTH;
+  this.imageHeight = firstTypeGrass.IMAGE_HEIGHT;
+  this.x = x;
+  this.y = y;
+  this.width = firstTypeGrass.WIDTH;
+  this.height = firstTypeGrass.HEIGHT;
+  this.type = bottomType.LAND;
+} //виды травы
+function SecondTypeGrass(source, x, y) {
+  this.source = source;
+  this.imageX = secondTypeGrass.IMAGE_X;
+  this.imageY = secondTypeGrass.IMAGE_Y;
+  this.imageWidth = secondTypeGrass.IMAGE_WIDTH;
+  this.imageHeight = secondTypeGrass.IMAGE_HEIGHT;
+  this.x = x;
+  this.y = y;
+  this.width = secondTypeGrass.WIDTH;
+  this.height = secondTypeGrass.HEIGHT;
+  this.type = bottomType.LAND;
+}
+function ThirdTypeGrass(source, x, y) {
+  this.source = source;
+  this.imageX = thirdTypeGrass.IMAGE_X;
+  this.imageY = thirdTypeGrass.IMAGE_Y;
+  this.imageWidth = thirdTypeGrass.IMAGE_WIDTH;
+  this.imageHeight = thirdTypeGrass.IMAGE_HEIGHT;
+  this.x = x;
+  this.y = y;
+  this.width = thirdTypeGrass.WIDTH;
+  this.height = thirdTypeGrass.HEIGHT;
+  this.type = bottomType.LAND;
+}
+
 function getPlayers() {
   let players = new Players();
+
   if (PLAYERS_AMOUNT >= 1) {
     players.firstPlayer.chooseRandomPlace();
   }
+
   if (PLAYERS_AMOUNT >= 2) {
     players.secondPlayer.chooseRandomPlace();
     while ((players.firstPlayer.x === players.secondPlayer.x) && (players.firstPlayer.y === players.secondPlayer.y)) {
       players.secondPlayer.chooseRandomPlace();
     }
   }
+
   if (PLAYERS_AMOUNT >= 3) {
     players.thirdPlayer.chooseRandomPlace();
     while (((players.firstPlayer.x === players.thirdPlayer.x) && (players.firstPlayer.y === players.thirdPlayer.y))
@@ -525,6 +531,7 @@ function getPlayers() {
       players.thirdPlayer.chooseRandomPlace();
     }
   }
+
   if (PLAYERS_AMOUNT >= 4) {
     players.fourthPlayer.chooseRandomPlace();
     while (((players.firstPlayer.x === players.fourthPlayer.x) && (players.firstPlayer.y === players.fourthPlayer.y))
@@ -549,7 +556,7 @@ function Players() {
   if (PLAYERS_AMOUNT >= 1) {
     this.firstPlayer = new Player(rightFirstPlayerImage, leftFirstPlayerImage,
         playerName.FIRST_NAME, 0, 0, firstPlayerMoveButton);
-  }
+  } // проверлка необходимого количества игроков
   if (PLAYERS_AMOUNT >= 2) {
     this.secondPlayer = new Player(rightSecondPlayerImage, leftSecondPlayerImage,
         playerName.SECOND_NAME, 0, 0, secondPlayerMoveButton);
@@ -621,23 +628,27 @@ function Player(sourceRightMoving, sourceLeftMoving, name, x, y, movingButtons) 
       name: playerName.FOURTH_NAME,
       killingAmount: 0
     },
-  };
+  }; // данные для статистики набора баллов игрока
 
   this.rightMove = 0;
   this.leftMove = 0;
   this.upMove = 0;
+
   this.draw = function(ctx) {
     ctx.drawImage(this.source, this.imageX, this.imageY, this.imageWidth, this.imageHeight,
         this.x, this.y, this.width,this.height);
   };
 
   this.updateImage = function(deltaTime) {
+    //смена изоюражения в зависимости от направления движения
     if ((this.rightMove === 1) && (this.source === this.leftMovingImage)) {
       this.source = this.rightMovingImage;
     }
     if ((this.leftMove === 1) && (this.source === this.rightMovingImage)) {
       this.source = this.leftMovingImage;
     }
+
+    //смена изображения для реализации анимации движения
     if (this.animationTime >= playerInformation.ANIMATION_TIME) {
       this.changeImage();
       this.animationTime = 0;
@@ -646,6 +657,7 @@ function Player(sourceRightMoving, sourceLeftMoving, name, x, y, movingButtons) 
       this.animationTime = sumDeltaTime;
     }
   };
+
   this.changeImage = function() {
     let firstX = playerImage.FIRST_LEFT_X;
     let secondX = playerImage.SECOND_LEFT_X;
@@ -714,6 +726,7 @@ function Player(sourceRightMoving, sourceLeftMoving, name, x, y, movingButtons) 
         break;
     }
   };
+
   this.chooseRandomPlace = function () {
     const MIN = 1;
     const MAX = 5;
@@ -741,6 +754,7 @@ function Player(sourceRightMoving, sourceLeftMoving, name, x, y, movingButtons) 
         break;
     }
   };
+
   this.chooseRandomDigit = function (min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   };
@@ -762,19 +776,23 @@ function Player(sourceRightMoving, sourceLeftMoving, name, x, y, movingButtons) 
 
   this.isFreePlace = function(playerName, playerX, playerY, players) {
     for (let key in players) {
-      if (players[key].name != playerName) {
+      if (players[key].name !== playerName) {
         let firstObjectBox = this.getBox();
         let secondObjectBox = players[key].getBox();
 
-        let isXNotFree = (((secondObjectBox.firstX >= firstObjectBox.firstX) &&  //двигающийся игрок левее
-        (secondObjectBox.firstX <= firstObjectBox.secondX)) ||
-        ((firstObjectBox.firstX >= secondObjectBox.firstX) &&  //двигающийся игрок правее
-        (firstObjectBox.firstX <= secondObjectBox.secondX)));
+        let isLeftNotFree = (secondObjectBox.firstX >= firstObjectBox.firstX) &&  //двигающийся игрок левее
+        (secondObjectBox.firstX <= firstObjectBox.secondX);
+        let isRightNotFree = (firstObjectBox.firstX >= secondObjectBox.firstX) &&  //двигающийся игрок правее
+            (firstObjectBox.firstX <= secondObjectBox.secondX);
 
-        let isYNotFree = (((secondObjectBox.y >= firstObjectBox.y) &&  //двигающийся игрок выше
-        (secondObjectBox.y <= firstObjectBox.y + this.height - this.topFreeSpace)) ||
-        ((firstObjectBox.y >= secondObjectBox.y) &&  //двигающийся игрок ниже
-        (firstObjectBox.y <= secondObjectBox.y + players[key].height - players[key].topFreeSpace)));
+        let isXNotFree = isLeftNotFree || isRightNotFree;
+
+        let isTopNotFree = (secondObjectBox.y >= firstObjectBox.y) &&  //двигающийся игрок выше
+            (secondObjectBox.y <= firstObjectBox.y + this.height - this.topFreeSpace);
+        let isBottomNotFree = (firstObjectBox.y >= secondObjectBox.y) &&  //двигающийся игрок ниже
+            (firstObjectBox.y <= secondObjectBox.y + players[key].height - players[key].topFreeSpace);
+
+        let isYNotFree = isTopNotFree || isBottomNotFree;
 
         if (isXNotFree && isYNotFree) {
           return false;
@@ -818,6 +836,8 @@ function Player(sourceRightMoving, sourceLeftMoving, name, x, y, movingButtons) 
     playerBox.secondX = this.x + this.width - this.rightFreeSpace;
     playerBox.y = this.y + this.topFreeSpace;
     playerBox.secondY = this.y + this.height;
+
+    // данные для взаимодействия с насекомыми
     playerBox.centralX = playerBox.firstX + (playerBox.secondX - playerBox.firstX) / 2;
     playerBox.centralY = playerBox.y + (playerBox.secondY - playerBox.y) / 2;
 
@@ -836,6 +856,7 @@ function Scoreboards(scoreboardImage, x) {
   let secondPlayerImage = g_context.resources[imageNames.LEFT_SECOND_PLAYER];
   let thirdPlayerImage = g_context.resources[imageNames.LEFT_THIRD_PLAYER];
   let fourthPlayerImage = g_context.resources[imageNames.LEFT_FOURTH_PLAYER];
+
   this.firstScoreboard = new Scoreboard(scoreboardImage, firstPlayerImage, playerName.FIRST_NAME, x, 0);
   this.secondScoreboard = new Scoreboard(scoreboardImage, secondPlayerImage, playerName.SECOND_NAME, x,
       this.firstScoreboard.y + pointScoreboard.HEIGHT);
@@ -843,9 +864,10 @@ function Scoreboards(scoreboardImage, x) {
       this.secondScoreboard.y + pointScoreboard.HEIGHT);
   this.fourthScoreboard = new Scoreboard(scoreboardImage, fourthPlayerImage, playerName.FOURTH_NAME, x,
       this.thirdScoreboard.y + pointScoreboard.HEIGHT);
+
   if (PLAYERS_AMOUNT >= 1) {
     this.firstScoreboard.scoreboardState = states.ACTIVE;
-  }
+  } // активация необходимого количества ячеек для баллов
   if (PLAYERS_AMOUNT >= 2) {
     this.secondScoreboard.scoreboardState = states.ACTIVE;
   }
@@ -885,6 +907,7 @@ function Scoreboard(sourceScoreboard, sourcePlayer, playerName, x, y) {
           this.y + pointScoreboard.Y_PLAYER_NAME_SHIFT);
     }
   };
+
   this.drawPoint = function (ctx) {
     let tens = Math.floor(this.pointsAmount / 10);
     let digitImage = this.chooseDigitImage(tens);
@@ -901,6 +924,7 @@ function Scoreboard(sourceScoreboard, sourcePlayer, playerName, x, y) {
         x + pointScoreboard.X_SECOND_POINT_SHIFT, this.y + pointScoreboard.Y_POINT_SHIFT,
         pointScoreboard.POINT_WIDTH, pointScoreboard.POINT_HEIGHT);
   };
+
   this.chooseDigitImage = function (digit) {
     switch (digit) {
       case points.ZERO.VALUE:
@@ -925,6 +949,7 @@ function Scoreboard(sourceScoreboard, sourcePlayer, playerName, x, y) {
         return points.NINE;
     }
   };
+
   this.prompt = {
     state: states.INACTIVE,
     timeInterval: 0
@@ -965,11 +990,6 @@ function Burst(sourceBurst){
       this.stateBurst = states.INACTIVE;
       this.currentStage = 0;
     }
-  };
-
-  this.draw = function(ctx) {
-    ctx.drawImage(this.source, this.imageX, this.imageY, this.imageWidth, this.imageHeight,
-        this.x, this.y, this.width,this.height);
   };
 
   this.changeImage = function() {
@@ -1015,7 +1035,7 @@ function Burst(sourceBurst){
 }
 
 function getInsectsSwarm() {
-  let insectsSwarm = new Swarm(1350, 700);
+  let insectsSwarm = new Swarm(1350, 700); // insectsSwarm
   return insectsSwarm;
 }
 function Swarm(x, y) {
@@ -1093,9 +1113,9 @@ function Swarm(x, y) {
     return playersCrossingInformation;
   };
 }
+
 function CrossingPlayer(player, isCrossRightTopCorner, isCrossLeftTopCorner,
                         isCrossLeftBottomCorner, isCrossRightBottomCorner) {
-  this.playerName = player.name;
   this.box = player.getBox();
   this.rightTopCorner = isCrossRightTopCorner;
   this.leftTopCorner = isCrossLeftTopCorner;
@@ -1157,17 +1177,20 @@ function Insect(swarmX, swarmY) {
       }
     }
   };
+
   this.isInSwarmArea = function(xSwarm, ySwarm, newX, newY, radius) {
     let isInArea = (((newX - xSwarm) * (newX - xSwarm) + (newY - ySwarm) * (newY - ySwarm))
     < (radius * radius));
     return isInArea;
   };
+
   this.draw = function(ctx) {
     let r = insectsSwarm.INSECT_RADIUS;
     let corner = insectsSwarm.INSECT_CORNER;
     ctx.fillStyle = colors.BLACK;
     this.drawCircle(ctx, this.x, this.y, r, corner);
   };
+
   this.drawCircle = function(ctx, x, y, r, corner) {
     ctx.beginPath();
     ctx.arc(x, y, r, 0, corner * Math.PI, false);

@@ -7,6 +7,7 @@ function World() {
   this.burst = getBurst();
   this.scoreboards = getScoreboards();
   this.insectsSwarm = getInsectsSwarm();
+
   this.update = function (deltaTime) {
     if (this.state === statesOfGame.IN_PROCESS) {
       let unalivePlayers = this.getPlayersInState(playerInformation.UNALIVE);
@@ -27,10 +28,12 @@ function World() {
       updatePromptTime(deltaTime, scoreboards);
     }
   };
+
   this.clean = function (ctx) {
     ctx.fillStyle = colors.WHITE;
     drawRectangle(ctx, 0, 0, canvasSize.WIDTH, canvasSize.HEIGHT, 1, 0, 0);
   };
+
   this.render = function (ctx) {
     if (this.state === statesOfGame.IN_PROCESS) {
       let gameWorldObjects = this.objects;
@@ -60,6 +63,7 @@ function World() {
       drawResult(ctx);
     }
   };
+
   this.getPlayersInState = function (state) {
     let playersInState = {};
     if ((this.players.firstPlayer) && (this.players.firstPlayer.liveState === state)) {
@@ -76,6 +80,7 @@ function World() {
     }
     return playersInState;
   };
+
   this.checkSpaceFree = function (player, elements) {
     for (let key in elements) {
       if (elements[key] != player) {
@@ -91,6 +96,7 @@ function World() {
     }
     return true;
   };
+
   this.checkCross = function (firstObject, secondObject) {
     let isXNotFree = this.getXFree(firstObject, secondObject);
     let isYNotFree = this.getYFree(firstObject, secondObject);
@@ -106,6 +112,7 @@ function World() {
     }
     return false;
   };
+
   this.getXFree = function(firstObject, secondObject) {
     let firstObjectBox = firstObject.getBox();
     let secondObjectBox = secondObject.getBox();
@@ -115,6 +122,7 @@ function World() {
     (firstObject.x <= secondObjectBox.secondX)));
     return isXNotFree;
   };
+
   this.getYFree = function(firstObject, secondObject) {
     let isYNotFree;
     let firstObjectBox = firstObject.getBox();
@@ -134,6 +142,7 @@ function World() {
     }
     return isYNotFree;
   };
+
   this.checkLandUnderPlayer = function(player, worldElements) {
     let playerBox = player.getBox();
     for (let key in worldElements) {
@@ -155,6 +164,7 @@ function World() {
     player.landed = states.INACTIVE;
     return false;
   };
+
   this.searchCollisionPlayers = function(player, alivePlayers) {
     if (alivePlayers) {
       for (let key in alivePlayers) {
@@ -173,6 +183,7 @@ function World() {
       }
     }
   };
+
   this.isXCollision = function(playerBox, alivePlayerBox) {
     let isXCollision = (((alivePlayerBox.firstX >= playerBox.firstX) &&
     (alivePlayerBox.firstX <= playerBox.secondX)) ||
@@ -180,6 +191,7 @@ function World() {
     (playerBox.firstX <= alivePlayerBox.secondX)));
     return isXCollision;
   };
+
   this.isYCollision = function(playerBox, alivePlayerBox) {
     let isYCollision =(((alivePlayerBox.secondY >= playerBox.y) &&
     (alivePlayerBox.secondY <= (playerBox.y + (playerBox.secondY - playerBox.y) / 2))) ||
@@ -187,6 +199,7 @@ function World() {
     (playerBox.secondY <= (alivePlayerBox.y + (alivePlayerBox.secondY - alivePlayerBox.y) / 2))));
     return isYCollision;
   };
+
   this.collisionDataProcessing = function(firstPlayer, secondPlayer, burst) {
     let alivePlayer;
     let unalivePlayer;
