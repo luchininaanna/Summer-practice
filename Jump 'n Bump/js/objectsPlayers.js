@@ -4,6 +4,7 @@ function getObjects() {
   objects.push(new Background(backgroundImage, 0, 0));
   return objects;
 }
+
 function Background(source, x, y) {
   this.source = source;
   this.imageX = 0;
@@ -16,6 +17,7 @@ function Background(source, x, y) {
   this.height = canvasSize.HEIGHT;
 }
 
+//значимые статические объекты
 function getWorldElements() {
   let firstTypeImage = g_context.resources[imageNames.FIRST_LAND];
   let secondTypeImage = g_context.resources[imageNames.SECOND_LAND];
@@ -199,7 +201,6 @@ function getWorldElements() {
   worldElements.push(new SmallGround(firstTypeImage, 1380, 440));
 
   worldElements.push(new Rock(rocksImage, 530, 430));
-  worldElements.push(new Rock(rocksImage, 560, 440));
   worldElements.push(new Rock(rocksImage, 590, 430));
 
   worldElements.push(new SmallGround(firstTypeImage, 630, 430));
@@ -281,7 +282,9 @@ function getWorldElements() {
   worldElements.push(new Rock(rocksImage, 1220, 90));
 
   return worldElements;
-} //значимые статические объекты
+}
+
+//второстепенные статические объекты
 function getBackgroundElements() {
   let firstTypeImage = g_context.resources[imageNames.FIRST_LAND];
   let secondTypeImage = g_context.resources[imageNames.SECOND_LAND];
@@ -301,6 +304,8 @@ function getBackgroundElements() {
   for (let i = 0; i < elementAmount; i++) {
     backgroundElements.push(new Rock(rocksImage, startX + i * shiftX, stairY));
   }
+
+  backgroundElements.push(new Rock(rocksImage, 560, 440));
 
   backgroundElements.push(new Rock(rocksImage, 1325, 845));
 
@@ -382,8 +387,9 @@ function getBackgroundElements() {
   backgroundElements.push(new IceBox(iceBoxImage, 765, 605));
 
   return backgroundElements;
-} //второстепенные статические объекты
+}
 
+//виды поверхностей
 function SmallGround(source, x, y) {
   this.source = source;
   this.imageX = smallGround.IMAGE_X;
@@ -405,7 +411,8 @@ function SmallGround(source, x, y) {
     landBox.y = this.y + this.topFreeSpace;
     return landBox;
   };
-} //виды поверхностей
+}
+
 function BigGround(source, x, y) {
   this.source = source;
   this.imageX = bigGround.IMAGE_X;
@@ -428,6 +435,7 @@ function BigGround(source, x, y) {
     return landBox;
   };
 }
+
 function IceBox(source, x, y) {
   this.source = source;
   this.imageX = iceBox.IMAGE_X;
@@ -450,6 +458,7 @@ function IceBox(source, x, y) {
     return iceBox;
   };
 }
+
 function Rock(source, x, y) {
   this.source = source;
   this.imageX = rock.IMAGE_X;
@@ -473,6 +482,7 @@ function Rock(source, x, y) {
   };
 }
 
+//виды травы
 function FirstTypeGrass(source, x, y) {
   this.source = source;
   this.imageX = firstTypeGrass.IMAGE_X;
@@ -484,7 +494,8 @@ function FirstTypeGrass(source, x, y) {
   this.width = firstTypeGrass.WIDTH;
   this.height = firstTypeGrass.HEIGHT;
   this.type = bottomType.LAND;
-} //виды травы
+}
+
 function SecondTypeGrass(source, x, y) {
   this.source = source;
   this.imageX = secondTypeGrass.IMAGE_X;
@@ -497,6 +508,7 @@ function SecondTypeGrass(source, x, y) {
   this.height = secondTypeGrass.HEIGHT;
   this.type = bottomType.LAND;
 }
+
 function ThirdTypeGrass(source, x, y) {
   this.source = source;
   this.imageX = thirdTypeGrass.IMAGE_X;
@@ -510,6 +522,7 @@ function ThirdTypeGrass(source, x, y) {
   this.type = bottomType.LAND;
 }
 
+//игроки
 function getPlayers() {
   let players = new Players();
 
@@ -542,6 +555,7 @@ function getPlayers() {
   }
   return players;
 }
+
 function Players() {
   let rightFirstPlayerImage = g_context.resources[imageNames.RIGHT_FIRST_PLAYER];
   let rightSecondPlayerImage = g_context.resources[imageNames.RIGHT_SECOND_PLAYER];
@@ -570,6 +584,7 @@ function Players() {
         playerName.FOURTH_NAME, 0, 0, fourthPlayerMoveButton);
   }
 }
+
 function Player(sourceRightMoving, sourceLeftMoving, name, x, y, movingButtons) {
   this.name = name;
 
@@ -845,12 +860,13 @@ function Player(sourceRightMoving, sourceLeftMoving, name, x, y, movingButtons) 
   };
 }
 
+//окна для баллов
 function getScoreboards() {
   let scoreboardImage = g_context.resources[imageNames.SCOREBOARD];
   let x = canvasSize.WIDTH - pointScoreboard.WIDTH;
-  let scoreboards = new Scoreboards(scoreboardImage, x);
-  return scoreboards;
+  return new Scoreboards(scoreboardImage, x);
 }
+
 function Scoreboards(scoreboardImage, x) {
   let firstPlayerImage = g_context.resources[imageNames.LEFT_FIRST_PLAYER];
   let secondPlayerImage = g_context.resources[imageNames.LEFT_SECOND_PLAYER];
@@ -878,6 +894,7 @@ function Scoreboards(scoreboardImage, x) {
     this.fourthScoreboard.scoreboardState = states.ACTIVE;
   }
 }
+
 function Scoreboard(sourceScoreboard, sourcePlayer, playerName, x, y) {
   this.name = playerName;
   this.sourceScoreboard = sourceScoreboard;
@@ -956,16 +973,22 @@ function Scoreboard(sourceScoreboard, sourcePlayer, playerName, x, y) {
   }
 }
 
+//взрыв
 function getBurst(){
   let sourceBurst = g_context.resources[imageNames.BURST];
-  let burst = new Burst(sourceBurst);
-  return burst;
+  return new Burst(sourceBurst);
 }
+
 function Burst(sourceBurst){
   this.source = sourceBurst;
   this.stateBurst = states.INACTIVE;
   this.animationTime = 0;
   this.currentStage = 0;
+
+  this.draw = function(ctx) {
+    ctx.drawImage(this.source, this.imageX, this.imageY, this.imageWidth, this.imageHeight,
+        this.x, this.y, this.width,this.height);
+  };
 
   this.x = 0;
   this.y = 0;
@@ -1034,27 +1057,37 @@ function Burst(sourceBurst){
   };
 }
 
+
+
+//насекомые
 function getInsectsSwarm() {
-  let insectsSwarm = new Swarm(1350, 700); // insectsSwarm
-  return insectsSwarm;
+  return new Swarm(insectsSwarm.X, insectsSwarm.Y);
 }
+
 function Swarm(x, y) {
   this.x = x;
   this.y = y;
 
+  this.deltaX = 0;
+  this.deltaY = 0;
+
   this.swarmAreaRadius = insectsSwarm.SWARM_RADIUS;
 
   let swarm = [];
+  let crossingPlayers = [];
+
+  //создаем необходимое количество насекомых
   for (let i = 0; i < insectsSwarm.AMOUNT_INSECTS; i++) {
     swarm[i] = new Insect(this.x, this.y);
-    swarm[i].chooseRandomCoordinates();
+    swarm[i].chooseRandomCoordinates(this.x, this.y, this.deltaX, this.deltaY, crossingPlayers);
   }
 
   this.swarm = swarm;
 
   this.animationTime = 0;
+
   this.createAnimation = function(deltaTime) {
-    let crossingPlayers =this.checkPlayerCrossing();
+    crossingPlayers = this.checkPlayerCrossing();
 
     if (this.animationTime >= insectsSwarm.INSECT_ANIMATION_TIME) {
       this.chooseRandomCoordinates(crossingPlayers);
@@ -1074,44 +1107,58 @@ function Swarm(x, y) {
     let newX = Math.round(minX - 0.5 + Math.random() * (maxX - minX + 1));
     let newY = Math.round(minY - 0.5 + Math.random() * (maxY - minY + 1));
 
-    let deltaX = newX - this.x;
-    let deltaY = newY - this.y;
+    this.deltaX = newX - this.x;
+    this.deltaY = newY - this.y;
 
-    if ((newX > 0) && (newX > canvasSize.WIDTH) && (newY > 0) && (newY < canvasSize.HEIGHT)) {
+    let isScreen = (newX > 0) && (newX > canvasSize.WIDTH) && (newY > 0) && (newY < canvasSize.HEIGHT);
+    if (isScreen) {
       this.x = newX;
       this.y = newY;
     }
 
     for (let i = 0; i < insectsSwarm.AMOUNT_INSECTS; i++) {
-      this.swarm[i].chooseRandomCoordinates(this.x, this.y, deltaX, deltaY, crossingPlayers);
+      this.swarm[i].chooseRandomCoordinates(this.x, this.y, this.deltaX, this.deltaY, crossingPlayers);
     }
   };
-  this.isCrossSwarmArea = function(x, y) {
-    let isInArea = (((x - this.x) * (x - this.x) + (y - this.y) * (y - this.y))
-    < (insectsSwarm.FIRST_SWARM_RADIUS * insectsSwarm.FIRST_SWARM_RADIUS));
-    return isInArea;
+
+  this.isCrossSwarmArea = function(checkingX, checkingY) {
+    let x = checkingX - this.x;
+    let y = checkingY - this.y;
+    let r = insectsSwarm.FIRST_SWARM_RADIUS;
+
+    return ((x * x + y * y) < (r * r));
   };
+
   this.checkPlayerCrossing = function() {
     let players = g_world.players;
+
     let isCrossRightTopCorner;
     let isCrossLeftTopCorner;
     let isCrossRightBottomCorner;
     let isCrossLeftBottomCorner;
+
     let playersCrossingInformation = [];
+
     for (let key in players) {
       let playerBox = players[key].getBox();
+
       isCrossRightTopCorner = this.isCrossSwarmArea(playerBox.secondX, playerBox.y);
       isCrossLeftTopCorner = this.isCrossSwarmArea(playerBox.firstX, playerBox.y);
       isCrossLeftBottomCorner = this.isCrossSwarmArea(playerBox.firstX, playerBox.secondY);
       isCrossRightBottomCorner = this.isCrossSwarmArea(playerBox.secondX, playerBox.secondY);
-      if ((isCrossRightTopCorner) || (isCrossLeftTopCorner)
-          || (isCrossLeftBottomCorner) || (isCrossRightBottomCorner)) {
+
+      let isCross = (isCrossRightTopCorner) || (isCrossLeftTopCorner)
+          || (isCrossLeftBottomCorner) || (isCrossRightBottomCorner);
+
+      if (isCross) {
         playersCrossingInformation.push(new CrossingPlayer(players[key], isCrossRightTopCorner,
             isCrossLeftTopCorner, isCrossLeftBottomCorner, isCrossRightBottomCorner));
       }
     }
+
     return playersCrossingInformation;
   };
+
 }
 
 function CrossingPlayer(player, isCrossRightTopCorner, isCrossLeftTopCorner,
@@ -1127,9 +1174,11 @@ function CrossingPlayer(player, isCrossRightTopCorner, isCrossLeftTopCorner,
 function Insect(swarmX, swarmY) {
   this.x = swarmX;
   this.y = swarmY;
+
   this.insectAreaRadius = insectsSwarm.INSECT_AREA_RADIUS;
   this.animationTime = 0;
-  this.chooseRandomCoordinates = function(xSwarm, ySwarm, deltaX, deltaY, crossingPlayers) {
+
+  this.chooseRandomCoordinates = function(swarmX, swarmY, deltaX, deltaY, crossingPlayers) {
     let minX = this.x - this.insectAreaRadius;
     let maxX = this.x + this.insectAreaRadius;
     let minY = this.y - this.insectAreaRadius;
@@ -1140,10 +1189,13 @@ function Insect(swarmX, swarmY) {
 
     let newX = Math.round(minX - 0.5 + Math.random() * (maxX - minX + 1)) + shiftX;
     let newY = Math.round(minY - 0.5 + Math.random() * (maxY - minY + 1)) + shiftY;
-    this.checkPlace(xSwarm, ySwarm, newX, newY, crossingPlayers);
+
+    this.checkPlace(swarmX, swarmY, newX, newY, crossingPlayers);
   };
+
   this.checkPlace = function(xSwarm, ySwarm, newX, newY, crossingPlayers) {
     let isInSwarmArea = this.isInSwarmArea(xSwarm, ySwarm, newX, newY, insectsSwarm.FIRST_SWARM_RADIUS);
+
     if (isInSwarmArea) {
       this.x = newX;
       this.y = newY;
@@ -1152,11 +1204,37 @@ function Insect(swarmX, swarmY) {
       this.y = ySwarm;
     }
 
-    let isInPlayerArea = this.isInSwarmArea(xSwarm, ySwarm, newX, newY, playerInformation.FREE_RADIUS_FROM_INSECTS);
+    let isInPlayerArea;
+
+    if (crossingPlayers.length === 0) {
+      isInPlayerArea = false;
+    } else {
+      isInPlayerArea = this.isInPlayerArea(newX, newY,
+          playerInformation.FREE_RADIUS_FROM_INSECTS, crossingPlayers);
+    }
+
     if (isInPlayerArea) {
-      this.processingCrossingPlayers(crossingPlayers, this.x, this.y);
+      this.processingCrossingPlayers(crossingPlayers);
     }
   };
+
+  this.isInPlayerArea = function(checkingX, checkingY, r, crossingPlayers) {
+    let massiveLength = crossingPlayers.length;
+    let x;
+    let y;
+    for (let i= 0; i < massiveLength; i++) {
+      x = crossingPlayers[i].box.centralX - checkingX;
+      y = crossingPlayers[i].box.centralY - checkingY;
+
+      let isInArea = (x * x) + (y * y) < (r * r);
+
+      if (isInArea) {
+        return true;
+      }
+    }
+    return false;
+  };
+
   this.processingCrossingPlayers = function(crossingPlayers) {
     for (let key in crossingPlayers) {
       if (crossingPlayers[key].rightTopCorner === true) {
@@ -1179,9 +1257,10 @@ function Insect(swarmX, swarmY) {
   };
 
   this.isInSwarmArea = function(xSwarm, ySwarm, newX, newY, radius) {
-    let isInArea = (((newX - xSwarm) * (newX - xSwarm) + (newY - ySwarm) * (newY - ySwarm))
-    < (radius * radius));
-    return isInArea;
+    let x = newX - xSwarm;
+    let y = newY - ySwarm;
+
+    return (x * x) + (y * y) < (radius * radius)
   };
 
   this.draw = function(ctx) {

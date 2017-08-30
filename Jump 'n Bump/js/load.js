@@ -85,35 +85,35 @@ function loadResources() {
       src: "image/burst.png"
     }
   ];
-  let resources = [];
-  let count = 0;
-  let loader = new Loader(resources, count);
+  let loader = new Loader();
   loader.addImages(images);
 }
 
-function Loader(resources, count) {
-  this.increaseElementsAmount = function(image, name) {
+function Loader() {
+  let resources = [];
+  let count = 0;
+
+  this.amountImages = 0;
+
+  this.increaseElementsAmount = function() {
     count++;
-    resources[name] = image;
-    if (count === MAX_COUNTER_VALUE) {  //проверка на количество загруженных изображений
-      g_context.resources = this.getImages();
+    if (count === this.amountImages) {  //проверка на количество загруженных изображений
+      g_context.resources = resources;
     }
   };
 
   this.addImage = function (name, src) {
     let image = new Image();
     image.src = src;
-    image.onload = this.increaseElementsAmount(image, name);
+    resources[name] = image;
+    image.onload = this.increaseElementsAmount();
   };
 
   this.addImages = function (images) {
-    let amountImages = images.length;
-    for (let i = 0; i < amountImages; i++) {
+    this.amountImages = images.length;
+    for (let i = 0; i < this.amountImages; i++) {
       this.addImage(images[i].name, images[i].src);
     }
   };
 
-  this.getImages = function () {
-    return resources;
-  }
 }

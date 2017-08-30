@@ -1,4 +1,3 @@
-const MAX_COUNTER_VALUE = 21;
 const PLAYERS_AMOUNT = 4;
 
 const colors = {
@@ -6,7 +5,7 @@ const colors = {
   LIGHT_BLUE: "#E0FFFF",
   LIGHT_YELLOW: "#F8F9DF",
   RED: "#B22222",
-  BLACK: "#000000",
+  BLACK: "#000000"
 };
 const backgroundSize = {
   WIDTH: 1600,
@@ -14,7 +13,7 @@ const backgroundSize = {
 };
 const resultBackgroundSize = {
   IMAGE_X: 0,
-  IMAGE_Y: 0,
+  IMAGE_Y: 0
 };
 const smallGround = {
   IMAGE_X: 145,
@@ -122,7 +121,7 @@ const playerInformation = {
   ACCELERATION_OF_GRAVITY: 9.8,
   MASS: 3,
 
-  FREE_RADIUS_FROM_INSECTS: 50,
+  FREE_RADIUS_FROM_INSECTS: 80,
 
   ALIVE: 1,
   UNALIVE: 0,
@@ -185,7 +184,7 @@ const imageNames = {
   FIRST_WINNING_PLAYER: "firstWinningPlayer",
   SECOND_WINNING_PLAYER: "secondWinningPlayer",
   THIRD_WINNING_PLAYER: "thirdWinningPlayer",
-  FOURTH_WINNING_PLAYER: "fourthWinningPlayer",
+  FOURTH_WINNING_PLAYER: "fourthWinningPlayer"
 };
 const points = {
   ZERO: {
@@ -309,7 +308,7 @@ const statesOfGame = {
 };
 const resultButton = {
   RESULT: 27,
-  NEW_GAME: 13,
+  NEW_GAME: 13
 };
 const resultTableForTwoPlayers = {
   LINE_SHIFT_Y: 140,
@@ -433,7 +432,7 @@ const burst = {
   NINTH_X: 1600,
   TENTH_X: 1800,
   ELEVENTH_X: 2000,
-  TWELFTH_X: 2200,
+  TWELFTH_X: 2200
 };
 const insectsSwarm = {
   AMOUNT_INSECTS: 100,

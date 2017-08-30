@@ -86,10 +86,6 @@ function World() {
       if (elements[key] != player) {
         let cross = this.checkCross(player, elements[key]);
         if (cross) {
-          //console.log("+++++++++++++++");
-          //console.log(elements[key].getBox().secondX);
-          //console.log(player.getBox().firstX);
-          //console.log("+++++++++++++++");
           return false;
         }
       }
@@ -101,10 +97,12 @@ function World() {
     let isXNotFree = this.getXFree(firstObject, secondObject);
     let isYNotFree = this.getYFree(firstObject, secondObject);
     if (isXNotFree && isYNotFree) {
-      if ((firstObject.y < secondObject.y) &&
-          ((secondObject.type === bottomType.LAND) ||
+
+      let isLand = (secondObject.type === bottomType.LAND) ||
           (secondObject.type === bottomType.ICE) ||
-          (secondObject.type === bottomType.ROCK))) {
+          (secondObject.type === bottomType.ROCK);
+
+      if ((firstObject.y < secondObject.y) && isLand) {
         let secondObjectBox = secondObject.getBox();
         firstObject.nextLand = secondObjectBox.y;
       }
@@ -116,10 +114,13 @@ function World() {
   this.getXFree = function(firstObject, secondObject) {
     let firstObjectBox = firstObject.getBox();
     let secondObjectBox = secondObject.getBox();
-    let isXNotFree = (((secondObjectBox.firstX >= firstObject.x) &&  //двигающийся игрок левее
-    (secondObjectBox.firstX <= firstObjectBox.secondX)) ||
-    ((firstObject.x >= secondObjectBox.firstX) &&  //двигающийся игрок правее
-    (firstObject.x <= secondObjectBox.secondX)));
+
+    let isLeftNotFree = (secondObjectBox.firstX >= firstObject.x) &&  //двигающийся игрок левее
+        (secondObjectBox.firstX <= firstObjectBox.secondX);
+    let isRightNotFree = (firstObject.x >= secondObjectBox.firstX) &&  //двигающийся игрок правее
+        (firstObject.x <= secondObjectBox.secondX);
+
+    let isXNotFree = (isLeftNotFree || isRightNotFree);
     return isXNotFree;
   };
 
@@ -127,18 +128,29 @@ function World() {
     let isYNotFree;
     let firstObjectBox = firstObject.getBox();
     let secondObjectBox = secondObject.getBox();
-    if ((secondObject.type === bottomType.LAND) ||
+
+    let isLand = (secondObject.type === bottomType.LAND) ||
         (secondObject.type === bottomType.ICE) ||
-        (secondObject.type === bottomType.ROCK)) {
-      isYNotFree = (((secondObjectBox.y > firstObjectBox.y) &&  //двигающийся игрок выше
-      (secondObjectBox.y < firstObjectBox.y + firstObject.height - firstObject.topFreeSpace)) ||
-      ((firstObjectBox.y > secondObjectBox.y) &&  //двигающийся игрок ниже
-      (firstObjectBox.y < secondObjectBox.y + secondObject.height - secondObject.topFreeSpace)));
+        (secondObject.type === bottomType.ROCK);
+
+    let isBottomNotFree;
+    let isTopNotFree;
+    if (isLand) {
+      isBottomNotFree = ((firstObjectBox.y > secondObjectBox.y) &&  //двигающийся игрок ниже
+      (firstObjectBox.y < secondObjectBox.y + secondObject.height - secondObject.topFreeSpace));
+
+      isTopNotFree = ((secondObjectBox.y > firstObjectBox.y) &&  //двигающийся игрок выше
+      (secondObjectBox.y < firstObjectBox.y + firstObject.height - firstObject.topFreeSpace));
+
+      isYNotFree = (isTopNotFree || isBottomNotFree);
     } else {
-      isYNotFree = (((secondObjectBox.y >= firstObjectBox.y) &&  //двигающийся игрок выше
-      (secondObjectBox.y <= firstObjectBox.y + firstObject.height - firstObject.topFreeSpace)) ||
-      ((firstObjectBox.y >= secondObjectBox.y) &&  //двигающийся игрок ниже
-      (firstObjectBox.y <= secondObjectBox.y + secondObject.height - secondObject.topFreeSpace)));
+      isBottomNotFree = ((firstObjectBox.y >= secondObjectBox.y) &&  //двигающийся игрок ниже
+      (firstObjectBox.y <= secondObjectBox.y + secondObject.height - secondObject.topFreeSpace));
+
+      isTopNotFree = ((secondObjectBox.y >= firstObjectBox.y) &&  //двигающийся игрок выше
+      (secondObjectBox.y <= firstObjectBox.y + firstObject.height - firstObject.topFreeSpace))
+
+      isYNotFree = (isTopNotFree || isBottomNotFree);
     }
     return isYNotFree;
   };
@@ -148,10 +160,13 @@ function World() {
     for (let key in worldElements) {
       let worldElementBox = worldElements[key].getBox();
 
-      let underLand = (((worldElementBox.firstX >= playerBox.firstX) &&
-      (worldElementBox.firstX <= playerBox.secondX)) ||
-      ((playerBox.firstX >= worldElementBox.firstX) &&
-      (playerBox.firstX <= worldElementBox.secondX)));
+      let isLeftCross = ((playerBox.firstX >= worldElementBox.firstX) &&
+      (playerBox.firstX <= worldElementBox.secondX));
+
+      let isRightCross = ((worldElementBox.firstX >= playerBox.firstX) &&
+      (worldElementBox.firstX <= playerBox.secondX));
+
+      let underLand = (isRightCross || isLeftCross);
 
       let onLand = (playerBox.secondY === worldElementBox.y);
 
@@ -185,18 +200,24 @@ function World() {
   };
 
   this.isXCollision = function(playerBox, alivePlayerBox) {
-    let isXCollision = (((alivePlayerBox.firstX >= playerBox.firstX) &&
-    (alivePlayerBox.firstX <= playerBox.secondX)) ||
-    ((playerBox.firstX >= alivePlayerBox.firstX) &&
-    (playerBox.firstX <= alivePlayerBox.secondX)));
+    let isRightCross = ((alivePlayerBox.firstX >= playerBox.firstX) &&
+    (alivePlayerBox.firstX <= playerBox.secondX));
+
+    let isLeftCross = ((playerBox.firstX >= alivePlayerBox.firstX) &&
+    (playerBox.firstX <= alivePlayerBox.secondX));
+
+    let isXCollision = (isRightCross || isLeftCross);
     return isXCollision;
   };
 
   this.isYCollision = function(playerBox, alivePlayerBox) {
-    let isYCollision =(((alivePlayerBox.secondY >= playerBox.y) &&
-    (alivePlayerBox.secondY <= (playerBox.y + (playerBox.secondY - playerBox.y) / 2))) ||
-    ((playerBox.secondY >= alivePlayerBox.y) &&
-    (playerBox.secondY <= (alivePlayerBox.y + (alivePlayerBox.secondY - alivePlayerBox.y) / 2))));
+    let isBottomCross = ((playerBox.secondY >= alivePlayerBox.y) &&
+    (playerBox.secondY <= (alivePlayerBox.y + (alivePlayerBox.secondY - alivePlayerBox.y) / 2)));
+
+    let isTopCross = ((alivePlayerBox.secondY >= playerBox.y) &&
+    (alivePlayerBox.secondY <= (playerBox.y + (playerBox.secondY - playerBox.y) / 2)));
+
+    let isYCollision =(isTopCross || isBottomCross);
     return isYCollision;
   };
 
