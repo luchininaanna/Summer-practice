@@ -1,4 +1,5 @@
 addEventListener("keydown", checkPressedButtons);
+
 addEventListener("keyup", checkReleasedButtons);
 
 function changeCanvasSize() {
@@ -20,18 +21,20 @@ function checkPressedButtons(event) {
   }
   changeStateOfGame(event.keyCode);
 }
+
 function changeStateOfGame(keyCode) {
   switch (keyCode) {
     case resultButton.RESULT:
       g_world.state = statesOfGame.RESULT;
       break;
     case resultButton.NEW_GAME:
-      g_world.state = statesOfGame.IN_PROCESS;  //в полной версии - выбор игроков
+      g_world.state = statesOfGame.IN_PROCESS;
       g_world.players = getPlayers();
       g_world.scoreboards = getScoreboards();
       break;
   }
 }
+
 function changePressedState(checkingPlayer, keyCode, movingButtons) {
   checkLandForMoving(checkingPlayer);
 
@@ -66,6 +69,7 @@ function checkReleasedButtons(event) {
     }
   }
 }
+
 function changeReleasedState(checkingPlayer, keyCode, movingButtons) {
   checkLandForMoving(checkingPlayer);
 
@@ -118,10 +122,13 @@ function checkLandForMoving(player) {
   for (let key in worldElements) {
     let worldElementBox = worldElements[key].getBox();
 
-    let underLand = (((worldElementBox.firstX >= playerBox.firstX) &&
-    (worldElementBox.firstX <= playerBox.secondX)) ||
-    ((playerBox.firstX >= worldElementBox.firstX) &&
-    (playerBox.firstX <= worldElementBox.secondX)));
+    let isRightCross = ((worldElementBox.firstX >= playerBox.firstX) &&
+    (worldElementBox.firstX <= playerBox.secondX));
+
+    let isLeftCross = ((playerBox.firstX >= worldElementBox.firstX) &&
+    (playerBox.firstX <= worldElementBox.secondX));
+
+    let underLand = (isRightCross || isLeftCross);
 
     let onLand = (playerBox.secondY === worldElementBox.y);
 

@@ -404,6 +404,7 @@ const promptInformation = {
   Y_FOR_THREE_PLAYERS: 770,
   Y_FOR_TWO_PLAYERS: 680,
   TEXT: "Для начала новой игры нажмите клавишу Enter",
+  EMPTY_TEXT: "-------",
   TIME_INTERVAL: 0.6
 };
 const speedCoefficients = {

@@ -10,6 +10,7 @@ function drawObject(ctx, object) {
   ctx.drawImage(object.source, object.imageX, object.imageY, object.imageWidth, object.imageHeight,
       object.x, object.y, object.width, object.height);
 }
+
 function drawPlayers(ctx, players) {
   for (let key in players) {
     if (players[key].liveState === playerInformation.ALIVE) {
@@ -17,6 +18,7 @@ function drawPlayers(ctx, players) {
     }
   }
 }
+
 function drawScoreboards(ctx, scoreboards) {
   for (let key in scoreboards) {
     scoreboards[key].draw(ctx);
@@ -49,6 +51,7 @@ function drawResult(ctx) {
   drawResultTable(ctx, resultTable);
   drawPrompt(ctx);
 }
+
 function drawBackground(ctx, resultTable) {
   let backgroundImage = g_context.resources[imageNames.BACKGROUND];
   ctx.drawImage(backgroundImage, 0, 0, backgroundSize.WIDTH, backgroundSize.HEIGHT,
@@ -60,6 +63,7 @@ function drawBackground(ctx, resultTable) {
       resultTable.START_TABLE_X, resultTable.START_TABLE_Y,
       resultTable.WIDTH, resultTable.HEIGHT);
 }
+
 function drawResultTable(ctx, resultTable) {
   ctx.strokeStyle = colors.LIGHT_YELLOW;
   ctx.lineWidth = 5;
@@ -121,6 +125,7 @@ function drawResultTable(ctx, resultTable) {
   drawLine(ctx, resultTable.START_TABLE_X + resultTable.WIDTH, resultTable.START_TABLE_Y,
       resultTable.START_TABLE_X + resultTable.WIDTH, resultTable.START_TABLE_Y + resultTable.HEIGHT);
 }
+
 function drawPoints(ctx, player, y, pointAmount, resultTable) {
   ctx.font = "bold 50pt Arial";
   let killedPlayers = player.killedPlayers;
@@ -129,7 +134,7 @@ function drawPoints(ctx, player, y, pointAmount, resultTable) {
   for (let key in killedPlayers) {
     if (i < PLAYERS_AMOUNT) {
       if (killedPlayers[key].name === player.name) {
-        ctx.fillText("-------", x, y);
+        ctx.fillText(promptInformation.EMPTY_TEXT, x, y);
       } else {
         let point = killedPlayers[key].killingAmount;
         let isSingle = isSingleDigit(point);
@@ -151,6 +156,7 @@ function drawPoints(ctx, player, y, pointAmount, resultTable) {
   }
   ctx.font = "bold 35pt Arial";
 }
+
 function getNewPointX(resultTable, x) {
   switch (x) {
     case resultTable.FIRST_POINT_X:
@@ -171,6 +177,7 @@ function getNewPointX(resultTable, x) {
   }
   return x;
 }
+
 function isSingleDigit(digit) {
   let integralPart = Math.floor(digit / 10); //целая часть от деления
   if (integralPart === 0) {

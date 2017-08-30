@@ -970,7 +970,7 @@ function Scoreboard(sourceScoreboard, sourcePlayer, playerName, x, y) {
   this.prompt = {
     state: states.INACTIVE,
     timeInterval: 0
-  }
+  };
 }
 
 //взрыв
@@ -1056,8 +1056,6 @@ function Burst(sourceBurst){
     }
   };
 }
-
-
 
 //насекомые
 function getInsectsSwarm() {

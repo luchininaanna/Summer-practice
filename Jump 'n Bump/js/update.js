@@ -6,15 +6,18 @@ function updatePlayersCoordinates(players, deltaTime) {
   }
   return players;
 }
+
 function updatePlayerCoordinates(player, deltaTime) {
   if ((player.rightMove === 1) ||
-      ((player.iceRightFinishMoving === states.ACTIVE) && (player.typeBottomUnderPlayer === bottomType.ICE))) {
+      ((player.iceRightFinishMoving === states.ACTIVE)
+      && (player.typeBottomUnderPlayer === bottomType.ICE))) {
     player.speedCoefficient = speedCoefficients.RIGHT_MOVING;
     moveHorizontally(player, deltaTime);
   }
 
   if ((player.leftMove === 1) ||
-      ((player.iceLeftFinishMoving === states.ACTIVE) && (player.typeBottomUnderPlayer === bottomType.ICE))) {
+      ((player.iceLeftFinishMoving === states.ACTIVE)
+      && (player.typeBottomUnderPlayer === bottomType.ICE))) {
     player.speedCoefficient = speedCoefficients.LEFT_MOVING;
     moveHorizontally(player, deltaTime);
   }
@@ -171,6 +174,7 @@ function animatePlayers(unalivePlayers, deltaTime){
     }
   }
 }
+
 function updatePromptTime(deltaTime, scoreboards) {
   if (scoreboards) {
     for (let key in scoreboards) {
